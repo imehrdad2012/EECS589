@@ -17,10 +17,22 @@ public class Cell implements Serializable {
 	Cell() {
 	}
 	
+	public Cell(String cell_area){
+		init(cell_area);
+	}
+	
 	public Cell(double cell_area){
-		StringTokenizer st= new StringTokenizer(Double.toString(cell_area), ".");
-		areaID=Integer.valueOf(st.nextToken()).intValue();
-		cellID=Integer.valueOf(st.nextToken()).intValue();
+		init(Double.toString(cell_area));
+	}
+	
+	private void init(String cell_area) {
+		if(!cell_area.equals("0")) {
+			StringTokenizer st= new StringTokenizer(cell_area, ".");
+			areaID=Integer.valueOf(st.nextToken()).intValue();
+			cellID=Integer.valueOf(st.nextToken()).intValue();
+		} else {
+			areaID = cellID = 0;
+		}
 	}
 
 	public int getAreaID() {

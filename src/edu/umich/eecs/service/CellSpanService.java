@@ -21,6 +21,9 @@ public class CellSpanService {
 
 	private SessionFactory sessionFactory;
 	
+	public CellSpanService() {
+		setUp();
+	}
 	
 	// setup configuration and session factory
 	public void setUp(){  
@@ -61,7 +64,7 @@ public class CellSpanService {
 	public void saveCP(CellSpan cp){
 		
 		Session s=fireTransaction();
-		s.save(cp);
+		s.saveOrUpdate(cp);
 		commitTransaction(s);
 	}
 	
