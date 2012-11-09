@@ -8,7 +8,12 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name="cellspan")
-public class CellSpan implements Serializable{
+public class CellSpan implements Serializable, Comparable<CellSpan> {
+	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	
 	/**
 	 * 
@@ -39,11 +44,30 @@ public class CellSpan implements Serializable{
 	public void setCell(Cell cell) {
 		this.cell = cell;
 	}
+	public Timestamp getStartTime() {
+		return key.getStarttime();
+	}
+	
+	/**
+	 * The duration in milliseconds.
+	 * @return
+	 */
+	public long getDuration() {
+		return getEndtime().getTime() - getStartTime().getTime();
+	}
+	
 	public Timestamp getEndtime() {
 		return endtime;
 	}
 	public void setEndtime(Timestamp endtime) {
 		this.endtime = endtime;
+	}
+	@Override
+	public int compareTo(CellSpan o) {
+		if(o.key.personid != key.personid) {
+			throw new ClassCastException();
+		}
+		return key.starttime.compareTo(o.key.starttime);
 	}
 	
 
