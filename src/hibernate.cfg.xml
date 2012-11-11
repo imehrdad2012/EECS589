@@ -58,7 +58,8 @@
         <mapping class="edu.umich.eecs.dto.Cell"/>
     	<mapping class="edu.umich.eecs.dto.CellSpan"/>
     	<mapping class="edu.umich.eecs.dto.CellSpanCompoundKey"/>
-
+		<mapping class="edu.umich.eecs.dto.PathPiece"/>
+		
     </session-factory>
 
 </hibernate-configuration>

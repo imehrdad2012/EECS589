@@ -2,19 +2,27 @@ package edu.umich.eecs.dto;
 
 import java.sql.Timestamp;
 import java.io.Serializable;
+
+import javax.persistence.Embeddable;
+import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+/**
+ * This class is a modeling of different users transition
+ * from various celltowers
+ * @author Mehrdad
+ *
+ */
 @Entity
 @Table(name="cellspan")
 public class CellSpan implements Serializable{
 	
-	/**
-	 * 
-	 */
+	
 	@Id
 	private CellSpanCompoundKey key; //(person id, starttime) is a irreducible key of our db
+	@Embedded
 	private Cell cell;
 	private Timestamp endtime;
 	
