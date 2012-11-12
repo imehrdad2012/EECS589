@@ -4,7 +4,7 @@ import java.util.StringTokenizer;
 import javax.persistence.Embeddable;
 
 @Embeddable
-public class Cell implements Serializable {
+public class Cell implements Serializable, Comparable<Cell> {
 
 	/**
 	 * 
@@ -49,6 +49,33 @@ public class Cell implements Serializable {
 	
 	public void setCellID(int cellID) {
 		this.cellID = cellID;
+	}
+
+	@Override
+	public int compareTo(Cell o) {
+		int areaComparison = Integer.compare(this.areaID, o.areaID);
+		if(areaComparison == 0) {
+			return Integer.compare(this.cellID, o.cellID);
+		} else {
+			return areaComparison;
+		}
+	}
+	
+	@Override
+	public int hashCode() {
+		return  areaID * 10000 + areaID;
+	}
+	
+	@Override
+	public boolean equals(Object c) {
+		if(c == this) {
+			return true;
+		}
+		if(c instanceof Cell && c != null) {
+			return ((Cell)c).areaID == this.areaID && ((Cell)c).cellID == this.cellID;
+		} else {
+			return false;
+		}
 	}
 	
 }
