@@ -1,4 +1,4 @@
-package edu.umich.eecs.dataconversion;
+package edu.umich.eecs.data;
 
 import java.io.File;
 import java.io.FileNotFoundException;
