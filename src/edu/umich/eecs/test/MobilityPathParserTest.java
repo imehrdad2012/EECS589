@@ -8,7 +8,7 @@ import java.util.List;
 import org.junit.Test;
 
 import edu.umich.eecs.MobilityPath;
-import edu.umich.eecs.MobilityPathParser;
+import edu.umich.eecs.MobilityPathFinder;
 import edu.umich.eecs.dto.CellSpan;
 
 public class MobilityPathParserTest {
@@ -38,8 +38,8 @@ public class MobilityPathParserTest {
 		
 		assertTrue(spans.size() == 11);
 		
-		MobilityPathParser parser = new MobilityPathParser(spans);
-		List<MobilityPath> paths = parser.parsePaths(7*60*1000, 5*60*1000);
+		MobilityPathFinder parser = new MobilityPathFinder(spans);
+		List<MobilityPath> paths = parser.findMobilityPaths(7*60*1000, 5*60*1000);
 		
 		assertTrue(paths.size() == 4);
 		assertMobilityPath(paths.get(0), new int[] { 1, 2, 3, 5 });
@@ -65,8 +65,8 @@ public class MobilityPathParserTest {
 
 		assertTrue(spans.size() == 11);
 		
-		MobilityPathParser parser = new MobilityPathParser(spans);
-		List<MobilityPath> paths = parser.parsePaths(7*60*1000, 5*60*1000);
+		MobilityPathFinder parser = new MobilityPathFinder(spans);
+		List<MobilityPath> paths = parser.findMobilityPaths(7*60*1000, 5*60*1000);
 		
 		assertTrue(paths.size() == 4);
 		assertMobilityPath(paths.get(0), new int[] { 1, 2, 3, 5 });

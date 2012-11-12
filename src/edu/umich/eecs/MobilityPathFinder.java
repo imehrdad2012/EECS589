@@ -11,10 +11,10 @@ import edu.umich.eecs.dto.CellSpan;
  * @author Pedro
  *
  */
-public class MobilityPathParser {
+public class MobilityPathFinder {
 	private List<CellSpan> cellspans;
 
-	public MobilityPathParser(List<CellSpan> cellspans) {
+	public MobilityPathFinder(List<CellSpan> cellspans) {
 		//
 		// We need to (shallow) copy the array because we sort it. Sorting
 		// is done by start time.
@@ -27,7 +27,7 @@ public class MobilityPathParser {
 	 * Returns the list of mobility paths given the data provided in the constructor.
 	 * @return
 	 */
-	public List<MobilityPath> parsePaths(double durationThresholdInMs, 	double transitionThresholdInMs) {
+	public List<MobilityPath> findMobilityPaths(double durationThresholdInMs, double transitionThresholdInMs) {
 		//
 		// This is pretty much verbatim Algorithm 1 in Bayir et al.
 		//
