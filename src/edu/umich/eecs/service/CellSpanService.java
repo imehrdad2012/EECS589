@@ -3,6 +3,7 @@ package edu.umich.eecs.service;
 
 import java.sql.Timestamp;
 import java.util.List;
+import java.util.Set;
 
 import org.hibernate.Query;
 import org.hibernate.Session;
@@ -17,50 +18,21 @@ import edu.umich.eecs.dto.Cell;
 import edu.umich.eecs.dto.CellSpan;
 import edu.umich.eecs.dto.CellSpanCompoundKey;
 
-public class CellSpanService {
 
-	private SessionFactory sessionFactory;
-	
+/**
+ * This class  contains queries to the cellspan table.
+ * @author Mehrdad
+ *
+ */
+
+
+public class CellSpanService extends Service {
+
+
 	public CellSpanService() {
-		setUp();
+		super();
 	}
-	
-	// setup configuration and session factory
-	public void setUp(){  
-		Configuration configuration = new Configuration();
-		configuration.configure();
-		ServiceRegistry serviceRegistry = new ServiceRegistryBuilder().applySettings(configuration.getProperties()).buildServiceRegistry();        
-		sessionFactory = configuration.buildSessionFactory(serviceRegistry);
-	
-	}
-	
-	//tear down session factory
-	public void tearDown() {
-		
-		try {
-			if ( sessionFactory != null ) {
-				sessionFactory.close();
-			}
-		} catch (Exception e) {
-			
-		}
-		
-	}
-	
-	// get session from session factory
-	public Session fireTransaction() {
-		Session session =sessionFactory.openSession();
-		session.beginTransaction();
-		return session;
-	}
-	
-	//commit transaction and close session
-	public void commitTransaction(Session session){
-		session.getTransaction().commit();
-		session.close();
-		
-	}
-	//
+
 	public void saveCP(CellSpan cp){
 		
 		Session s=fireTransaction();
@@ -68,16 +40,35 @@ public class CellSpanService {
 		commitTransaction(s);
 	}
 	
-	public  List< CellSpan> getCPByPersonID(int pid){
+	public  List< CellSpan> getCPByUserID(int pid){
 		
 		  Session s= fireTransaction();
-		   Query query=s.createQuery("from CellSpan where key.personid=:pid ");
+		   Query query=s.createQuery("from CellSpan where key.personid=:pid order by" +
+		   		" key.starttime ");
 		   query.setInteger("pid", pid);
 		   List <CellSpan> lcp=(List<CellSpan>)query.list();
 		   commitTransaction(s);
 	  return lcp; 
 	}
 	
+
+	public List<Cell> getAllCells(){
+		
+		Session s= fireTransaction();
+		Query query= s.createQuery("select cell from CellSpan group by cell" );
+		List<Cell> cells=(List<Cell>)query.list();
+		return cells;
+		
+	}
+	
+public List<Integer> getAllUsers(){
+		
+		Session s= fireTransaction();
+		Query query= s.createQuery("select key.personid from CellSpan group by key.personid" );
+		List<Integer> users=(List<Integer>)query.list();
+		return users;
+		
+	}
 	
 	
 	

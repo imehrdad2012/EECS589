@@ -3,13 +3,16 @@ import java.io.Serializable;
 import java.util.StringTokenizer;
 import javax.persistence.Embeddable;
 
+
+/**
+ * This class is a simple modeling for cell towers that considers 
+ * each cell tower has a cell id and area id.
+ * @author Mehrdad
+ *
+ */
+
 @Embeddable
 public class Cell implements Serializable, Comparable<Cell> {
-
-	/**
-	 * 
-	 */
-
 	private int areaID;
 	private int cellID;
 	// e.g: 5188.40332--> areaid=5188 cellid=40332	
@@ -78,4 +81,18 @@ public class Cell implements Serializable, Comparable<Cell> {
 		}
 	}
 	
+	/**
+	 * We have overrided toString method of Object class for having
+	 *  string representation of each cell in the future
+	 */
+	
+	@Override
+	public String toString() {
+		
+		return new StringBuilder().append(getAreaID()).
+				append(".").append(getCellID()).toString();
+	}
+	
 }
+	
+
