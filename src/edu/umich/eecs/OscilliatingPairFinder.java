@@ -5,6 +5,8 @@ import java.util.HashMap;
 import java.util.HashSet;
 
 import edu.umich.eecs.dto.Cell;
+import edu.umich.eecs.dto.CellTowerPair;
+import edu.umich.eecs.dto.OscillatingCellTowerPair;
 
 public class OscilliatingPairFinder {
 
@@ -38,9 +40,9 @@ public class OscilliatingPairFinder {
 					oscillatingPairs.put(oscillation.cellTowerPair,
 							new OscillatingCellTowerPair(oscillation.cellTowerPair));
 				}
-				oscillatingPairs.get(oscillation.cellTowerPair).totalNumberPaths++;
+				oscillatingPairs.get(oscillation.cellTowerPair).incrementTotalNumberSwitches();
 				if (oscillation.numberOfSwitches >= oscillationCountThreshold) {
-					oscillatingPairs.get(oscillation.cellTowerPair).numberOscillations++;
+					oscillatingPairs.get(oscillation.cellTowerPair).incrementNumberOscillations();
 				}
 			}
 		}

@@ -1,17 +1,12 @@
 package edu.umich.eecs.service;
 
-import java.util.ArrayList;
-import java.util.HashSet;
+import java.util.Collection;
 import java.util.List;
-import java.util.Set;
 
 import org.hibernate.Query;
 import org.hibernate.Session;
-import org.hibernate.SessionFactory;
 
-import edu.umich.eecs.dto.Cell;
-import edu.umich.eecs.dto.CellSpan;
-import edu.umich.eecs.dto.OscillationEdge;
+import edu.umich.eecs.dto.OscillatingCellTowerPair;
 
 /**
  * This class extends service class and has some simple queries for manipulating persisted
@@ -32,7 +27,7 @@ public class OscillationService extends Service{
 	 * @param pp
 	 */
 	
-	public void saveOE(OscillationEdge oe){
+	public void saveOE(OscillatingCellTowerPair oe){
 		Session s=fireTransaction();
 		s.saveOrUpdate(oe);
 		commitTransaction(s);
@@ -44,10 +39,10 @@ public class OscillationService extends Service{
 	 * @param osEdgeSet
 	 */
 	
-	public void saveSetofOE(Set<OscillationEdge> osEdgeSet){
+	public void saveSetofOE(Collection<OscillatingCellTowerPair> osEdgeSet){
 		Session s=fireTransaction();
 		
-		for(OscillationEdge oe:osEdgeSet){
+		for(OscillatingCellTowerPair oe:osEdgeSet){
 			s.saveOrUpdate(oe);
 		}
 		commitTransaction(s);
@@ -57,10 +52,10 @@ public class OscillationService extends Service{
 	 * This method returns all OscillationEdges extracted.
 	 * @return
 	 */
-	public List<OscillationEdge> getAllOE(){
+	public List<OscillatingCellTowerPair> getAllOscillatingPairs(){
 		  Session s= fireTransaction();
 		   Query query=s.createQuery("from OscillationEdge");
-		   List <OscillationEdge> allEdges=(List<OscillationEdge>)query.list();
+		   List <OscillatingCellTowerPair> allEdges=(List<OscillatingCellTowerPair>)query.list();
 		   commitTransaction(s);
 		  return allEdges;
 		

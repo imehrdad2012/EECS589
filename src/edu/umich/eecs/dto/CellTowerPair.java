@@ -1,15 +1,31 @@
-package edu.umich.eecs;
+package edu.umich.eecs.dto;
 
-import edu.umich.eecs.dto.Cell;
+import java.io.Serializable;
+
+import javax.persistence.AttributeOverride;
+import javax.persistence.AttributeOverrides;
+import javax.persistence.Column;
+import javax.persistence.Embeddable;
+
 
 /**
  * This class represents a pair of cell towers.
  * @author Pedro
  *
  */
-public class CellTowerPair {
-	
+@Embeddable
+public class CellTowerPair implements Serializable {
+
+	private static final long serialVersionUID = 1L;
+
+	@AttributeOverrides({
+		@AttributeOverride(name = "areaID", column = @Column(name = "secondAreaID")),
+		@AttributeOverride(name = "cellID", column = @Column(name = "secondCellID")) })
 	private Cell cell1;
+
+	@AttributeOverrides({
+			@AttributeOverride(name = "areaID", column = @Column(name = "firstAreaID")),
+			@AttributeOverride(name = "cellID", column = @Column(name = "firstCellID")) })
 	private Cell cell2;
 	
 	public CellTowerPair(Cell cell1, Cell cell2) {

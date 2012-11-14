@@ -1,5 +1,7 @@
 package edu.umich.eecs;
 
+import edu.umich.eecs.dto.CellTowerPair;
+
 /**
  * Defines a pair of cell towers that had at least one mutual switch in a mobility path.
  * @author Pedro

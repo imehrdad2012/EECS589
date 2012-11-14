@@ -7,12 +7,12 @@ import java.util.Collection;
 
 import org.junit.Test;
 
-import edu.umich.eecs.CellTowerPair;
 import edu.umich.eecs.MobilityPath;
-import edu.umich.eecs.OscillatingCellTowerPair;
 import edu.umich.eecs.OscilliatingPairFinder;
 import edu.umich.eecs.SwitchingCellTowerPair;
 import edu.umich.eecs.dto.CellSpan;
+import edu.umich.eecs.dto.CellTowerPair;
+import edu.umich.eecs.dto.OscillatingCellTowerPair;
 
 public class OscillatingPairFinderTest {
 
@@ -84,24 +84,24 @@ public class OscillatingPairFinderTest {
 		
 		for(OscillatingCellTowerPair pair : pairs) {
 			if(pair.pairEquals(xy)) {
-				assertEquals(1, pair.numberOscillations);
+				assertEquals(1, pair.getNumberOscillations());
 			}
 			else if(pair.pairEquals(xw)) {
-				assertEquals(0, pair.numberOscillations);
+				assertEquals(0, pair.getNumberOscillations());
 			}
 			else if(pair.pairEquals(xv)) {
-				assertEquals(0, pair.numberOscillations);
+				assertEquals(0, pair.getNumberOscillations());
 			}
 			else if(pair.pairEquals(yw)) {
-				assertEquals(1, pair.numberOscillations);
+				assertEquals(1, pair.getNumberOscillations());
 			}
 			else if(pair.pairEquals(yv)) {
-				assertEquals(1, pair.numberOscillations);
+				assertEquals(1, pair.getNumberOscillations());
 			}
 			else if(pair.pairEquals(wv)) {
-				assertEquals(1, pair.numberOscillations);
+				assertEquals(1, pair.getNumberOscillations());
 			}
-			assertEquals(1, pair.totalNumberPaths);
+			assertEquals(1, pair.getTotalNumberSwitches());
 		}
 	}
 	
@@ -146,33 +146,33 @@ public class OscillatingPairFinderTest {
 		
 		for(OscillatingCellTowerPair pair : pairs) {
 			if(pair.pairEquals(xy)) {
-				assertEquals(2, pair.numberOscillations);
-				assertEquals(2, pair.totalNumberPaths);
+				assertEquals(2, pair.getNumberOscillations());
+				assertEquals(2, pair.getTotalNumberSwitches());
 				assertEquals(1.0, pair.support(), 0.0000000001);
 			}
 			else if(pair.pairEquals(xw)) {
-				assertEquals(1, pair.numberOscillations);
-				assertEquals(2, pair.totalNumberPaths);
+				assertEquals(1, pair.getNumberOscillations());
+				assertEquals(2, pair.getTotalNumberSwitches());
 				assertEquals(0.5, pair.support(), 0.0000000001);
 			}
 			else if(pair.pairEquals(xv)) {
-				assertEquals(0, pair.numberOscillations);
-				assertEquals(1, pair.totalNumberPaths);
+				assertEquals(0, pair.getNumberOscillations());
+				assertEquals(1, pair.getTotalNumberSwitches());
 				assertEquals(0.0, pair.support(), 0.0000000001);
 			}
 			else if(pair.pairEquals(yw)) {
-				assertEquals(2, pair.numberOscillations);
-				assertEquals(2, pair.totalNumberPaths);
+				assertEquals(2, pair.getNumberOscillations());
+				assertEquals(2, pair.getTotalNumberSwitches());
 				assertEquals(1.0, pair.support(), 0.0000000001);
 			}
 			else if(pair.pairEquals(yv)) {
-				assertEquals(1, pair.numberOscillations);
-				assertEquals(1, pair.totalNumberPaths);
+				assertEquals(1, pair.getNumberOscillations());
+				assertEquals(1, pair.getTotalNumberSwitches());
 				assertEquals(1.0, pair.support(), 0.0000000001);
 			}
 			else if(pair.pairEquals(wv)) {
-				assertEquals(1, pair.numberOscillations);
-				assertEquals(1, pair.totalNumberPaths);
+				assertEquals(1, pair.getNumberOscillations());
+				assertEquals(1, pair.getTotalNumberSwitches());
 				assertEquals(1.0, pair.support(), 0.0000000001);
 			}
 			
