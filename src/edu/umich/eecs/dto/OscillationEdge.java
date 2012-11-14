@@ -31,31 +31,29 @@ import javax.persistence.Table;
  */
 
 @Entity
-@Table(name="osc_edges")
-public class OscillationEdge implements Serializable{
-	
+@Table(name = "osc_edges")
+public class OscillationEdge implements Serializable {
+
 	@Id
 	private OscillationEdgeKey key;
 	private int totSwitch;
 	private int totOscillation;
 
-	
-	public OscillationEdge( Cell first, Cell second, int totSwitch,
-			int totOscillation ) {
-	
-		this.key= new OscillationEdgeKey(first, second);
+	public OscillationEdge(Cell first, Cell second, int totSwitch,
+			int totOscillation) {
+
+		this.key = new OscillationEdgeKey(first, second);
 		this.key.setSecond(second);
 		this.totSwitch = totSwitch;
 
 		this.totOscillation = totOscillation;
 
-		
 	}
 
 	OscillationEdge() {
-		
+
 	}
-	
+
 	public int getTotSwitch() {
 		return totSwitch;
 	}
@@ -72,36 +70,32 @@ public class OscillationEdge implements Serializable{
 		this.totOscillation = totOscillation;
 	}
 
-
-	
 	@Override
 	public String toString() {
-		return new StringBuilder().append("First Cell: "+this.key.getFirst().toString()+"  TotalNumberofOscillation: "+ 
-	getTotOscillation()+"   TotalNumberofSwitches:"+ getTotSwitch() +"  Second Cell: "+this.key.getSecond().toString()).toString();
-				
-		
+		return new StringBuilder().append(
+				"First Cell: " + this.key.getFirst().toString()
+						+ "  TotalNumberofOscillation: " + getTotOscillation()
+						+ "   TotalNumberofSwitches:" + getTotSwitch()
+						+ "  Second Cell: " + this.key.getSecond().toString())
+				.toString();
+
 	}
 
 }
 
 @Embeddable
-class OscillationEdgeKey implements Serializable{
+class OscillationEdgeKey implements Serializable {
 
-	
-	  @AttributeOverrides( {
-        @AttributeOverride(name="areaID", column = @Column(name="secondAreaID") ),
-        @AttributeOverride(name="cellID", column = @Column(name="secondCellID") )
-} )
+	@AttributeOverrides({
+			@AttributeOverride(name = "areaID", column = @Column(name = "secondAreaID")),
+			@AttributeOverride(name = "cellID", column = @Column(name = "secondCellID")) })
 	private Cell second;
-	
 
-	 @AttributeOverrides( {
-      @AttributeOverride(name="areaID", column = @Column(name="firstAreaID") ),
-      @AttributeOverride(name="cellID", column = @Column(name="firstCellID") )
-} )
+	@AttributeOverrides({
+			@AttributeOverride(name = "areaID", column = @Column(name = "firstAreaID")),
+			@AttributeOverride(name = "cellID", column = @Column(name = "firstCellID")) })
 	private Cell first;
-	
-	
+
 	public OscillationEdgeKey() {
 	}
 
@@ -126,5 +120,5 @@ class OscillationEdgeKey implements Serializable{
 	public void setSecond(Cell second) {
 		this.second = second;
 	}
-	
+
 }
