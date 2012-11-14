@@ -58,7 +58,7 @@
         <mapping class="edu.umich.eecs.dto.Cell"/>
     	<mapping class="edu.umich.eecs.dto.CellSpan"/>
     	<mapping class="edu.umich.eecs.dto.CellSpanCompoundKey"/>
-		<mapping class="edu.umich.eecs.dto.OscillationEdge"/>
+		<mapping class="edu.umich.eecs.dto.OscillatingCellTowerPair"/>
 		
     </session-factory>
 

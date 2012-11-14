@@ -137,9 +137,11 @@ public class RMDataImporter {
 
 		try {
 			File dir = new File(pathToCsvFiles);
-			 int count = 0;
+			int count = 0;
 			String[] contents = dir.list();
 			for (String file : contents) {
+				// Uncomment to generate a small dataset.
+				if(!file.startsWith("4_")) continue;
 				RMDataImporter dataImporter = new RMDataImporter(pathToCsvFiles + file, cellSpanService);
 				dataImporter.insertIntoDatabase();
 				System.out.println(++count + "/" + contents.length + " CSV files inserted in the DB");

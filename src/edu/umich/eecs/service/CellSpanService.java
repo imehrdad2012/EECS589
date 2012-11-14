@@ -42,6 +42,12 @@ public class CellSpanService extends Service {
 	  return lcp; 
 	}
 	
+	public List<CellSpan> getAllCellSpans() {
+		Session s= fireTransaction();
+		Query query= s.createQuery("from CellSpan" );
+		List<CellSpan> cells=(List<CellSpan>)query.list();
+		return cells;
+	}
 
 	public List<Cell> getAllCells(){
 		
