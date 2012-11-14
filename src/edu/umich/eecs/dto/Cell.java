@@ -3,6 +3,7 @@ import java.io.Serializable;
 import java.util.StringTokenizer;
 import javax.persistence.Embeddable;
 
+
 /**
  * This class is a simple modeling for cell towers that considers 
  * each cell tower has a cell id and area id.
@@ -10,10 +11,8 @@ import javax.persistence.Embeddable;
  *
  */
 
-
 @Embeddable
-public class Cell implements Serializable  {
-
+public class Cell implements Serializable, Comparable<Cell> {
 	private int areaID;
 	private int cellID;
 	// e.g: 5188.40332--> areaid=5188 cellid=40332	
@@ -54,6 +53,33 @@ public class Cell implements Serializable  {
 	public void setCellID(int cellID) {
 		this.cellID = cellID;
 	}
+
+	@Override
+	public int compareTo(Cell o) {
+		int areaComparison = Integer.compare(this.areaID, o.areaID);
+		if(areaComparison == 0) {
+			return Integer.compare(this.cellID, o.cellID);
+		} else {
+			return areaComparison;
+		}
+	}
+	
+	@Override
+	public int hashCode() {
+		return  areaID * 10000 + areaID;
+	}
+	
+	@Override
+	public boolean equals(Object c) {
+		if(c == this) {
+			return true;
+		}
+		if(c instanceof Cell && c != null) {
+			return ((Cell)c).areaID == this.areaID && ((Cell)c).cellID == this.cellID;
+		} else {
+			return false;
+		}
+	}
 	
 	/**
 	 * We have overrided toString method of Object class for having
@@ -66,18 +92,7 @@ public class Cell implements Serializable  {
 		return new StringBuilder().append(getAreaID()).
 				append(".").append(getCellID()).toString();
 	}
-
-	@Override
-	public boolean equals(Object obj) {
-	    	if(obj==null) return false;
-	    	if(obj==this)return true;
-	    	if(!(obj instanceof Cell))return false;
-	    	Cell otherCell=(Cell)obj;
-	    	if(otherCell.cellID==this.cellID&& otherCell.areaID==this.areaID) return true;
-	    	return false;
-	    }
 	
-	
-	}
+}
 	
 
