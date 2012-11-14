@@ -10,6 +10,10 @@ public class CellSpanCompoundKey implements Serializable {
 	/**
 	 * 
 	 */
+	private static final long serialVersionUID = 1L;
+	/**
+	 * 
+	 */
 	public int personid;
 	public Timestamp starttime;
 	

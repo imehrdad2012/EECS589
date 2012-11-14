@@ -13,6 +13,10 @@ import javax.persistence.Embeddable;
 
 @Embeddable
 public class Cell implements Serializable, Comparable<Cell> {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private int areaID;
 	private int cellID;
 	// e.g: 5188.40332--> areaid=5188 cellid=40332	

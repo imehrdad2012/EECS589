@@ -1,22 +1,13 @@
 package edu.umich.eecs.service;
 
 
-import java.sql.Timestamp;
 import java.util.List;
-import java.util.Set;
 
 import org.hibernate.Query;
 import org.hibernate.Session;
-import org.hibernate.SessionFactory;
-import org.hibernate.cfg.Configuration;
-import org.hibernate.dialect.FirebirdDialect;
-import org.hibernate.service.ServiceRegistry;
-import org.hibernate.service.ServiceRegistryBuilder;
-
 
 import edu.umich.eecs.dto.Cell;
 import edu.umich.eecs.dto.CellSpan;
-import edu.umich.eecs.dto.CellSpanCompoundKey;
 
 
 /**
