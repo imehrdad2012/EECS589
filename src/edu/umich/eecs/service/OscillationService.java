@@ -42,7 +42,18 @@ public class OscillationService extends Service{
 	public void saveSetofOE(Collection<OscillatingCellTowerPair> osEdgeSet){
 		Session s=fireTransaction();
 		
+		//
+		// Commiting every once in a while makes it go _much_ faster
+		// and use _a lot_ less memory.
+		//
+		int commitEveryX = 1000;
+		int i = 0;
 		for(OscillatingCellTowerPair oe:osEdgeSet){
+			if(++i % commitEveryX == 0) {
+				System.out.println("Intermediate commit... (" + i + "/" + osEdgeSet.size() + ")");
+				commitTransaction(s);
+				s = fireTransaction();
+			}
 			s.saveOrUpdate(oe);
 		}
 		commitTransaction(s);

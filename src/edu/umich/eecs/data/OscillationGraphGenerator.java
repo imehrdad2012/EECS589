@@ -7,12 +7,13 @@ import edu.umich.eecs.*;
 import edu.umich.eecs.dto.CellSpan;
 import edu.umich.eecs.dto.OscillatingCellTowerPair;
 import edu.umich.eecs.service.CellSpanService;
+import edu.umich.eecs.service.OscillationService;
 import edu.umich.eecs.util.Tic;
 
 public class OscillationGraphGenerator {
 	public static Tic clock = new Tic(true);
 	
-	public void computeOscillationEdges(CellSpanService svc) {
+	public Collection<OscillatingCellTowerPair> computeOscillationEdges(CellSpanService svc) {
 		clock.tic();
 		List<Integer> personIds = svc.getAllUsers();
 		clock.toc("Obtained " + personIds.size() + " person IDs");
@@ -38,13 +39,20 @@ public class OscillationGraphGenerator {
 		Collection<OscillatingCellTowerPair> oscillations   =
 				OscilliatingPairFinder.findOscillationSupport(mobilityPaths, Constants.oscillationThreshold);
 		clock.toc(oscillations.size() + " oscillations found.");
-		clock.totalTime();
+		return oscillations;
 	}
 	
 	public static void main(String[] args) {
 		OscillationGraphGenerator gen = new OscillationGraphGenerator();
 		CellSpanService cellSpanService = new CellSpanService();
-		gen.computeOscillationEdges(cellSpanService);
+		Collection<OscillatingCellTowerPair> oscillations = 
+				gen.computeOscillationEdges(cellSpanService);
+		System.out.println("Saving oscillation graph...");
+		clock.tic();
+		new OscillationService().saveSetofOE(oscillations);
+		clock.toc("Graph saved");
+		clock.totalTime();
+		
 		
 	}
 }
