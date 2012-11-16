@@ -73,7 +73,7 @@ public class OscillatingPairFinderTest {
 		paths.add(path);
 		
 		Collection<OscillatingCellTowerPair> pairs = OscilliatingPairFinder.findOscillationSupport(paths, 2);
-		assertTrue(pairs.size() == 6);
+		assertTrue(pairs.size() == 4);
 		
 		CellTowerPair xy = new CellTowerPair(x.getCell(), y.getCell());
 		CellTowerPair xw = new CellTowerPair(x.getCell(), w.getCell());
@@ -85,12 +85,6 @@ public class OscillatingPairFinderTest {
 		for(OscillatingCellTowerPair pair : pairs) {
 			if(pair.pairEquals(xy)) {
 				assertEquals(1, pair.getNumberOscillations());
-			}
-			else if(pair.pairEquals(xw)) {
-				assertEquals(0, pair.getNumberOscillations());
-			}
-			else if(pair.pairEquals(xv)) {
-				assertEquals(0, pair.getNumberOscillations());
 			}
 			else if(pair.pairEquals(yw)) {
 				assertEquals(1, pair.getNumberOscillations());
@@ -135,7 +129,7 @@ public class OscillatingPairFinderTest {
 		
 		
 		Collection<OscillatingCellTowerPair> pairs = OscilliatingPairFinder.findOscillationSupport(paths, 2);
-		assertTrue(pairs.size() == 6);
+		assertTrue(pairs.size() == 5);
 		
 		CellTowerPair xy = new CellTowerPair(x.getCell(), y.getCell());
 		CellTowerPair xw = new CellTowerPair(x.getCell(), w.getCell());

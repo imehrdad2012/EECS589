@@ -1,5 +1,6 @@
 package edu.umich.eecs;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -46,8 +47,19 @@ public class OscilliatingPairFinder {
 				}
 			}
 		}
+
+		//
+		// Remove cell tower pairs with 0 oscillations.
+		//
+		Collection<OscillatingCellTowerPair> allOscillations = oscillatingPairs.values();
+		Collection<OscillatingCellTowerPair> filteredOscillations = new ArrayList<OscillatingCellTowerPair>(allOscillations.size()/2);
+		for(OscillatingCellTowerPair pair : allOscillations) {
+			if(pair.getNumberOscillations() > 0) {
+				filteredOscillations.add(pair);
+			}
+		}
 		
-		return oscillatingPairs.values();
+		return filteredOscillations;
 	}
 
 	/**
