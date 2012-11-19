@@ -25,15 +25,17 @@ public class CellSpan implements Serializable, Comparable<CellSpan> {
 	
 	
 	@Id
-	private CellSpanCompoundKey key; //(person id, starttime) is a irreducible key of our db
+	private CellSpanCompoundKey key; //(person id, transitionId) is a irreducible key of our db
 	@Embedded
 	private Cell cell;
+	private Timestamp startTime;
 	private Timestamp endtime;
 	
-	public CellSpan(int personid, Cell cell,Timestamp startime, Timestamp endtime) {
+	public CellSpan(int personid, Cell cell, int transitionId, Timestamp startTime, Timestamp endtime) {
 		super();
-		this.key = new CellSpanCompoundKey(personid, startime);
+		this.key = new CellSpanCompoundKey(personid, transitionId);
 		this.cell = cell;
+		this.startTime = startTime;
 		this.endtime = endtime;
 	}
 	CellSpan() {
@@ -52,7 +54,7 @@ public class CellSpan implements Serializable, Comparable<CellSpan> {
 		this.cell = cell;
 	}
 	public Timestamp getStartTime() {
-		return key.getStarttime();
+		return startTime;
 	}
 	
 	/**
@@ -66,15 +68,13 @@ public class CellSpan implements Serializable, Comparable<CellSpan> {
 	public Timestamp getEndtime() {
 		return endtime;
 	}
-	public void setEndtime(Timestamp endtime) {
-		this.endtime = endtime;
-	}
+
 	@Override
 	public int compareTo(CellSpan o) {
 		if(o.key.personid != key.personid) {
 			throw new ClassCastException();
 		}
-		return key.starttime.compareTo(o.key.starttime);
+		return Integer.compare(key.transitionId, o.key.transitionId);
 	}
 	
 

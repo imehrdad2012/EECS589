@@ -27,7 +27,7 @@ public class OscillationGraphGenerator {
 			clock.tic();
 			MobilityPathFinder pathFinder = new MobilityPathFinder(cellSpans);
 			List<MobilityPath> personsMobiliyPaths = pathFinder.findMobilityPaths(
-					Constants.durationThresholdInMs, Constants.durationThresholdInMs);
+					Constants.durationThresholdInMs, Constants.transitionThresholdInMs);
 			clock.toc("\t" + personsMobiliyPaths.size() + " mobility paths.");
 			
 			clock.tic();

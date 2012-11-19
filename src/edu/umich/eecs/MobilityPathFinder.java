@@ -20,7 +20,7 @@ public class MobilityPathFinder {
 		// is done by start time.
 		//
 		this.cellspans = new ArrayList<CellSpan>(cellspans);
-		Collections.sort(this.cellspans);
+		//Collections.sort(this.cellspans);
 	}
 	
 	/**
@@ -34,10 +34,12 @@ public class MobilityPathFinder {
 		
 		List<MobilityPath> paths = new ArrayList<MobilityPath>();
 		MobilityPath currentPath = new MobilityPath();
+		int i = -1;
 		for(CellSpan span : cellspans) {
 			boolean spanIsObservedEndLocation = false;
 			boolean spanFollowsHiddenEndLocation = false;
 			boolean spanIsNormalElement = false;
+			i++;
 			if(span.getDuration() <= durationThresholdInMs) {
 				if(currentPath.size() > 0) {
 					assert span.getStartTime().getTime() >= currentPath.getLastEndTime();

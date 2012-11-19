@@ -19,10 +19,10 @@ public class OscillatingPairFinderTest {
 	@Test
 	public void testOneMPPairs() {
 		MobilityPath path = new MobilityPath();
-		CellSpan x = Util.makeCellSpan(1, 1.1, 0, 0);
-		CellSpan y = Util.makeCellSpan(1, 1.2, 0, 0);
-		CellSpan v = Util.makeCellSpan(1, 1.3, 0, 0);
-		CellSpan w = Util.makeCellSpan(1, 1.4, 0, 0);
+		CellSpan x = Util.makeCellSpan(1, 1, 1.1, 0, 0);
+		CellSpan y = Util.makeCellSpan(1, 2, 1.2, 0, 0);
+		CellSpan v = Util.makeCellSpan(1, 3, 1.3, 0, 0);
+		CellSpan w = Util.makeCellSpan(1, 4, 1.4, 0, 0);
 		
 		path.addToPath(x);
 		path.addToPath(y);
@@ -56,10 +56,10 @@ public class OscillatingPairFinderTest {
 	@Test
 	public void testOneMPPairsSupport() {
 		MobilityPath path = new MobilityPath();
-		CellSpan x = Util.makeCellSpan(1, 1.1, 0, 0);
-		CellSpan y = Util.makeCellSpan(1, 1.2, 0, 0);
-		CellSpan v = Util.makeCellSpan(1, 1.3, 0, 0);
-		CellSpan w = Util.makeCellSpan(1, 1.4, 0, 0);
+		CellSpan x = Util.makeCellSpan(1, 1, 1.1, 0, 0);
+		CellSpan y = Util.makeCellSpan(1, 2, 1.2, 0, 0);
+		CellSpan v = Util.makeCellSpan(1, 3, 1.3, 0, 0);
+		CellSpan w = Util.makeCellSpan(1, 4, 1.4, 0, 0);
 		
 		path.addToPath(x);
 		path.addToPath(y);
@@ -103,10 +103,10 @@ public class OscillatingPairFinderTest {
 	public void testTwoMPsPairsSupport() {
 		MobilityPath path1 = new MobilityPath();
 		MobilityPath path2 = new MobilityPath();
-		CellSpan x = Util.makeCellSpan(1, 1.1, 0, 0);
-		CellSpan y = Util.makeCellSpan(1, 1.2, 0, 0);
-		CellSpan v = Util.makeCellSpan(1, 1.3, 0, 0);
-		CellSpan w = Util.makeCellSpan(1, 1.4, 0, 0);
+		CellSpan x = Util.makeCellSpan(1, 2, 1.1, 0, 0);
+		CellSpan y = Util.makeCellSpan(1, 3, 1.2, 0, 0);
+		CellSpan v = Util.makeCellSpan(1, 4, 1.3, 0, 0);
+		CellSpan w = Util.makeCellSpan(1, 5, 1.4, 0, 0);
 		
 		path1.addToPath(x);
 		path1.addToPath(y);

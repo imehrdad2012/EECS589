@@ -21,14 +21,15 @@ public class MobilityPath {
 		// 
 		CellSpan previous = null;
 		for(CellSpan cellspan : getPath()) {
-			if(cellspan.getDuration() >= durationThresholdInMs &&
+			if(cellspan.getDuration() > durationThresholdInMs &&
 					!(getPath().get(0) == cellspan || getPath().get(getPath().size() - 1) == cellspan)) {
 				return false;
 			}
-			if(previous != null && (previous.getEndtime().getTime() - cellspan.getStartTime().getTime() >=
+			if(previous != null && (previous.getEndtime().getTime() - cellspan.getStartTime().getTime() >
 					transitionThresholdInMs)) {
 				return false;
 			}
+			previous = cellspan;
 		}
 		
 		return true;

@@ -5,6 +5,7 @@ import java.io.FileNotFoundException;
 import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Scanner;
 import java.util.StringTokenizer;
 
@@ -69,6 +70,7 @@ public class RMDataImporter {
 		//	  plus the one that just started.
 		//
 		
+		int transitionId = 0;
 		scanner.useDelimiter(",");
 		String lastEndDate = null;
 		while(scanner.hasNext()) {
@@ -87,7 +89,8 @@ public class RMDataImporter {
 			}
 			
 			if(!startDate.startsWith("01-Jan-2004") && !endDate.startsWith("01-Jan-2004")) {
-					CellSpan span = createCellSpan(personID, startDate, endDate, cellAreaCode);
+					CellSpan span = createCellSpan(personID, transitionId, startDate, endDate, cellAreaCode);
+					transitionId++;
 					cellSpanSvc.saveCP(span);
 			} else {
 				//
@@ -109,17 +112,20 @@ public class RMDataImporter {
 		// part.
 		//
 		try {
-			return new Timestamp(dateFormatter.parse(timestamp).getTime());
+			Date parsedDate = dateFormatter.parse(timestamp);
+			Timestamp parsedTimestamp = new Timestamp(parsedDate.getTime());
+			return parsedTimestamp;
 		} catch(ParseException ex) {
 			return new Timestamp(new SimpleDateFormat("dd-MMM-yyyy").parse(timestamp).getTime());
 		}
 	}
 	
-	private CellSpan createCellSpan(int personId, String startTime, String endTime, String cell)
+	private CellSpan createCellSpan(int personId, int transitionId, String startTime, String endTime, String cell)
 			throws ParseException {
 		return new CellSpan(
 				personId,
 				new Cell(cell),
+				transitionId,
 				parseTimestamp(startTime),
 				parseTimestamp(endTime));
 	}
@@ -141,7 +147,7 @@ public class RMDataImporter {
 			String[] contents = dir.list();
 			for (String file : contents) {
 				// Uncomment to generate a small dataset.
-				if(!file.startsWith("4_")) continue;
+				// if(!file.startsWith("4_")) continue;
 				RMDataImporter dataImporter = new RMDataImporter(pathToCsvFiles + file, cellSpanService);
 				dataImporter.insertIntoDatabase();
 				System.out.println(++count + "/" + contents.length + " CSV files inserted in the DB");

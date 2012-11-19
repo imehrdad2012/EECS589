@@ -35,7 +35,7 @@ public class CellSpanService extends Service {
 		
 		  Session s= fireTransaction();
 		   Query query=s.createQuery("from CellSpan where key.personid=:pid order by" +
-		   		" key.starttime ");
+		   		" key.transitionId ");
 		   query.setInteger("pid", pid);
 		   List <CellSpan> lcp=(List<CellSpan>)query.list();
 		   commitTransaction(s);
