@@ -3,8 +3,11 @@ package edu.umich.eecs.service;
 import java.util.Collection;
 import java.util.List;
 
+import org.hibernate.Criteria;
 import org.hibernate.Query;
 import org.hibernate.Session;
+import org.hibernate.criterion.Order;
+import org.hibernate.criterion.Restrictions;
 
 import edu.umich.eecs.dto.OscillatingCellTowerPair;
 
@@ -65,13 +68,35 @@ public class OscillationService extends Service{
 	 */
 	public List<OscillatingCellTowerPair> getAllOscillatingPairs(){
 		  Session s= fireTransaction();
-		   Query query=s.createQuery("from OscillationEdge");
+		   Query query=s.createQuery("from OscillatingCellTowerPair  ");
 		   List <OscillatingCellTowerPair> allEdges=(List<OscillatingCellTowerPair>)query.list();
 		   commitTransaction(s);
 		  return allEdges;
 		
 		
 	}
+	
+	/**
+	 * This method is used for retrieving an ascending ordered lists of oscillation edges by their weights.
+	 * @return
+	 */
+	
+	public List<OscillatingCellTowerPair> getOrderedOscillationPairs(){
+		  Session s= fireTransaction();
+		 
+		  Criteria crit = s.createCriteria(OscillatingCellTowerPair.class);
+		  crit.addOrder(Order.asc("supportRate"));  
+		   List <OscillatingCellTowerPair> allEdges=(List<OscillatingCellTowerPair>) crit.list();
+		   commitTransaction(s);
+			for(OscillatingCellTowerPair f: allEdges.subList(0, 100)){
+				System.out.println(f.toString());
+			}
+		  return allEdges;
+		
+		
+	}
+	
+	
 	
 
 }

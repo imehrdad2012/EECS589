@@ -28,6 +28,10 @@ public class CellTowerPair implements Serializable {
 			@AttributeOverride(name = "cellID", column = @Column(name = "firstCellID")) })
 	private Cell cell2;
 	
+	CellTowerPair() {
+		super();
+	}
+
 	public CellTowerPair(Cell cell1, Cell cell2) {
 		super();
 		assert !cell1.equals(cell2);

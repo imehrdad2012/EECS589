@@ -2,7 +2,10 @@ package edu.umich.eecs.dto;
 
 import java.io.Serializable;
 
+import javax.persistence.Basic;
+import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
@@ -22,6 +25,8 @@ public class OscillatingCellTowerPair  implements Serializable {
 	 */
 	private static final long serialVersionUID = 1L;
 
+	
+
 	@Id
 	private CellTowerPair cellTowerPair;
 	
@@ -37,17 +42,33 @@ public class OscillatingCellTowerPair  implements Serializable {
 	 */
 	private int numberOscillations;
 	
+	/**
+	 * support = numberOscillations / totalNumberPaths
+	 */
+	@Basic(fetch = FetchType.LAZY)
+	@Column(updatable = false, name = "support_ratio", nullable = false)
+	public double supportRate;
+	
+	
+	
+
+	OscillatingCellTowerPair() {
+		super();
+	}
+	
+	
 	public OscillatingCellTowerPair(CellTowerPair cellTowerPair) {
 		super();
 		this.cellTowerPair = cellTowerPair;
 	}
-	/**
-	 * support = numberOscillations / totalNumberPaths
-	 */
-	public double support() {
-		return (double)numberOscillations / totalNumberSwitches;
+	
+	public double getSupportRate() {
+		return supportRate;
 	}
-
+	public void setSupportRate(double r){
+		this.supportRate=r;
+		
+	}
 	
 	public boolean pairEquals(CellTowerPair o) {
 		return cellTowerPair.equals(o);
@@ -79,10 +100,20 @@ public class OscillatingCellTowerPair  implements Serializable {
 	public String toString() {
 		return new StringBuilder().append(
 				"First Cell: " + this.cellTowerPair.getCell1().toString()
-						+ "  TotalNumberofOscillation: " + getNumberOscillations()
-						+ "   TotalNumberofSwitches:" + getTotalNumberSwitches()
-						+ "  Second Cell: " + this.cellTowerPair.getCell2().toString())
+						+ "   TotalNumberofOscillation: " + getNumberOscillations()
+						+ "    TotalNumberofSwitches:" + getTotalNumberSwitches()
+						+ "   Second Cell: " + this.cellTowerPair.getCell2().toString()+"  Weight:"+getSupportRate())
 				.toString();
 
+	}
+
+
+	public CellTowerPair getCellTowerPair() {
+		return cellTowerPair;
+	}
+
+
+	public void setCellTowerPair(CellTowerPair cellTowerPair) {
+		this.cellTowerPair = cellTowerPair;
 	}
 }
