@@ -3,10 +3,15 @@ package edu.umich.eecs.dto;
 import java.io.Serializable;
 import java.sql.Timestamp;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
+
+import org.hibernate.annotations.Cascade;
 
 /**
  * This class is a modeling of different users transition
@@ -15,18 +20,15 @@ import javax.persistence.Table;
  *
  */
 @Entity
-@Table(name="cellspan")
+@Table(name="cell_span")
 public class CellSpan implements Serializable, Comparable<CellSpan> {
-	
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
 	
 	
 	@Id
 	private CellSpanCompoundKey key; //(person id, transitionId) is a irreducible key of our db
-	@Embedded
+	
+	@ManyToOne
+	@Cascade(org.hibernate.annotations.CascadeType.SAVE_UPDATE)
 	private Cell cell;
 	private Timestamp startTime;
 	private Timestamp endtime;

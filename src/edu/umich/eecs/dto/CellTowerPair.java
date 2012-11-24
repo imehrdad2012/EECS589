@@ -4,8 +4,13 @@ import java.io.Serializable;
 
 import javax.persistence.AttributeOverride;
 import javax.persistence.AttributeOverrides;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
+import javax.persistence.Embedded;
+import javax.persistence.ManyToOne;
+
+import org.hibernate.annotations.Cascade;
 
 
 /**
@@ -18,11 +23,13 @@ public class CellTowerPair implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
+	@ManyToOne
 	@AttributeOverrides({
 		@AttributeOverride(name = "areaID", column = @Column(name = "secondAreaID")),
 		@AttributeOverride(name = "cellID", column = @Column(name = "secondCellID")) })
 	private Cell cell1;
 
+	@ManyToOne
 	@AttributeOverrides({
 			@AttributeOverride(name = "areaID", column = @Column(name = "firstAreaID")),
 			@AttributeOverride(name = "cellID", column = @Column(name = "firstCellID")) })

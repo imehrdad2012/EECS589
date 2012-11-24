@@ -1,7 +1,9 @@
 package edu.umich.eecs.service;
 
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.hibernate.Criteria;
 import org.hibernate.Query;
@@ -9,6 +11,7 @@ import org.hibernate.Session;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 
+import edu.umich.eecs.dto.Cell;
 import edu.umich.eecs.dto.OscillatingCellTowerPair;
 
 /**
@@ -83,18 +86,32 @@ public class OscillationService extends Service{
 	
 	public List<OscillatingCellTowerPair> getOrderedOscillationPairs(){
 		  Session s= fireTransaction();
-		 
 		  Criteria crit = s.createCriteria(OscillatingCellTowerPair.class);
 		  crit.addOrder(Order.asc("supportRate"));  
 		   List <OscillatingCellTowerPair> allEdges=(List<OscillatingCellTowerPair>) crit.list();
 		   commitTransaction(s);
-			for(OscillatingCellTowerPair f: allEdges.subList(0, 100)){
-				System.out.println(f.toString());
-			}
 		  return allEdges;
 		
 		
 	}
+	
+	/**
+	 * computes all cells that are in oscillation tables.
+	 * @return
+	 */
+	public Set<Cell> getAllOsiCells(){
+		Session s= fireTransaction();
+		Query query1= s.createQuery("select distinct(cellTowerPair.cell1) from OscillatingCellTowerPair");
+		Query query2= s.createQuery("select distinct(cellTowerPair.cell2) from OscillatingCellTowerPair");
+		Set<Cell> cell = new HashSet<Cell>();
+		cell.addAll(query1.list());
+		cell.addAll(query2.list());
+		return cell;
+		
+		
+	}
+	
+	
 	
 	
 	

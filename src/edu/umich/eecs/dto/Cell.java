@@ -2,6 +2,13 @@ package edu.umich.eecs.dto;
 import java.io.Serializable;
 import java.util.StringTokenizer;
 import javax.persistence.Embeddable;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
+
+import org.hibernate.annotations.NotFound;
+import org.hibernate.annotations.NotFoundAction;
 
 
 /**
@@ -10,20 +17,33 @@ import javax.persistence.Embeddable;
  * @author Mehrdad
  *
  */
-
-@Embeddable
+@Entity
+@Table(name="cell")
 public class Cell implements Serializable, Comparable<Cell> {
 	/**
+	 * Default Cluster Id
+	 * 
 	 * 
 	 */
-	private static final long serialVersionUID = 1L;
-	private int areaID;
-	private int cellID;
-	// e.g: 5188.40332--> areaid=5188 cellid=40332	
+	
+	@Id
+	private CellKey cellkey; //Composite Key=5188.40332--> (areaid=5188 cellid=40332)	
+	
 	
 	Cell() {
 	}
 	
+	public CellKey getCellkey() {
+		return cellkey;
+	}
+
+
+	public void setCellkey(CellKey cellkey) {
+		this.cellkey = cellkey;
+	}
+
+
+
 	public Cell(String cell_area){
 		init(cell_area);
 	}
@@ -33,36 +53,39 @@ public class Cell implements Serializable, Comparable<Cell> {
 	}
 	
 	private void init(String cell_area) {
+		cellkey= new CellKey();
 		if(!cell_area.equals("0")) {
 			StringTokenizer st= new StringTokenizer(cell_area, ".");
-			areaID=Integer.valueOf(st.nextToken()).intValue();
-			cellID=Integer.valueOf(st.nextToken()).intValue();
+			cellkey.setAreaID(Integer.valueOf(st.nextToken()).intValue());
+			cellkey.setCellID(Integer.valueOf(st.nextToken()).intValue());
 		} else {
-			areaID = cellID = 0;
+			cellkey.setAreaID(0);
+			cellkey.setCellID(0);
+			
 		}
 	}
 
 	public int getAreaID() {
-		return areaID;
+		return cellkey.getAreaID();
 	}
 	
 	public void setAreaID(int areaID) {
-		this.areaID = areaID;
+		cellkey.setAreaID(areaID);
 	}
 	
 	public int getCellID() {
-		return cellID;
+		return cellkey.getCellID();
 	}
 	
 	public void setCellID(int cellID) {
-		this.cellID = cellID;
+		cellkey.setCellID(cellID);
 	}
 
 	@Override
 	public int compareTo(Cell o) {
-		int areaComparison = Integer.compare(this.areaID, o.areaID);
+		int areaComparison = Integer.compare(this.getAreaID(), o.getAreaID());
 		if(areaComparison == 0) {
-			return Integer.compare(this.cellID, o.cellID);
+			return Integer.compare(this.getCellID(), o.getAreaID());
 		} else {
 			return areaComparison;
 		}
@@ -70,7 +93,7 @@ public class Cell implements Serializable, Comparable<Cell> {
 	
 	@Override
 	public int hashCode() {
-		return  areaID * 10000 + areaID;
+		return  (getAreaID()+getCellID()) * 10000 + getAreaID();
 	}
 	
 	@Override
@@ -79,7 +102,7 @@ public class Cell implements Serializable, Comparable<Cell> {
 			return true;
 		}
 		if(c instanceof Cell && c != null) {
-			return ((Cell)c).areaID == this.areaID && ((Cell)c).cellID == this.cellID;
+			return ((Cell)c).getAreaID() == this.getAreaID() && ((Cell)c).getCellID() == this.getCellID();
 		} else {
 			return false;
 		}
