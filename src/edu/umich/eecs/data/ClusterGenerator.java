@@ -35,7 +35,13 @@ public class ClusterGenerator {
 		List<Cluster> clusters=cf.makeCluster();
 		clock.toc("Cluster Graph is Created ");
 		
+		clock.tic();
+		cs.saveListToCluster(clusters);
+		clock.toc("Persisted Remaining Clusters");
 	}
+	
+	
+	
 	public static void main(String[] args) {
 		
 		ClusterGenerator.computeCluster();	

@@ -22,8 +22,7 @@ public class Cluster implements Serializable {
 	private int clusterID;
 	
 	@OneToMany
-	@JoinTable(name="Cluster_Cell", joinColumns=@JoinColumn(name="Cluster_ID")
-	, inverseJoinColumns=@JoinColumn(name="Cell_Key"))
+	@JoinTable(name="Cluster_Cell")
 	Set<Cell> cells;
 	
 	@Column(name="Quality_Ratio")

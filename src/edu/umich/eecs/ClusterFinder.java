@@ -23,6 +23,7 @@ import edu.umich.eecs.dto.OscillatingCellTowerPair;
 import edu.umich.eecs.logger.LogClass;
 import edu.umich.eecs.service.ClusterService;
 import edu.umich.eecs.service.OscillationService;
+import edu.umich.eecs.util.Tic;
 
 /**
  * This class do a weight base hierarchical 
@@ -38,6 +39,7 @@ import edu.umich.eecs.service.OscillationService;
 
 public class ClusterFinder {
 	
+	public static Tic clock = new Tic(true);
 
 	SimpleWeightedGraph<Cell, DefaultWeightedEdge> oscGraph;     //oscillation graph.
 	SimpleWeightedGraph<Cell, DefaultWeightedEdge> backupGraph; //keeping the original graph.
@@ -102,9 +104,8 @@ public class ClusterFinder {
 	 */
 
 	public void setUpGraph(List<OscillatingCellTowerPair> osCellPair, Set<Cell> distinctCells){
-		
+		clock.tic();
 		addVertices(distinctCells);
-		
 		int numberOfInsertedEdges=0;
 		for(Iterator<OscillatingCellTowerPair> i= osCellPair.iterator(); i.hasNext();){
 			
@@ -120,9 +121,12 @@ public class ClusterFinder {
 			oscGraph.setEdgeWeight(e, op.getSupportRate());
 			numberOfInsertedEdges++;
 		}
-     	System.out.println("Insertions of "+ numberOfInsertedEdges+ " edges was succesful");
+     	
+     	clock.toc("Insertions of "+ numberOfInsertedEdges+ " edges was succesful");
+     	clock.tic();
+     	
      	simpleGraphDeepCopy(oscGraph, backupGraph);
-		
+		clock.toc("Copying Graph is done...");
 	}
 	/**
 	 * Inserts all oscillation vertices into oscillation graph	
