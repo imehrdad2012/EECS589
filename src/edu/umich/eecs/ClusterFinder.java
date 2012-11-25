@@ -21,6 +21,7 @@ import edu.umich.eecs.dto.Cell;
 import edu.umich.eecs.dto.Cluster;
 import edu.umich.eecs.dto.OscillatingCellTowerPair;
 import edu.umich.eecs.logger.LogClass;
+import edu.umich.eecs.service.ClusterService;
 import edu.umich.eecs.service.OscillationService;
 
 /**
@@ -41,32 +42,26 @@ public class ClusterFinder {
 	SimpleWeightedGraph<Cell, DefaultWeightedEdge> oscGraph;     //oscillation graph.
 	SimpleWeightedGraph<Cell, DefaultWeightedEdge> backupGraph; //keeping the original graph.
 	List< Cluster > clusters;       ///clusterset after running clustering algorithms.
+	ClusterService clusterSrv;
+	Integer transNumber;     // includes number of package of 100 clusters that persisted
+	
 	
 	List<OscillatingCellTowerPair> orderedEdges;   //list oredred edges based on ascending weights.
 
-	/**
-	 * Constructor with simple weighted graph argument
-	 * @param oscGraph: Pre-constructed oscillation graph
-	 */
-	public ClusterFinder(SimpleWeightedGraph<Cell, DefaultWeightedEdge> oscGraph,List<OscillatingCellTowerPair> orderedEdges) {
-		super();
-		this.oscGraph = oscGraph;
-		this.orderedEdges=orderedEdges;
-		backupGraph= new SimpleWeightedGraph<Cell, DefaultWeightedEdge>(DefaultWeightedEdge.class);
-		simpleGraphDeepCopy(oscGraph, backupGraph);
-		
-	}
+	
 	/**
 	 * Constructor that handles setting up oscillation graph using oscillation edges and cells
 	 * @param osCellPair: edges(ordered by weight)
 	 * @param distinctCells: vertices
 	 */
 	
-	public ClusterFinder(List<OscillatingCellTowerPair> osCellPair, Set<Cell> distinctCells) {
+	public ClusterFinder(List<OscillatingCellTowerPair> osCellPair, Set<Cell> distinctCells, ClusterService cs) {
 		
 		oscGraph= new SimpleWeightedGraph<Cell, DefaultWeightedEdge>(DefaultWeightedEdge.class);
 		backupGraph= new SimpleWeightedGraph<Cell, DefaultWeightedEdge>(DefaultWeightedEdge.class);
 		clusters= new ArrayList<Cluster>();
+		clusterSrv=cs;
+		transNumber=0;
 		if(osCellPair != null && osCellPair.size() > 0){
 			orderedEdges=osCellPair;
 			setUpGraph(osCellPair, distinctCells);
@@ -79,6 +74,12 @@ public class ClusterFinder {
 	public ClusterFinder() {
 		super();
 	}
+	/**
+	 * This method creates a semi-deep copy of oscillation graph for computing quality metric
+	 * @param source: oscillation graph
+	 * @param dest: backup graph
+	 */
+	
 	
 	public void simpleGraphDeepCopy(SimpleWeightedGraph<Cell, DefaultWeightedEdge> source,
 		SimpleWeightedGraph<Cell, DefaultWeightedEdge> dest){
@@ -111,7 +112,11 @@ public class ClusterFinder {
 			DefaultWeightedEdge e=oscGraph.addEdge(op.getCellTowerPair().getCell1(), op.getCellTowerPair().getCell2());
 			LogClass.log(numberOfInsertedEdges+": "+op.getCellTowerPair().getCell1()+ "<-->"+op.getCellTowerPair().getCell2()+
 					" Weight:"+ op.getSupportRate());
-			assert (e!=null);
+			if(e==null){
+				e=oscGraph.getEdge(op.getCellTowerPair().getCell1(), op.getCellTowerPair().getCell2());
+				LogClass.log(numberOfInsertedEdges+": "+op.getCellTowerPair().getCell1()+ "<-->"+op.getCellTowerPair().getCell2()+
+						" Weight:"+ op.getSupportRate());
+			}
 			oscGraph.setEdgeWeight(e, op.getSupportRate());
 			numberOfInsertedEdges++;
 		}
@@ -134,13 +139,11 @@ public class ClusterFinder {
 			
 		}
 		System.out.println("Insertions of "+ cells.size()+ "distinct cells was sucessful");
-		
-		
 	}
-	/**
-	 * 
-	 */
 	
+	/**
+	 * Computes a greedy algorithm for finding cell towers that oscillates frequently to eachother.
+	 */
 	
 	public List< Cluster > makeCluster(){
 
@@ -148,14 +151,14 @@ public class ClusterFinder {
 		while(oscGraph.vertexSet().size() > 0 && oscGraph.edgeSet().size() > 0){
 			
 			removeLowestWeightEdge();
-			System.out.println(oscGraph.toString());
 			for(Set< Cell> connectedSet: getDisconnectedParts(oscGraph)){
 				
 				if(connectedSet.size() <= Constants.maximumClusterSize && 
 						qualityMetric(connectedSet) >= Constants.minimumQualityValue ){
-					System.out.println("Cluster:"+ (++clusterCount)+ " #Cell:"+ connectedSet.size());
-					System.out.println("\t"+connectedSet);
-					clusters.add(new Cluster(connectedSet, qualityMetric(connectedSet)));
+					double qualityMetric=qualityMetric(connectedSet);
+					LogClass.log("Cluster:"+ (++clusterCount)+ " #Cell:"+ connectedSet.size()+" Quality"+qualityMetric);
+					LogClass.log("\t"+connectedSet);
+					addCluster(new Cluster(connectedSet, qualityMetric(connectedSet)));
 					oscGraph.removeAllVertices(connectedSet);
 				}
 			}
@@ -194,8 +197,9 @@ public class ClusterFinder {
 	public boolean removeLowestWeightEdge(){
 		
 		if(orderedEdges.size() > 0){
+			
 			OscillatingCellTowerPair minWeightEdge=orderedEdges.get(0);
-			System.out.println("Selected Edge Weight For Removal"+ minWeightEdge);
+			LogClass.log("Selected Edge Weight For Removal"+ minWeightEdge);
 			orderedEdges.remove(0);
 			if(oscGraph.removeEdge(minWeightEdge.getCellTowerPair().getCell1(),
 					minWeightEdge.getCellTowerPair().getCell2()) != null){
@@ -222,7 +226,6 @@ public class ClusterFinder {
 		for(Cell c: cells){
 			Set<DefaultWeightedEdge> allEdges=backupGraph.edgesOf(c);
 			Set<DefaultWeightedEdge> insideEdges=oscGraph.edgesOf(c);
-
 			double totalWeight=0, insideWeight=0;
 			
 			for(DefaultWeightedEdge e:allEdges){
@@ -234,11 +237,33 @@ public class ClusterFinder {
 			edgeWeightOutside+=totalWeight-insideWeight;
 			edgeWeightInside+=insideWeight/2;
 		}
-		System.out.println("Quality:"+edgeWeightInside/edgeWeightOutside);
 		return edgeWeightInside/edgeWeightOutside;
 		
 		
 	}
+	
+	
+	
+	public void addCluster(Cluster c){
+		
+		clusters.add(c);
+		if(clusters.size()==Constants.maximumClusterBufferSize){
+			transNumber++;
+			System.out.println("Persisting #...(" + Constants.maximumClusterBufferSize*transNumber+ ") of All Clusters" );
+			clusterSrv.saveListToCluster(clusters);
+			clusters.clear();
+			
+		}
+		
+		
+		
+	}
+	
+	
+	
+	
+	
+	
 	
 
 }

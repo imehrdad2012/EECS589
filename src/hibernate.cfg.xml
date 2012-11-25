@@ -59,7 +59,10 @@
     	<mapping class="edu.umich.eecs.dto.CellSpan"/>
     	<mapping class="edu.umich.eecs.dto.CellSpanCompoundKey"/>
 		<mapping class="edu.umich.eecs.dto.OscillatingCellTowerPair"/>
-		
+		<mapping class="edu.umich.eecs.dto.CellKey"/>
+		<mapping class="edu.umich.eecs.dto.CellTowerPair"/>
+		<mapping class="edu.umich.eecs.dto.OscillatingCellTowerPair"/>
+		<mapping class="edu.umich.eecs.dto.Cluster"/>
     </session-factory>
 
 </hibernate-configuration>

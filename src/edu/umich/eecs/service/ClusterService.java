@@ -17,14 +17,8 @@ public class ClusterService extends Service {
 	}
 	public void saveListToCluster(List<Cluster> clusters){
 		Session s=fireTransaction();
-		int commitEveryX = 1000;
-		int i = 0;
 		for(Cluster c: clusters){
-			if(++i % commitEveryX == 0) {
-				System.out.println("Persisting #...(" + i + "/" + clusters.size() + ") Cluster" );
-				commitTransaction(s);
-				s = fireTransaction();
-			}
+		
 			s.saveOrUpdate(c);
 		}
 		commitTransaction(s);

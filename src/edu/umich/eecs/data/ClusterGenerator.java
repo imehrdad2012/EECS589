@@ -20,7 +20,7 @@ public class ClusterGenerator {
 		ClusterService  cs= new ClusterService();
 		
 		clock.tic();
-		List<OscillatingCellTowerPair> oEdges=os.getAllOscillatingPairs();
+		List<OscillatingCellTowerPair> oEdges=os.getOrderedOscillationPairs();
 		clock.toc("Obtained " + oEdges.size() + " Edges ");
 		
 		clock.tic();
@@ -28,20 +28,14 @@ public class ClusterGenerator {
 		clock.toc("Obtained " + oEdges.size() + " Vertices ");
 		
 		clock.tic();
-		ClusterFinder cf= new ClusterFinder(oEdges, oCells);
+		ClusterFinder cf= new ClusterFinder(oEdges, oCells, new ClusterService());
 		clock.toc("Oscillation Graph is Created ");
 		
 		clock.tic();
 		List<Cluster> clusters=cf.makeCluster();
 		clock.toc("Cluster Graph is Created ");
 		
-		clock.tic();
-		cs.saveListToCluster(clusters);
-		clock.toc("Generated Clusters are Persisted");
 	}
-	
-	
-	
 	public static void main(String[] args) {
 		
 		ClusterGenerator.computeCluster();	
