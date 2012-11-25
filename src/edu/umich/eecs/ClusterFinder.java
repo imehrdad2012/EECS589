@@ -5,17 +5,13 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.logging.Logger;
-
 import junit.framework.Assert;
-
 import org.h2.schema.Constant;
 import org.jgraph.JGraph;
 import org.jgrapht.UndirectedGraph;
 import org.jgrapht.alg.ConnectivityInspector;
 import org.jgrapht.graph.DefaultWeightedEdge;
 import org.jgrapht.graph.SimpleWeightedGraph;
-
 import edu.umich.eecs.data.Constants;
 import edu.umich.eecs.dto.Cell;
 import edu.umich.eecs.dto.Cluster;
@@ -104,29 +100,30 @@ public class ClusterFinder {
 	 */
 
 	public void setUpGraph(List<OscillatingCellTowerPair> osCellPair, Set<Cell> distinctCells){
-		clock.tic();
+		
 		addVertices(distinctCells);
+		clock.tic();
 		int numberOfInsertedEdges=0;
 		for(Iterator<OscillatingCellTowerPair> i= osCellPair.iterator(); i.hasNext();){
 			
 			OscillatingCellTowerPair op=i.next();
 			DefaultWeightedEdge e=oscGraph.addEdge(op.getCellTowerPair().getCell1(), op.getCellTowerPair().getCell2());
-			LogClass.log(numberOfInsertedEdges+": "+op.getCellTowerPair().getCell1()+ "<-->"+op.getCellTowerPair().getCell2()+
-					" Weight:"+ op.getSupportRate());
+			//LogClass.log(numberOfInsertedEdges+": "+op.getCellTowerPair().getCell1()+ "<-->"+op.getCellTowerPair().getCell2()+
+				//	" Weight:"+ op.getSupportRate());
 			if(e==null){
 				e=oscGraph.getEdge(op.getCellTowerPair().getCell1(), op.getCellTowerPair().getCell2());
-				LogClass.log(numberOfInsertedEdges+": "+op.getCellTowerPair().getCell1()+ "<-->"+op.getCellTowerPair().getCell2()+
-						" Weight:"+ op.getSupportRate());
+				//LogClass.log(numberOfInsertedEdges+": "+op.getCellTowerPair().getCell1()+ "<-->"+op.getCellTowerPair().getCell2()+
+				//		" Weight:"+ op.getSupportRate());
 			}
 			oscGraph.setEdgeWeight(e, op.getSupportRate());
 			numberOfInsertedEdges++;
 		}
      	
-     	clock.toc("Insertions of "+ numberOfInsertedEdges+ " edges was succesful");
+     	clock.toc("\t Insertions of "+ numberOfInsertedEdges+ "is done..");
      	clock.tic();
      	
      	simpleGraphDeepCopy(oscGraph, backupGraph);
-		clock.toc("Copying Graph is done...");
+		clock.toc("\t Copying Graph is done...");
 	}
 	/**
 	 * Inserts all oscillation vertices into oscillation graph	
@@ -134,7 +131,7 @@ public class ClusterFinder {
 	 */
 	
 	public void addVertices(Set<Cell> cells){
-		
+		clock.tic();
 		for(Cell cell: cells){
 			if(!oscGraph.addVertex(cell)){
 				System.err.println("cell "+cell.toString()+" is inserted into graph multiple times..");
@@ -142,7 +139,8 @@ public class ClusterFinder {
 			}
 			
 		}
-		System.out.println("Insertions of "+ cells.size()+ "distinct cells was sucessful");
+		clock.toc("\tInsertions of "+ cells.size()+ "distinct cells is done..");
+	
 	}
 	
 	/**
@@ -158,16 +156,15 @@ public class ClusterFinder {
 			for(Set< Cell> connectedSet: getDisconnectedParts(oscGraph)){
 				
 				if(connectedSet.size() <= Constants.maximumClusterSize && 
-						qualityMetric(connectedSet) >= Constants.minimumQualityValue ){
+					qualityMetric(connectedSet) >= Constants.minimumQualityValue ){
 					double qualityMetric=qualityMetric(connectedSet);
-					LogClass.log("Cluster:"+ (++clusterCount)+ " #Cell:"+ connectedSet.size()+" Quality"+qualityMetric);
-					LogClass.log("\t"+connectedSet);
+					//LogClass.log("Cluster:"+ (++clusterCount)+ " #Cell:"+ connectedSet.size()+" Quality"+qualityMetric);
+					//LogClass.log("\t"+connectedSet);
 					addCluster(new Cluster(connectedSet, qualityMetric(connectedSet)));
 					oscGraph.removeAllVertices(connectedSet);
 				}
 			}
-		
-			
+
 		}
 		
 		return clusters;
@@ -203,7 +200,7 @@ public class ClusterFinder {
 		if(orderedEdges.size() > 0){
 			
 			OscillatingCellTowerPair minWeightEdge=orderedEdges.get(0);
-			LogClass.log("Selected Edge Weight For Removal"+ minWeightEdge);
+			//LogClass.log("Selected Edge Weight For Removal"+ minWeightEdge);
 			orderedEdges.remove(0);
 			if(oscGraph.removeEdge(minWeightEdge.getCellTowerPair().getCell1(),
 					minWeightEdge.getCellTowerPair().getCell2()) != null){
@@ -245,7 +242,10 @@ public class ClusterFinder {
 		
 		
 	}
-	
+	/**
+	 * This method persist each 100 clusters into database.
+	 * @param c
+	 */
 	
 	
 	public void addCluster(Cluster c){
@@ -262,7 +262,6 @@ public class ClusterFinder {
 		
 		
 	}
-	
 	
 	
 	
