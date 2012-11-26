@@ -4,13 +4,10 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.sql.Timestamp;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.Scanner;
-import java.util.StringTokenizer;
 
-import edu.umich.eecs.dto.*;
-import edu.umich.eecs.service.CellSpanService;
+import edu.umich.eecs.dto.Cell;
+import edu.umich.eecs.dto.CellSpan;
 import edu.umich.eecs.service.MDCCellSpanService;
 
 /**
@@ -72,7 +69,7 @@ public class MDCDataImporter {
 		Timestamp lastCellStartTime = null;
 		Cell lastCellSeen = null;
 		// first line is the header
-		String x = scanner.nextLine();
+		scanner.nextLine();
 		while(scanner.hasNext()) {
 			//
 			// First we read the values, then see if we have changed cells. If so, we record a new CellSpan.

@@ -1,15 +1,12 @@
 package edu.umich.eecs.service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.hibernate.Query;
 import org.hibernate.Session;
 
-import edu.umich.eecs.dto.AbstractCellSpan;
 import edu.umich.eecs.dto.Cell;
 import edu.umich.eecs.dto.CellSpan;
-import edu.umich.eecs.dto.MDCCellSpan;
 import edu.umich.eecs.dto.MDCCellSpan;
 
 public class MDCCellSpanService extends Service {
@@ -25,6 +22,7 @@ public class MDCCellSpanService extends Service {
 		commitTransaction(s);
 	}
 
+	@SuppressWarnings("unchecked")
 	public List<CellSpan> getCPByUserID(int pid) {
 
 		Session s = fireTransaction();
@@ -32,13 +30,13 @@ public class MDCCellSpanService extends Service {
 				.createQuery("from MDCCellSpan where key.personid=:pid order by"
 						+ " key.transitionId ");
 		query.setInteger("pid", pid);
-		List<MDCCellSpan> mdcSpans = (List<MDCCellSpan>) query
-				.list();
+		List<MDCCellSpan> mdcSpans = (List<MDCCellSpan>) query.list();
 		List<CellSpan> cellSpans = MDCCellSpan.listAsCellSpan(mdcSpans);
 		commitTransaction(s);
 		return cellSpans;
 	}
-
+	
+	@SuppressWarnings("unchecked")
 	public List<CellSpan> getAllCellSpans() {
 		Session s = fireTransaction();
 		Query query = s.createQuery("from MDCCellSpan");
@@ -47,15 +45,18 @@ public class MDCCellSpanService extends Service {
 		return cellSpans;
 	}
 
+	@SuppressWarnings("unchecked")
 	public List<Cell> getAllCells() {
 
 		Session s = fireTransaction();
-		Query query = s.createQuery("select cell from MDCCellSpan group by cell");
+		Query query = s
+				.createQuery("select cell from MDCCellSpan group by cell");
 		List<Cell> cells = (List<Cell>) query.list();
 		return cells;
 
 	}
 
+	@SuppressWarnings("unchecked")
 	public List<Integer> getAllUsers() {
 
 		Session s = fireTransaction();

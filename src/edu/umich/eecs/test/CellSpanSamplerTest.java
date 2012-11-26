@@ -8,7 +8,6 @@ import org.junit.Test;
 
 import edu.umich.eecs.data.CellSpanSampler;
 import edu.umich.eecs.dto.CellSpan;
-import edu.umich.eecs.dto.SampledCellSpan;
 
 public class CellSpanSamplerTest {
 	

@@ -34,10 +34,10 @@ public class SampledCellSpan extends AbstractCellSpan {
 		for(SampledCellSpan sampledSpan : sampledSpans) {
 			spans.add(new CellSpan(
 					sampledSpan.key.personid,
-					sampledSpan.cell,
+					sampledSpan.getCell(),
 					sampledSpan.key.transitionId,
-					sampledSpan.startTime,
-					sampledSpan.endtime));
+					sampledSpan.getStartTime(),
+					sampledSpan.getEndtime()));
 		}
 		return spans;
 	}

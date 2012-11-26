@@ -6,6 +6,7 @@ import javax.persistence.AttributeOverride;
 import javax.persistence.AttributeOverrides;
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
+import javax.persistence.ManyToOne;
 
 
 /**
@@ -18,19 +19,24 @@ public class CellTowerPair implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
+	@ManyToOne
 	@AttributeOverrides({
 		@AttributeOverride(name = "areaID", column = @Column(name = "firstAreaID")),
 		@AttributeOverride(name = "cellID", column = @Column(name = "firstCellID")),
 		@AttributeOverride(name = "countryID", column = @Column(name = "firstCountryID"))})
 	private Cell cell1;
 
-
+	@ManyToOne
 	@AttributeOverrides({
 		@AttributeOverride(name = "areaID", column = @Column(name = "secondAreaID")),
 		@AttributeOverride(name = "cellID", column = @Column(name = "secondCellID")),
 		@AttributeOverride(name = "countryID", column = @Column(name = "secondCountryID"))})
 	private Cell cell2;
 	
+	CellTowerPair() {
+		super();
+	}
+
 	public CellTowerPair(Cell cell1, Cell cell2) {
 		super();
 		assert !cell1.equals(cell2);

@@ -26,9 +26,9 @@ public class MDCCellSpan extends AbstractCellSpan {
 	public static List<CellSpan> listAsCellSpan(List<MDCCellSpan> sampledSpans) {
 		List<CellSpan> spans = new ArrayList<CellSpan>(sampledSpans.size());
 		for (MDCCellSpan sampledSpan : sampledSpans) {
-			spans.add(new CellSpan(sampledSpan.key.personid, sampledSpan.cell,
-					sampledSpan.key.transitionId, sampledSpan.startTime,
-					sampledSpan.endtime));
+			spans.add(new CellSpan(sampledSpan.key.personid, sampledSpan.getCell(),
+					sampledSpan.key.transitionId, sampledSpan.getStartTime(),
+					sampledSpan.getEndtime()));
 		}
 		return spans;
 	}

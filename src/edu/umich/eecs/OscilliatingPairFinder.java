@@ -54,9 +54,14 @@ public class OscilliatingPairFinder {
 		Collection<OscillatingCellTowerPair> allOscillations = oscillatingPairs.values();
 		Collection<OscillatingCellTowerPair> filteredOscillations = new ArrayList<OscillatingCellTowerPair>(allOscillations.size()/2);
 		for(OscillatingCellTowerPair pair : allOscillations) {
-			if(pair.getNumberOscillations() > 0) {
+			if(pair.getNumberOscillations() > 0 && pair.getCellTowerPair().getCell1().getCellID() > 0 && 
+					 pair.getCellTowerPair().getCell2().getCellID() > 0) {
+				
+				pair.setSupportRate((double)pair.getNumberOscillations()/pair.getTotalNumberSwitches());
 				filteredOscillations.add(pair);
 			}
+			
+			
 		}
 		
 		return filteredOscillations;
@@ -103,4 +108,6 @@ public class OscilliatingPairFinder {
 		}
 		return oscillatingPairs.values();
 	}
+
+	
 }

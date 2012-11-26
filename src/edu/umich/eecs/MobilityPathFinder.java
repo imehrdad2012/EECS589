@@ -1,7 +1,6 @@
 package edu.umich.eecs;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import edu.umich.eecs.dto.CellSpan;

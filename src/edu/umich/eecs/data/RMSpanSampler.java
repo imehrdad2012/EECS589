@@ -1,12 +1,10 @@
 package edu.umich.eecs.data;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import edu.umich.eecs.dto.CellSpan;
 import edu.umich.eecs.service.CellSpanService;
 import edu.umich.eecs.service.SampledCellSpanService;
-import edu.umich.eecs.test.Util;
 import edu.umich.eecs.util.Tic;
 
 public class RMSpanSampler {

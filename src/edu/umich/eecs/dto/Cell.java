@@ -1,7 +1,9 @@
 package edu.umich.eecs.dto;
 import java.io.Serializable;
 import java.util.StringTokenizer;
-import javax.persistence.Embeddable;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
 
 
 /**
@@ -10,21 +12,33 @@ import javax.persistence.Embeddable;
  * @author Mehrdad
  *
  */
-
-@Embeddable
+@Entity
+@Table(name="cell")
 public class Cell implements Serializable, Comparable<Cell> {
 	/**
+	 * Default Cluster Id
+	 * 
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	private int countryID = 1;
-	private int areaID;
-	private int cellID;
-	// e.g: 5188.40332--> areaid=5188 cellid=40332	
+	
+	@Id
+	private CellKey cellkey; //Composite Key=5188.40332--> (areaid=5188 cellid=40332)	
 	
 	Cell() {
 	}
 	
+	public CellKey getCellkey() {
+		return cellkey;
+	}
+
+
+	public void setCellkey(CellKey cellkey) {
+		this.cellkey = cellkey;
+	}
+
+
+
 	public Cell(String cell_area){
 		init(cell_area);
 	}
@@ -34,76 +48,53 @@ public class Cell implements Serializable, Comparable<Cell> {
 	}
 	
 	public Cell(int countryID, int areaID, int cellID) {
-		this.countryID = countryID;
-		this.areaID = areaID;
-		this.cellID = cellID;
+		this.cellkey = new CellKey(countryID, areaID, cellID);
 	}
 
 	private void init(String cell_area) {
+		cellkey= new CellKey();
 		if(!cell_area.equals("0")) {
 			StringTokenizer st= new StringTokenizer(cell_area, ".");
-			areaID=Integer.valueOf(st.nextToken()).intValue();
-			cellID=Integer.valueOf(st.nextToken()).intValue();
+			cellkey.setAreaID(Integer.valueOf(st.nextToken()).intValue());
+			cellkey.setCellID(Integer.valueOf(st.nextToken()).intValue());
 		} else {
-			areaID = cellID = 0;
+			cellkey.setAreaID(0);
+			cellkey.setCellID(0);
+			
 		}
 	}
 
 	public int getAreaID() {
-		return areaID;
+		return cellkey.getAreaID();
 	}
 	
 	public void setAreaID(int areaID) {
-		this.areaID = areaID;
+		cellkey.setAreaID(areaID);
 	}
 	
 	public int getCellID() {
-		return cellID;
+		return cellkey.getCellID();
 	}
 	
 	public void setCellID(int cellID) {
-		this.cellID = cellID;
+		cellkey.setCellID(cellID);
 	}
 
 	@Override
 	public int compareTo(Cell o) {
-		int countryComparison = Integer.compare(this.countryID, o.countryID);
-		if(countryComparison != 0) return countryComparison;
-		
-		int areaComparison = Integer.compare(this.areaID, o.areaID);
-		if(areaComparison != 0) return areaComparison;
-		
-		return Integer.compare(this.cellID, o.cellID);
+		return cellkey.compareTo(o.cellkey);
 	}
 	
 
 	
 	@Override
 	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + areaID;
-		result = prime * result + cellID;
-		result = prime * result + countryID;
-		return result;
+		return cellkey.hashCode();
 	}
 
 	@Override
 	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		Cell other = (Cell) obj;
-		if (areaID != other.areaID)
-			return false;
-		if (cellID != other.cellID)
-			return false;
-		if (countryID != other.countryID)
-			return false;
-		return true;
+		return cellkey.equals(obj);
 	}
 
 	/**
@@ -116,14 +107,6 @@ public class Cell implements Serializable, Comparable<Cell> {
 		
 		return new StringBuilder().append(getAreaID()).
 				append(".").append(getCellID()).toString();
-	}
-
-	public int getCountryID() {
-		return countryID;
-	}
-
-	public void setCountryID(int countryID) {
-		this.countryID = countryID;
 	}
 	
 }

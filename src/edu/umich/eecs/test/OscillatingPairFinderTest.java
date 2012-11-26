@@ -76,8 +76,6 @@ public class OscillatingPairFinderTest {
 		assertTrue(pairs.size() == 4);
 		
 		CellTowerPair xy = new CellTowerPair(x.getCell(), y.getCell());
-		CellTowerPair xw = new CellTowerPair(x.getCell(), w.getCell());
-		CellTowerPair xv = new CellTowerPair(x.getCell(), v.getCell());
 		CellTowerPair yw = new CellTowerPair(y.getCell(), w.getCell());
 		CellTowerPair yv = new CellTowerPair(y.getCell(), v.getCell());
 		CellTowerPair wv = new CellTowerPair(w.getCell(), v.getCell());
@@ -142,32 +140,32 @@ public class OscillatingPairFinderTest {
 			if(pair.pairEquals(xy)) {
 				assertEquals(2, pair.getNumberOscillations());
 				assertEquals(2, pair.getTotalNumberSwitches());
-				assertEquals(1.0, pair.support(), 0.0000000001);
+				assertEquals(1.0, pair.getSupportRate(), 0.0000000001);
 			}
 			else if(pair.pairEquals(xw)) {
 				assertEquals(1, pair.getNumberOscillations());
 				assertEquals(2, pair.getTotalNumberSwitches());
-				assertEquals(0.5, pair.support(), 0.0000000001);
+				assertEquals(0.5, pair.getSupportRate(), 0.0000000001);
 			}
 			else if(pair.pairEquals(xv)) {
 				assertEquals(0, pair.getNumberOscillations());
 				assertEquals(1, pair.getTotalNumberSwitches());
-				assertEquals(0.0, pair.support(), 0.0000000001);
+				assertEquals(0.0, pair.getSupportRate(), 0.0000000001);
 			}
 			else if(pair.pairEquals(yw)) {
 				assertEquals(2, pair.getNumberOscillations());
 				assertEquals(2, pair.getTotalNumberSwitches());
-				assertEquals(1.0, pair.support(), 0.0000000001);
+				assertEquals(1.0, pair.getSupportRate(), 0.0000000001);
 			}
 			else if(pair.pairEquals(yv)) {
 				assertEquals(1, pair.getNumberOscillations());
 				assertEquals(1, pair.getTotalNumberSwitches());
-				assertEquals(1.0, pair.support(), 0.0000000001);
+				assertEquals(1.0, pair.getSupportRate(), 0.0000000001);
 			}
 			else if(pair.pairEquals(wv)) {
 				assertEquals(1, pair.getNumberOscillations());
 				assertEquals(1, pair.getTotalNumberSwitches());
-				assertEquals(1.0, pair.support(), 0.0000000001);
+				assertEquals(1.0, pair.getSupportRate(), 0.0000000001);
 			}
 			
 		}

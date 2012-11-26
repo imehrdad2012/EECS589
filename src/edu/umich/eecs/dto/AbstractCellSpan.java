@@ -3,9 +3,11 @@ package edu.umich.eecs.dto;
 import java.io.Serializable;
 import java.sql.Timestamp;
 
-import javax.persistence.Embedded;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import javax.persistence.MappedSuperclass;
+
+import org.hibernate.annotations.Cascade;
 
 @MappedSuperclass
 public class AbstractCellSpan  implements Serializable, Comparable<CellSpan> {
@@ -14,12 +16,15 @@ public class AbstractCellSpan  implements Serializable, Comparable<CellSpan> {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
+	
 	@Id
-	protected CellSpanCompoundKey key;
-	@Embedded
-	protected Cell cell;
-	protected Timestamp startTime;
-	protected Timestamp endtime;
+	protected CellSpanCompoundKey key; //(person id, transitionId) is a irreducible key of our db
+	
+	@ManyToOne
+	@Cascade(org.hibernate.annotations.CascadeType.SAVE_UPDATE)
+	private Cell cell;
+	private Timestamp startTime;
+	private Timestamp endtime;
 
 	public AbstractCellSpan(int personid, Cell cell, int transitionId, Timestamp startTime, Timestamp endtime) {
 		this.key = new CellSpanCompoundKey(personid, transitionId);

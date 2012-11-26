@@ -1,12 +1,10 @@
 package edu.umich.eecs.service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.hibernate.Query;
 import org.hibernate.Session;
 
-import edu.umich.eecs.dto.AbstractCellSpan;
 import edu.umich.eecs.dto.Cell;
 import edu.umich.eecs.dto.CellSpan;
 import edu.umich.eecs.dto.SampledCellSpan;
@@ -24,6 +22,7 @@ public class SampledCellSpanService extends Service {
 		commitTransaction(s);
 	}
 
+	@SuppressWarnings("unchecked")
 	public List<CellSpan> getCPByUserID(int pid) {
 
 		Session s = fireTransaction();
@@ -37,7 +36,8 @@ public class SampledCellSpanService extends Service {
 		commitTransaction(s);
 		return cellSpans;
 	}
-
+	
+	@SuppressWarnings("unchecked")
 	public List<CellSpan> getAllCellSpans() {
 		Session s = fireTransaction();
 		Query query = s.createQuery("from SampledCellSpan");
@@ -45,7 +45,8 @@ public class SampledCellSpanService extends Service {
 		List<CellSpan> cellSpans = SampledCellSpan.listAsCellSpan(sampledSpans);
 		return cellSpans;
 	}
-
+	
+	@SuppressWarnings("unchecked")
 	public List<Cell> getAllCells() {
 
 		Session s = fireTransaction();
@@ -54,7 +55,8 @@ public class SampledCellSpanService extends Service {
 		return cells;
 
 	}
-
+	
+	@SuppressWarnings("unchecked")
 	public List<Integer> getAllUsers() {
 
 		Session s = fireTransaction();
