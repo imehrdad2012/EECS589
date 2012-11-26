@@ -19,13 +19,16 @@ public class CellTowerPair implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@AttributeOverrides({
-		@AttributeOverride(name = "areaID", column = @Column(name = "secondAreaID")),
-		@AttributeOverride(name = "cellID", column = @Column(name = "secondCellID")) })
+		@AttributeOverride(name = "areaID", column = @Column(name = "firstAreaID")),
+		@AttributeOverride(name = "cellID", column = @Column(name = "firstCellID")),
+		@AttributeOverride(name = "countryID", column = @Column(name = "firstCountryID"))})
 	private Cell cell1;
 
+
 	@AttributeOverrides({
-			@AttributeOverride(name = "areaID", column = @Column(name = "firstAreaID")),
-			@AttributeOverride(name = "cellID", column = @Column(name = "firstCellID")) })
+		@AttributeOverride(name = "areaID", column = @Column(name = "secondAreaID")),
+		@AttributeOverride(name = "cellID", column = @Column(name = "secondCellID")),
+		@AttributeOverride(name = "countryID", column = @Column(name = "secondCountryID"))})
 	private Cell cell2;
 	
 	public CellTowerPair(Cell cell1, Cell cell2) {
