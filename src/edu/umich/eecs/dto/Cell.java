@@ -37,8 +37,6 @@ public class Cell implements Serializable, Comparable<Cell> {
 		this.cellkey = cellkey;
 	}
 
-
-
 	public Cell(String cell_area){
 		init(cell_area);
 	}
@@ -60,8 +58,8 @@ public class Cell implements Serializable, Comparable<Cell> {
 		} else {
 			cellkey.setAreaID(0);
 			cellkey.setCellID(0);
-			
 		}
+		cellkey.setCountryID(1);
 	}
 
 	public int getAreaID() {
@@ -85,16 +83,29 @@ public class Cell implements Serializable, Comparable<Cell> {
 		return cellkey.compareTo(o.cellkey);
 	}
 	
-
-	
 	@Override
 	public int hashCode() {
-		return cellkey.hashCode();
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((cellkey == null) ? 0 : cellkey.hashCode());
+		return result;
 	}
 
 	@Override
 	public boolean equals(Object obj) {
-		return cellkey.equals(obj);
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Cell other = (Cell) obj;
+		if (cellkey == null) {
+			if (other.cellkey != null)
+				return false;
+		} else if (!cellkey.equals(other.cellkey))
+			return false;
+		return true;
 	}
 
 	/**

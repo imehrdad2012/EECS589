@@ -7,6 +7,10 @@ import javax.persistence.Embeddable;
 @Embeddable
 public class CellKey implements Serializable, Comparable<CellKey>{
 
+		
+	private int countryID;
+	private int cellID;
+	private int areaID;
 	
 	/**
 	 * 
@@ -19,10 +23,7 @@ public class CellKey implements Serializable, Comparable<CellKey>{
 		this.cellID = cellID;
 		this.areaID = areaID;
 	}
-	
-	private int countryID = 1;
-	private int cellID;
-	private int areaID;
+
 	
 	 CellKey() {
 		super();
