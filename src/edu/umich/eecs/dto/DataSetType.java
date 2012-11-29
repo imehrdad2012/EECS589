@@ -2,7 +2,8 @@ package edu.umich.eecs.dto;
 
 public enum DataSetType {
 	RealityMining(0),
-	NokiaChallenge(1);
+	NokiaChallenge(1),
+	SampledRealityMining(2);
 	
     private final int id;
     private DataSetType(int id) { this.id = id; }

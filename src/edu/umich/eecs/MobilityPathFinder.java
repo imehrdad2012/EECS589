@@ -41,8 +41,11 @@ public class MobilityPathFinder {
 			i++;
 			if(span.getDuration() <= durationThresholdInMs) {
 				if(currentPath.size() > 0) {
-					assert span.getStartTime().getTime() >= currentPath.getLastEndTime();
-					if(span.getStartTime().getTime() - currentPath.getLastEndTime() <= transitionThresholdInMs) {
+					if(span.getStartTime().getTime() < currentPath.getLastEndTime()) {
+						System.out.println("WARN: Time warp.");
+						spanFollowsHiddenEndLocation = true;
+					}
+					else if(span.getStartTime().getTime() - currentPath.getLastEndTime() <= transitionThresholdInMs) {
 						spanIsNormalElement = true;
 					} else {
 						spanFollowsHiddenEndLocation = true;
@@ -57,8 +60,11 @@ public class MobilityPathFinder {
 				// previous span's endtime is too long ago).
 				//
 				if(currentPath.size() > 0) {
-					assert span.getStartTime().getTime() >= currentPath.getLastEndTime();
-					if(span.getStartTime().getTime() - currentPath.getLastEndTime() <= transitionThresholdInMs) {
+					if(span.getStartTime().getTime() < currentPath.getLastEndTime()) {
+						System.out.println("WARN: Time warp.");
+						spanFollowsHiddenEndLocation = true;
+					}
+					else if(span.getStartTime().getTime() - currentPath.getLastEndTime() <= transitionThresholdInMs) {
 						spanIsObservedEndLocation = true;
 					} else {
 						spanFollowsHiddenEndLocation = true;

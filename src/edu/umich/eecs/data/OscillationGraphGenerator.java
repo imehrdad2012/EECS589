@@ -11,6 +11,7 @@ import edu.umich.eecs.service.CellSpanService;
 import edu.umich.eecs.service.CellSpanServiceInterface;
 import edu.umich.eecs.service.MDCCellSpanService;
 import edu.umich.eecs.service.OscillationService;
+import edu.umich.eecs.service.SampledCellSpanService;
 import edu.umich.eecs.util.Tic;
 
 public class OscillationGraphGenerator {
@@ -46,13 +47,16 @@ public class OscillationGraphGenerator {
 	}
 	
 	public static void main(String[] args) {
-		DataSetType dataset = DataSetType.NokiaChallenge;
+		DataSetType dataset = DataSetType.SampledRealityMining;
 		CellSpanServiceInterface cellSpanService = null;
 		if(dataset == DataSetType.RealityMining){
 			cellSpanService = new CellSpanService();
 		} else if(dataset == DataSetType.NokiaChallenge) {
 			cellSpanService = new MDCCellSpanService();
+		} else if(dataset == DataSetType.SampledRealityMining) {
+			cellSpanService = new SampledCellSpanService();
 		}
+		
 		OscillationGraphGenerator gen = new OscillationGraphGenerator();
 		Collection<OscillatingCellTowerPair> oscillations = 
 				gen.computeOscillationEdges(cellSpanService);
@@ -61,7 +65,5 @@ public class OscillationGraphGenerator {
 		new OscillationService(dataset).saveSetofOE(oscillations);
 		clock.toc("Graph saved");
 		clock.totalTime();
-		
-		
 	}
 }

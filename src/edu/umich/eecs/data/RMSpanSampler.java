@@ -34,7 +34,7 @@ public class RMSpanSampler {
 //		for(CellSpan sampledSpan : sampledSpans) {
 //			sampledCellSpanSvc.saveCP(sampledSpan);
 //		}
-		Tic clock = new Tic();
+		Tic clock = new Tic(); clock.setVerbose(true);
 		RMSpanSampler sampler = new RMSpanSampler();
 		sampler.sampleAndSave(60);
 		clock.toc();
