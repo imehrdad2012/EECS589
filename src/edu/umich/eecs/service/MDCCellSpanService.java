@@ -9,7 +9,7 @@ import edu.umich.eecs.dto.Cell;
 import edu.umich.eecs.dto.CellSpan;
 import edu.umich.eecs.dto.MDCCellSpan;
 
-public class MDCCellSpanService extends Service {
+public class MDCCellSpanService extends Service implements CellSpanServiceInterface {
 
 	public MDCCellSpanService() {
 		super();

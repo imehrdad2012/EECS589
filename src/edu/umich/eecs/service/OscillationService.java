@@ -9,7 +9,10 @@ import org.hibernate.Criteria;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.criterion.Order;
+import org.hibernate.criterion.Restrictions;
+
 import edu.umich.eecs.dto.Cell;
+import edu.umich.eecs.dto.DataSetType;
 import edu.umich.eecs.dto.OscillatingCellTowerPair;
 
 /**
@@ -22,16 +25,20 @@ import edu.umich.eecs.dto.OscillatingCellTowerPair;
 
 public class OscillationService extends Service{
 	
-	public OscillationService() {
+	private DataSetType dataset;
+	
+	public OscillationService(DataSetType dataset) {
 		super();
+		this.dataset = dataset;
 	}
 	
 	/**
 	 * This method save one OscillationEdge in one session.
-	 * @param pp
+	 * @param 
 	 */
 	
 	public void saveOE(OscillatingCellTowerPair oe){
+		oe.setDataSetType(dataset);
 		Session s=fireTransaction();
 		s.saveOrUpdate(oe);
 		commitTransaction(s);
@@ -58,6 +65,7 @@ public class OscillationService extends Service{
 				commitTransaction(s);
 				s = fireTransaction();
 			}
+			oe.setDataSetType(dataset);
 			s.saveOrUpdate(oe);
 		}
 		commitTransaction(s);
@@ -70,7 +78,8 @@ public class OscillationService extends Service{
 	@SuppressWarnings("unchecked")
 	public List<OscillatingCellTowerPair> getAllOscillatingPairs(){
 		  Session s= fireTransaction();
-		   Query query=s.createQuery("from OscillatingCellTowerPair  ");
+		  Query query=s.createQuery("from OscillatingCellTowerPair where dataset =:dataset");
+		  query.setInteger("dataset", dataset.asInt());
 		   List <OscillatingCellTowerPair> allEdges=(List<OscillatingCellTowerPair>)query.list();
 		   commitTransaction(s);
 		  return allEdges;
@@ -85,12 +94,13 @@ public class OscillationService extends Service{
 	@SuppressWarnings("unchecked")
 	public List<OscillatingCellTowerPair> getOrderedOscillationPairs(){
 		  Session s= fireTransaction();
-		  Criteria crit = s.createCriteria(OscillatingCellTowerPair.class);
-		  crit.addOrder(Order.asc("supportRate"));  
-		   List <OscillatingCellTowerPair> allEdges=(List<OscillatingCellTowerPair>) crit.list();
-		   commitTransaction(s);
-		  return allEdges;
-		
+		Criteria crit = s.createCriteria(OscillatingCellTowerPair.class);
+		crit.add(Restrictions.eq("dataset", dataset.asInt()));
+		crit.addOrder(Order.asc("supportRate"));
+		List<OscillatingCellTowerPair> allEdges = (List<OscillatingCellTowerPair>) crit
+				.list();
+		commitTransaction(s);
+		return allEdges;
 		
 	}
 	
@@ -101,8 +111,10 @@ public class OscillationService extends Service{
 	@SuppressWarnings("unchecked")
 	public Set<Cell> getAllOsiCells(){
 		Session s= fireTransaction();
-		Query query1= s.createQuery("select distinct(cellTowerPair.cell1) from OscillatingCellTowerPair");
-		Query query2= s.createQuery("select distinct(cellTowerPair.cell2) from OscillatingCellTowerPair");
+		Query query1= s.createQuery("select distinct(cellTowerPair.cell1) from OscillatingCellTowerPair where dataset =:dataset");
+		query1.setInteger("dataset", dataset.asInt());
+		Query query2= s.createQuery("select distinct(cellTowerPair.cell2) from OscillatingCellTowerPair where dataset =:dataset");
+		query2.setInteger("dataset", dataset.asInt());
 		Set<Cell> cell = new HashSet<Cell>();
 		cell.addAll(query1.list());
 		cell.addAll(query2.list());

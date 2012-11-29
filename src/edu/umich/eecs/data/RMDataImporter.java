@@ -138,7 +138,8 @@ public class RMDataImporter {
 		// else. The path must end with a trailing slash.
 		//
 		
-		String pathToCsvFiles = "/Users/Mehrdad/Documents/workspace/589-Project/realitydata_csv/";
+		//String pathToCsvFiles = "/Users/Mehrdad/Documents/workspace/589-Project/realitydata_csv/";
+		String pathToCsvFiles = "C:\\Users\\Pedro\\Desktop\\589 project data\\realitydata_csv\\locs\\";
 		CellSpanService cellSpanService = new CellSpanService();
 
 		try {

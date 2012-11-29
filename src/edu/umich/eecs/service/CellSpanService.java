@@ -15,7 +15,7 @@ import edu.umich.eecs.dto.CellSpan;
  * 
  */
 
-public class CellSpanService extends Service {
+public class CellSpanService extends Service implements CellSpanServiceInterface {
 
 	public CellSpanService() {
 		super();

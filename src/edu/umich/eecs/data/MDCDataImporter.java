@@ -9,6 +9,7 @@ import java.util.Scanner;
 import edu.umich.eecs.dto.Cell;
 import edu.umich.eecs.dto.CellSpan;
 import edu.umich.eecs.service.MDCCellSpanService;
+import edu.umich.eecs.util.Tic;
 
 /**
  * This class imports data from the files generated from the
@@ -129,7 +130,7 @@ public class MDCDataImporter {
 	}
 
 	public static void main(String[] args) throws ParseException, FileNotFoundException {
-		
+		Tic clock = new Tic(); clock.setVerbose(true);
 		//
 		// Replace this with the path to where the personid/gsm.csv files are.
 		//
@@ -156,5 +157,6 @@ public class MDCDataImporter {
 		} finally {
 			cellSpanService.tearDown();
 		}
+		clock.toc();
 	}
 }
