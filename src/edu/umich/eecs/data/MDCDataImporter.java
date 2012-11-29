@@ -81,12 +81,12 @@ public class MDCDataImporter {
 			Timestamp time = new Timestamp(Long.parseLong(scanner.next()) * 1000);
 			scanner.next(); // timezone is not used
 			int countryID = scanner.nextInt();
-			scanner.next(); // network code, not used
+			int networkID = scanner.nextInt();
 			int cellID = scanner.nextInt();
 			int areaID = scanner.nextInt();
 			scanner.next(); scanner.next(); // signal and signaldbm
 			
-			Cell currentCell = new Cell(countryID, areaID, cellID);
+			Cell currentCell = new Cell(countryID, areaID, cellID, networkID);
 			
 			//
 			// This is true for all but the first line.
