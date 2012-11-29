@@ -13,6 +13,7 @@ import org.junit.Test;
 
 import edu.umich.eecs.ClusterFinder;
 import edu.umich.eecs.dto.Cell;
+import edu.umich.eecs.dto.DataSetType;
 import edu.umich.eecs.dto.OscillatingCellTowerPair;
 import edu.umich.eecs.service.ClusterService;
 import edu.umich.eecs.service.OscillationService;
@@ -21,7 +22,7 @@ public class ClusterCreatorTest {
 
 	@Test
 	public void testDatabaseEdgeOrder() {
-		OscillationService os= new OscillationService();
+		OscillationService os= new OscillationService(DataSetType.RealityMining);
 		List<OscillatingCellTowerPair> cellPair =os.getOrderedOscillationPairs().subList(0, 10);
 		for(int i=0;i<9;i++){
 			assertTrue("ascending", cellPair.get(i+1).getSupportRate()-cellPair.get(i).getSupportRate()>0);
