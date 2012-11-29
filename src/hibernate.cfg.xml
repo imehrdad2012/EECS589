@@ -33,14 +33,11 @@
         <!-- Database connection settings -->
         <property name="connection.driver_class">org.h2.Driver</property>
         <property name="connection.url">jdbc:h2:~/mobile</property>
-        
-  
         <property name="connection.username">test</property>
         <property name="connection.password">1234</property>
 
         <!-- JDBC connection pool (use the built-in) -->
         <property name="connection.pool_size">1</property>
-
 
         <!-- SQL dialect -->
         <property name="dialect">org.hibernate.dialect.H2Dialect</property>
@@ -63,6 +60,8 @@
 		<mapping class="edu.umich.eecs.dto.CellTowerPair"/>
 		<mapping class="edu.umich.eecs.dto.OscillatingCellTowerPair"/>
 		<mapping class="edu.umich.eecs.dto.Cluster"/>
+		<mapping class="edu.umich.eecs.dto.Location"/>
+		
     </session-factory>
 
 </hibernate-configuration>
