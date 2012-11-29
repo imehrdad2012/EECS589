@@ -46,9 +46,8 @@ public class OscillatingCellTowerPair  implements Serializable {
 	@Column(updatable = false, name = "Support_Ratio", nullable = false)
 	public double supportRate;
 	
+	private DataSetType dataset;
 	
-	
-
 	OscillatingCellTowerPair() {
 		super();
 	}
@@ -58,7 +57,14 @@ public class OscillatingCellTowerPair  implements Serializable {
 		this.setNumberOscillations(numberOscillations) ;
 		this.setCellTowerPair(new CellTowerPair(cell1, cell2));
 		this.setSupportRate((double)getNumberOscillations()/getTotalNumberSwitches());
-
+	}
+	
+	public DataSetType getDataSetType() {
+		return dataset;
+	}
+	
+	public void setDataSetType(DataSetType dataset) {
+		this.dataset = dataset;
 	}
 	
 	public OscillatingCellTowerPair(CellTowerPair cellTowerPair) {

@@ -60,7 +60,11 @@
 		<mapping class="edu.umich.eecs.dto.CellTowerPair"/>
 		<mapping class="edu.umich.eecs.dto.OscillatingCellTowerPair"/>
 		<mapping class="edu.umich.eecs.dto.Cluster"/>
+		<mapping class="edu.umich.eecs.dto.SampledCellSpan"/>
+		<mapping class="edu.umich.eecs.dto.MDCCellSpan"/>
 		<mapping class="edu.umich.eecs.dto.Location"/>
+		
+
 		
     </session-factory>
 

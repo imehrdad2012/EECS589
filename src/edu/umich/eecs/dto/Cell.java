@@ -1,14 +1,9 @@
 package edu.umich.eecs.dto;
 import java.io.Serializable;
 import java.util.StringTokenizer;
-import javax.persistence.Embeddable;
 import javax.persistence.Entity;
 import javax.persistence.Id;
-import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-
-import org.hibernate.annotations.NotFound;
-import org.hibernate.annotations.NotFoundAction;
 
 
 /**
@@ -25,10 +20,10 @@ public class Cell implements Serializable, Comparable<Cell> {
 	 * 
 	 * 
 	 */
+	private static final long serialVersionUID = 1L;
 	
 	@Id
 	private CellKey cellkey; //Composite Key=5188.40332--> (areaid=5188 cellid=40332)	
-	
 	
 	Cell() {
 	}
@@ -42,8 +37,6 @@ public class Cell implements Serializable, Comparable<Cell> {
 		this.cellkey = cellkey;
 	}
 
-
-
 	public Cell(String cell_area){
 		init(cell_area);
 	}
@@ -52,6 +45,10 @@ public class Cell implements Serializable, Comparable<Cell> {
 		init(Double.toString(cell_area));
 	}
 	
+	public Cell(int countryID, int areaID, int cellID) {
+		this.cellkey = new CellKey(countryID, areaID, cellID);
+	}
+
 	private void init(String cell_area) {
 		cellkey= new CellKey();
 		if(!cell_area.equals("0")) {
@@ -61,8 +58,8 @@ public class Cell implements Serializable, Comparable<Cell> {
 		} else {
 			cellkey.setAreaID(0);
 			cellkey.setCellID(0);
-			
 		}
+		cellkey.setCountryID(1);
 	}
 
 	public int getAreaID() {
@@ -83,31 +80,34 @@ public class Cell implements Serializable, Comparable<Cell> {
 
 	@Override
 	public int compareTo(Cell o) {
-		int areaComparison = Integer.compare(this.getAreaID(), o.getAreaID());
-		if(areaComparison == 0) {
-			return Integer.compare(this.getCellID(), o.getAreaID());
-		} else {
-			return areaComparison;
-		}
+		return cellkey.compareTo(o.cellkey);
 	}
 	
 	@Override
 	public int hashCode() {
-		return  (getAreaID()+getCellID()) * 10000 + getAreaID();
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((cellkey == null) ? 0 : cellkey.hashCode());
+		return result;
 	}
-	
+
 	@Override
-	public boolean equals(Object c) {
-		if(c == this) {
+	public boolean equals(Object obj) {
+		if (this == obj)
 			return true;
-		}
-		if(c instanceof Cell && c != null) {
-			return ((Cell)c).getAreaID() == this.getAreaID() && ((Cell)c).getCellID() == this.getCellID();
-		} else {
+		if (obj == null)
 			return false;
-		}
+		if (getClass() != obj.getClass())
+			return false;
+		Cell other = (Cell) obj;
+		if (cellkey == null) {
+			if (other.cellkey != null)
+				return false;
+		} else if (!cellkey.equals(other.cellkey))
+			return false;
+		return true;
 	}
-	
+
 	/**
 	 * We have overrided toString method of Object class for having
 	 *  string representation of each cell in the future

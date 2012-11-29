@@ -1,7 +1,5 @@
 package edu.umich.eecs.test;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-
 import java.util.ArrayList;
 import java.util.Collection;
 
@@ -33,7 +31,7 @@ public class OscillatingPairFinderTest {
 		path.addToPath(y);
 		
 		Collection<SwitchingCellTowerPair> pairs = OscilliatingPairFinder.findSwitchesInMobilityPath(path);
-		assertTrue(pairs.size() == 6);
+		assertEquals(6, pairs.size());
 		
 		CellTowerPair xy = new CellTowerPair(x.getCell(), y.getCell());
 		CellTowerPair xw = new CellTowerPair(x.getCell(), w.getCell());
@@ -73,11 +71,9 @@ public class OscillatingPairFinderTest {
 		paths.add(path);
 		
 		Collection<OscillatingCellTowerPair> pairs = OscilliatingPairFinder.findOscillationSupport(paths, 2);
-		assertTrue(pairs.size() == 4);
+		assertEquals(4, pairs.size());
 		
 		CellTowerPair xy = new CellTowerPair(x.getCell(), y.getCell());
-		CellTowerPair xw = new CellTowerPair(x.getCell(), w.getCell());
-		CellTowerPair xv = new CellTowerPair(x.getCell(), v.getCell());
 		CellTowerPair yw = new CellTowerPair(y.getCell(), w.getCell());
 		CellTowerPair yv = new CellTowerPair(y.getCell(), v.getCell());
 		CellTowerPair wv = new CellTowerPair(w.getCell(), v.getCell());
@@ -129,7 +125,7 @@ public class OscillatingPairFinderTest {
 		
 		
 		Collection<OscillatingCellTowerPair> pairs = OscilliatingPairFinder.findOscillationSupport(paths, 2);
-		assertTrue(pairs.size() == 5);
+		assertEquals(5, pairs.size());
 		
 		CellTowerPair xy = new CellTowerPair(x.getCell(), y.getCell());
 		CellTowerPair xw = new CellTowerPair(x.getCell(), w.getCell());

@@ -1,7 +1,6 @@
 package edu.umich.eecs.dto;
 
 import java.io.Serializable;
-import java.sql.Timestamp;
 
 import javax.persistence.Embeddable;
 

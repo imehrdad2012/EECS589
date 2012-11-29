@@ -5,15 +5,19 @@ import java.util.List;
 
 import edu.umich.eecs.*;
 import edu.umich.eecs.dto.CellSpan;
+import edu.umich.eecs.dto.DataSetType;
 import edu.umich.eecs.dto.OscillatingCellTowerPair;
 import edu.umich.eecs.service.CellSpanService;
+import edu.umich.eecs.service.CellSpanServiceInterface;
+import edu.umich.eecs.service.MDCCellSpanService;
 import edu.umich.eecs.service.OscillationService;
+import edu.umich.eecs.service.SampledCellSpanService;
 import edu.umich.eecs.util.Tic;
 
 public class OscillationGraphGenerator {
 	public static Tic clock = new Tic(true);
 	
-	public Collection<OscillatingCellTowerPair> computeOscillationEdges(CellSpanService svc) {
+	public Collection<OscillatingCellTowerPair> computeOscillationEdges(CellSpanServiceInterface svc) {
 		clock.tic();
 		List<Integer> personIds = svc.getAllUsers();
 		clock.toc("Obtained " + personIds.size() + " person IDs");
@@ -43,16 +47,23 @@ public class OscillationGraphGenerator {
 	}
 	
 	public static void main(String[] args) {
+		DataSetType dataset = DataSetType.SampledRealityMining;
+		CellSpanServiceInterface cellSpanService = null;
+		if(dataset == DataSetType.RealityMining){
+			cellSpanService = new CellSpanService();
+		} else if(dataset == DataSetType.NokiaChallenge) {
+			cellSpanService = new MDCCellSpanService();
+		} else if(dataset == DataSetType.SampledRealityMining) {
+			cellSpanService = new SampledCellSpanService();
+		}
+		
 		OscillationGraphGenerator gen = new OscillationGraphGenerator();
-		CellSpanService cellSpanService = new CellSpanService();
 		Collection<OscillatingCellTowerPair> oscillations = 
 				gen.computeOscillationEdges(cellSpanService);
 		System.out.println("Saving oscillation graph...");
 		clock.tic();
-		new OscillationService().saveSetofOE(oscillations);
+		new OscillationService(dataset).saveSetofOE(oscillations);
 		clock.toc("Graph saved");
 		clock.totalTime();
-		
-		
 	}
 }
