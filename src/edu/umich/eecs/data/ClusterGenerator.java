@@ -6,6 +6,7 @@ import java.util.Set;
 import edu.umich.eecs.ClusterFinder;
 import edu.umich.eecs.dto.Cell;
 import edu.umich.eecs.dto.Cluster;
+import edu.umich.eecs.dto.DataSetType;
 import edu.umich.eecs.dto.OscillatingCellTowerPair;
 import edu.umich.eecs.service.ClusterService;
 import edu.umich.eecs.service.OscillationService;
@@ -22,8 +23,8 @@ import edu.umich.eecs.util.Tic;
 public class ClusterGenerator {
 	public static Tic clock = new Tic(true);
 	
-	public static void computeCluster(){
-		OscillationService os= new OscillationService();
+	public static void computeCluster(OscillationService os){
+		
 		ClusterService  cs= new ClusterService();
 		
 		clock.tic();
@@ -50,7 +51,7 @@ public class ClusterGenerator {
 	
 	public static void main(String[] args) {
 		
-		ClusterGenerator.computeCluster();	
+		ClusterGenerator.computeCluster(new OscillationService(DataSetType.RealityMining));	
 		
 	}
 

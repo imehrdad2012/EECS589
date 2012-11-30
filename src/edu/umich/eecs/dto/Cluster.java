@@ -17,9 +17,6 @@ import javax.persistence.Table;
 @Table(name="Cluster")
 public class Cluster implements Serializable {
 	
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 
 	@Id @GeneratedValue(strategy=GenerationType.AUTO)
@@ -32,7 +29,18 @@ public class Cluster implements Serializable {
 	@Column(name="Quality_Ratio")
 	double quality;
 	
+	private DataSetType dataset;
 	
+	public DataSetType getDataset() {
+		return dataset;
+	}
+
+
+	public void setDataset(DataSetType dataset) {
+		this.dataset = dataset;
+	}
+
+
 	Cluster() {
 		super();
 	}

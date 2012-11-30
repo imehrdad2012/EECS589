@@ -25,7 +25,6 @@ public class RMDataImporter {
 	private Scanner scanner;
 	private int personID;
 	private int countCorruptedEntries = 0; // the number of 01-Jan-2004 entries skipped
-	
 	public int getCountCorruptedEntries() {
 		return countCorruptedEntries;
 	}
@@ -138,8 +137,8 @@ public class RMDataImporter {
 		// else. The path must end with a trailing slash.
 		//
 		
-		//String pathToCsvFiles = "/Users/Mehrdad/Documents/workspace/589-Project/realitydata_csv/";
-		String pathToCsvFiles = "C:\\Users\\Pedro\\Desktop\\589 project data\\realitydata_csv\\locs\\";
+		String pathToCsvFiles = "/Users/Mehrdad/Documents/workspace/589-Project/realitydata_csv/";
+		//String pathToCsvFiles = "C:\\Users\\Pedro\\Desktop\\589 project data\\realitydata_csv\\locs\\";
 		CellSpanService cellSpanService = new CellSpanService();
 
 		try {

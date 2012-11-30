@@ -47,7 +47,7 @@ public class OscillationGraphGenerator {
 	}
 	
 	public static void main(String[] args) {
-		DataSetType dataset = DataSetType.SampledRealityMining;
+		DataSetType dataset = DataSetType.NokiaChallenge;
 		CellSpanServiceInterface cellSpanService = null;
 		if(dataset == DataSetType.RealityMining){
 			cellSpanService = new CellSpanService();
