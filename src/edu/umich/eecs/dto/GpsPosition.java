@@ -12,6 +12,12 @@ public class GpsPosition {
 	private double longitude = 0;
 	@Column(name="GPS_STDDEV", nullable = true)
 	private double stdDev = 0;
+	//
+	// This is the number of times this specific cell was seen in the GSM data
+	// and we found appropriate GPS data for it.
+	//
+	@Column(name="GPS_SIGHTINGS", nullable = true)
+	private int countSightings = 0;
 	
 	public GpsPosition(double latitude, double longitude, double stdDev) {
 		super();
@@ -40,6 +46,16 @@ public class GpsPosition {
 	public void setStdDev(double stdDev) {
 		this.stdDev = stdDev;
 	}
+
+	public int getCountSightings() {
+		return countSightings;
+	}
+
+	public void setCountSightings(int countSightings) {
+		this.countSightings = countSightings;
+	}
+	
+	
 	
 	
 }
