@@ -24,13 +24,17 @@ public class Cell implements Serializable, Comparable<Cell> {
 	
 	@Id
 	private CellKey cellkey; //Composite Key=5188.40332--> (areaid=5188 cellid=40332)	
-	
+
+	private GpsPosition gpsPosition;
+
 	Cell() {
 	}
 	
 	public CellKey getCellkey() {
 		return cellkey;
 	}
+	
+	
 
 
 	public void setCellkey(CellKey cellkey) {
@@ -45,8 +49,8 @@ public class Cell implements Serializable, Comparable<Cell> {
 		init(Double.toString(cell_area));
 	}
 	
-	public Cell(int countryID, int areaID, int cellID) {
-		this.cellkey = new CellKey(countryID, areaID, cellID);
+	public Cell(int countryID, int networkID, int areaID, int cellID) {
+		this.cellkey = new CellKey(countryID, areaID, cellID, networkID);
 	}
 
 	private void init(String cell_area) {
@@ -119,6 +123,16 @@ public class Cell implements Serializable, Comparable<Cell> {
 		return new StringBuilder().append(getAreaID()).
 				append(".").append(getCellID()).toString();
 	}
+
+
+	public GpsPosition getGpsPosition() {
+		return gpsPosition;
+	}
+
+	public void setGpsPosition(GpsPosition gpsPosition) {
+		this.gpsPosition = gpsPosition;
+	}
+
 	
 }
 	

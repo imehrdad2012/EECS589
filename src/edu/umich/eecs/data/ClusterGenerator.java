@@ -23,9 +23,13 @@ import edu.umich.eecs.util.Tic;
 public class ClusterGenerator {
 	public static Tic clock = new Tic(true);
 	
-	public static void computeCluster(OscillationService os){
+
+
 		
-		ClusterService  cs= new ClusterService();
+
+	public static void computeCluster(DataSetType dataset){
+		OscillationService os= new OscillationService(dataset);
+		ClusterService cs= new ClusterService();
 		
 		clock.tic();
 		List<OscillatingCellTowerPair> oEdges=os.getOrderedOscillationPairs();
@@ -51,7 +55,9 @@ public class ClusterGenerator {
 	
 	public static void main(String[] args) {
 		
-		ClusterGenerator.computeCluster(new OscillationService(DataSetType.RealityMining));	
+
+		DataSetType dataset = DataSetType.RealityMining;
+		ClusterGenerator.computeCluster(dataset);	
 		
 	}
 

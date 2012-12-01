@@ -11,17 +11,19 @@ public class CellKey implements Serializable, Comparable<CellKey>{
 	private int countryID;
 	private int cellID;
 	private int areaID;
+	private int networkID;
 	
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
 
-	public CellKey(int countryID, int cellID, int areaID) {
+	public CellKey(int countryID, int cellID, int areaID, int networkID) {
 		super();
 		this.countryID = countryID;
 		this.cellID = cellID;
 		this.areaID = areaID;
+		this.networkID = networkID;
 	}
 
 	
@@ -50,6 +52,16 @@ public class CellKey implements Serializable, Comparable<CellKey>{
 		this.countryID = countryID;
 	}
 
+	public int getNetworkID() {
+		return networkID;
+	}
+
+
+	public void setNetworkID(int networkID) {
+		this.networkID = networkID;
+	}
+
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -57,6 +69,7 @@ public class CellKey implements Serializable, Comparable<CellKey>{
 		result = prime * result + areaID;
 		result = prime * result + cellID;
 		result = prime * result + countryID;
+		result = prime * result + networkID;
 		return result;
 	}
 
@@ -74,6 +87,8 @@ public class CellKey implements Serializable, Comparable<CellKey>{
 		if (cellID != other.cellID)
 			return false;
 		if (countryID != other.countryID)
+			return false;
+		if(networkID != other.networkID)
 			return false;
 		return true;
 	}
