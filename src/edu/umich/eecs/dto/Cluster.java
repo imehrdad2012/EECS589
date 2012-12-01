@@ -10,7 +10,11 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinTable;
 import javax.persistence.OneToMany;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
+
+import org.hibernate.annotations.CascadeType;
+import org.hibernate.annotations.GenericGenerator;
 
 
 @Entity
@@ -19,7 +23,9 @@ public class Cluster implements Serializable {
 	
 	private static final long serialVersionUID = 1L;
 
-	@Id @GeneratedValue(strategy=GenerationType.AUTO)
+	
+	@GenericGenerator(name = "generator", strategy = "increment", parameters = {})
+    @Id@GeneratedValue(generator = "generator")
 	private int clusterID;
 	
 	@OneToMany
@@ -29,12 +35,12 @@ public class Cluster implements Serializable {
 	@Column(name="Quality_Ratio")
 	double quality;
 	
+	@Column(name="DataSet_Type")
 	private DataSetType dataset;
 	
 	public DataSetType getDataset() {
 		return dataset;
 	}
-
 
 	public void setDataset(DataSetType dataset) {
 		this.dataset = dataset;
@@ -46,10 +52,11 @@ public class Cluster implements Serializable {
 	}
 	
 	
-	public Cluster(Set<Cell> cells, double quality) {
+	public Cluster(Set<Cell> cells, double quality, DataSetType dataset) {
 		super();
 		this.cells = cells;
 		this.quality = quality;
+		this.dataset=dataset;
 	}
 
 

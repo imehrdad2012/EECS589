@@ -33,6 +33,7 @@ public class MDCCellSpanService extends Service implements CellSpanServiceInterf
 		List<MDCCellSpan> mdcSpans = (List<MDCCellSpan>) query.list();
 		List<CellSpan> cellSpans = MDCCellSpan.listAsCellSpan(mdcSpans);
 		commitTransaction(s);
+		closeSession(s);
 		return cellSpans;
 	}
 	
@@ -42,6 +43,7 @@ public class MDCCellSpanService extends Service implements CellSpanServiceInterf
 		Query query = s.createQuery("from MDCCellSpan");
 		List<MDCCellSpan> mdcSpans = (List<MDCCellSpan>) query.list();
 		List<CellSpan> cellSpans = MDCCellSpan.listAsCellSpan(mdcSpans);
+		closeSession(s);
 		return cellSpans;
 	}
 
@@ -52,6 +54,7 @@ public class MDCCellSpanService extends Service implements CellSpanServiceInterf
 		Query query = s
 				.createQuery("select cell from MDCCellSpan group by cell");
 		List<Cell> cells = (List<Cell>) query.list();
+		closeSession(s);
 		return cells;
 
 	}
@@ -63,6 +66,7 @@ public class MDCCellSpanService extends Service implements CellSpanServiceInterf
 		Query query = s
 				.createQuery("select key.personid from MDCCellSpan group by key.personid");
 		List<Integer> users = (List<Integer>) query.list();
+		closeSession(s);
 		return users;
 
 	}

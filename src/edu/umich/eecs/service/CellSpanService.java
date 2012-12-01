@@ -37,7 +37,7 @@ public class CellSpanService extends Service implements CellSpanServiceInterface
 						+ " key.transitionId ");
 		query.setInteger("pid", pid);
 		List<CellSpan> lcp = (List<CellSpan>) query.list();
-		commitTransaction(s);
+		closeSession(s);
 		return lcp;
 	}
 
@@ -46,6 +46,7 @@ public class CellSpanService extends Service implements CellSpanServiceInterface
 		Session s = fireTransaction();
 		Query query = s.createQuery("from CellSpan");
 		List<CellSpan> cells = (List<CellSpan>) query.list();
+		closeSession(s);
 		return cells;
 	}
 
@@ -54,6 +55,7 @@ public class CellSpanService extends Service implements CellSpanServiceInterface
 		Session s = fireTransaction();
 		Query query = s.createQuery("select cell from CellSpan group by cell");
 		List<Cell> cells = (List<Cell>) query.list();
+		closeSession(s);
 		return cells;
 
 	}
@@ -64,6 +66,7 @@ public class CellSpanService extends Service implements CellSpanServiceInterface
 		Query query = s
 				.createQuery("select key.personid from CellSpan group by key.personid");
 		List<Integer> users = (List<Integer>) query.list();
+		closeSession(s);
 		return users;
 
 	}

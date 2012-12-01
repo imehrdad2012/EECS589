@@ -110,7 +110,7 @@ public class ClusterCreatorTest {
 		osEdges.add(new OscillatingCellTowerPair(new Cell("1.2"), new Cell("1.3"), 99, 100));
 		
 
-		ClusterFinder cf= new ClusterFinder(osEdges,cells, new ClusterService() );
+		ClusterFinder cf= new ClusterFinder(osEdges,cells, new ClusterService(), DataSetType.RealityMining);
 		//cf.makeCluster();
 		//assertEquals(new ClusterService().getAllClusters().size(), 2);
 		

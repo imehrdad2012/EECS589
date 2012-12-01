@@ -12,6 +12,5 @@ public enum DataSetType {
     public static boolean isValid(DataSetType t) {
     	return t == RealityMining || t == NokiaChallenge;
     }
-    
     public int asInt() { return id; }
 }

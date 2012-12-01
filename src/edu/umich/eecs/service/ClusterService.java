@@ -13,6 +13,7 @@ public class ClusterService extends Service {
 		Session s= fireTransaction();
 		Query query= s.createQuery("from Cluster" );
 		List<Cluster> cells=(List<Cluster>)query.list();
+		closeSession(s);
 		return cells;
 	}
 	public void saveListToCluster(List<Cluster> clusters){

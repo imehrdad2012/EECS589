@@ -20,6 +20,7 @@ public class CellService  extends Service {
 		Session s = fireTransaction();
 		Query query = s.createQuery("from Cell");
 		List<Cell> cells = (List<Cell>) query.list();
+		closeSession(s);
 		return cells;
 	}
 	

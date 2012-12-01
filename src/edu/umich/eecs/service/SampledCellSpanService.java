@@ -33,7 +33,7 @@ public class SampledCellSpanService extends Service implements CellSpanServiceIn
 		List<SampledCellSpan> sampledSpans = (List<SampledCellSpan>) query
 				.list();
 		List<CellSpan> cellSpans = SampledCellSpan.listAsCellSpan(sampledSpans);
-		commitTransaction(s);
+		closeSession(s);
 		return cellSpans;
 	}
 	
@@ -43,6 +43,7 @@ public class SampledCellSpanService extends Service implements CellSpanServiceIn
 		Query query = s.createQuery("from SampledCellSpan");
 		List<SampledCellSpan> sampledSpans = (List<SampledCellSpan>) query.list();
 		List<CellSpan> cellSpans = SampledCellSpan.listAsCellSpan(sampledSpans);
+		closeSession(s);
 		return cellSpans;
 	}
 	
@@ -52,6 +53,7 @@ public class SampledCellSpanService extends Service implements CellSpanServiceIn
 		Session s = fireTransaction();
 		Query query = s.createQuery("select cell from SampledCellSpan group by cell");
 		List<Cell> cells = (List<Cell>) query.list();
+		closeSession(s);
 		return cells;
 
 	}
@@ -63,6 +65,7 @@ public class SampledCellSpanService extends Service implements CellSpanServiceIn
 		Query query = s
 				.createQuery("select key.personid from SampledCellSpan group by key.personid");
 		List<Integer> users = (List<Integer>) query.list();
+		closeSession(s);
 		return users;
 
 	}

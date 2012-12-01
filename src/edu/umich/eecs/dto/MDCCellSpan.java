@@ -9,9 +9,7 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "mdc_cellspan")
 public class MDCCellSpan extends AbstractCellSpan {
-	/**
-	 * 
-	 */
+	
 	private static final long serialVersionUID = 1L;
 
 	public MDCCellSpan(CellSpan span) {

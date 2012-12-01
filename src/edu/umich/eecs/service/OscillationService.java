@@ -95,11 +95,11 @@ public class OscillationService extends Service{
 	public List<OscillatingCellTowerPair> getOrderedOscillationPairs(){
 		  Session s= fireTransaction();
 		Criteria crit = s.createCriteria(OscillatingCellTowerPair.class);
-		crit.add(Restrictions.eq("dataset", dataset.asInt()));
+		crit.add(Restrictions.eq("dataset", dataset));
 		crit.addOrder(Order.asc("supportRate"));
 		List<OscillatingCellTowerPair> allEdges = (List<OscillatingCellTowerPair>) crit
 				.list();
-		commitTransaction(s);
+		closeSession(s);
 		return allEdges;
 		
 	}
@@ -118,6 +118,7 @@ public class OscillationService extends Service{
 		Set<Cell> cell = new HashSet<Cell>();
 		cell.addAll(query1.list());
 		cell.addAll(query2.list());
+		closeSession(s);
 		return cell;
 		
 		

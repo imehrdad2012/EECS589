@@ -38,7 +38,6 @@ public class OscillationGraphGenerator {
 			mobilityPaths.addAll(personsMobiliyPaths);
 			clock.toc("\t" + mobilityPaths.size() + " total mobility paths.");
 		}
-
 		clock.tic();
 		Collection<OscillatingCellTowerPair> oscillations   =
 				OscilliatingPairFinder.findOscillationSupport(mobilityPaths, Constants.oscillationThreshold);
