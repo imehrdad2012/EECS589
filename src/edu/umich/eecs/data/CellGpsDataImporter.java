@@ -262,7 +262,6 @@ public class CellGpsDataImporter {
 					cellGpsDataMap);
 
 			System.out.println(++count + "/" + contents.length + " CSV files analyzed DB");
-			break;
 		}
 
 		HashMap<Cell, GpsPosition> cellGpsPosition = importer.computeCellGpsPosition(cellGpsDataMap);
