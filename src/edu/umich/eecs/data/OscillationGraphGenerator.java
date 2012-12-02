@@ -23,6 +23,7 @@ public class OscillationGraphGenerator {
 		clock.toc("Obtained " + personIds.size() + " person IDs");
 		List<MobilityPath> mobilityPaths = new ArrayList<MobilityPath>(personIds.size() * 1000);
 		for(Integer personId : personIds) {
+			
 			System.out.println(personId + "/" + personIds.size());
 			clock.tic();
 			List<CellSpan> cellSpans = svc.getCPByUserID(personId.intValue());
@@ -37,6 +38,7 @@ public class OscillationGraphGenerator {
 			clock.tic();
 			mobilityPaths.addAll(personsMobiliyPaths);
 			clock.toc("\t" + mobilityPaths.size() + " total mobility paths.");
+
 		}
 
 		clock.tic();
@@ -47,7 +49,7 @@ public class OscillationGraphGenerator {
 	}
 	
 	public static void main(String[] args) {
-		DataSetType dataset = DataSetType.SampledRealityMining;
+		DataSetType dataset = DataSetType.NokiaChallenge;
 		CellSpanServiceInterface cellSpanService = null;
 		if(dataset == DataSetType.RealityMining){
 			cellSpanService = new CellSpanService();

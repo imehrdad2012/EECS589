@@ -86,7 +86,7 @@ public class MDCDataImporter {
 			int areaID = scanner.nextInt();
 			scanner.next(); scanner.next(); // signal and signaldbm
 			
-			Cell currentCell = new Cell(countryID, areaID, cellID, networkID);
+			Cell currentCell = new Cell(countryID, networkID, areaID, cellID);
 			
 			//
 			// This is true for all but the first line.

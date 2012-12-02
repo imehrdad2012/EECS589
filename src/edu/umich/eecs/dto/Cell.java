@@ -50,7 +50,7 @@ public class Cell implements Serializable, Comparable<Cell> {
 	}
 	
 	public Cell(int countryID, int networkID, int areaID, int cellID) {
-		this.cellkey = new CellKey(countryID, areaID, cellID, networkID);
+		this.cellkey = new CellKey(countryID, cellID, areaID, networkID);
 	}
 
 	private void init(String cell_area) {
