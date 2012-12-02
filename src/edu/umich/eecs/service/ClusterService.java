@@ -5,15 +5,16 @@ import java.util.List;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import edu.umich.eecs.dto.Cluster;
+import edu.umich.eecs.dto.DataSetType;
 import edu.umich.eecs.dto.OscillatingCellTowerPair;
 
 public class ClusterService extends Service {
 
-	public List<Cluster> getAllClusters() {
+	public List<Cluster> getAllClusters(DataSetType dataset) {
 		Session s= fireTransaction();
-		Query query= s.createQuery("from Cluster" );
+		Query query= s.createQuery("from Cluster where ckey.dataset=:dset" );
+		query.setInteger("dset", dataset.asInt());
 		List<Cluster> cells=(List<Cluster>)query.list();
-		closeSession(s);
 		return cells;
 	}
 	public void saveListToCluster(List<Cluster> clusters){
@@ -29,4 +30,5 @@ public class ClusterService extends Service {
 		}
 		commitTransaction(s);
 	}
+	
 }

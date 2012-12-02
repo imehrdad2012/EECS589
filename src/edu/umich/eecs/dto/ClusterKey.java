@@ -16,6 +16,10 @@ public class ClusterKey implements Serializable {
 	private DataSetType dataset;
 	
 	
+	ClusterKey() {
+		super();
+	}
+
 	@Column(name = "Cluster_ID", unique = true, nullable = false)
 	private int clusterID;
 	
