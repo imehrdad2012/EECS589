@@ -81,7 +81,6 @@ public class OscillationService extends Service{
 		  Query query=s.createQuery("from OscillatingCellTowerPair where dataset =:dataset");
 		  query.setInteger("dataset", dataset.asInt());
 		   List <OscillatingCellTowerPair> allEdges=(List<OscillatingCellTowerPair>)query.list();
-		   commitTransaction(s);
 		  return allEdges;
 		
 		
@@ -99,7 +98,6 @@ public class OscillationService extends Service{
 		crit.addOrder(Order.asc("supportRate"));
 		List<OscillatingCellTowerPair> allEdges = (List<OscillatingCellTowerPair>) crit
 				.list();
-		closeSession(s);
 		return allEdges;
 		
 	}
@@ -118,7 +116,6 @@ public class OscillationService extends Service{
 		Set<Cell> cell = new HashSet<Cell>();
 		cell.addAll(query1.list());
 		cell.addAll(query2.list());
-		closeSession(s);
 		return cell;
 		
 		

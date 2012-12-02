@@ -59,9 +59,6 @@ public class Service {
 		
 	}
 	
-	public void closeSession(Session session){
-		session.close();
-	}
 	
 
 }
