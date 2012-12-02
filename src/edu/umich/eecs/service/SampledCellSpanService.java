@@ -33,7 +33,6 @@ public class SampledCellSpanService extends Service implements CellSpanServiceIn
 		List<SampledCellSpan> sampledSpans = (List<SampledCellSpan>) query
 				.list();
 		List<CellSpan> cellSpans = SampledCellSpan.listAsCellSpan(sampledSpans);
-		commitTransaction(s);
 		return cellSpans;
 	}
 	

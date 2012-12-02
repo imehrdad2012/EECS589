@@ -24,7 +24,6 @@ public class LocImporter {
 	private BufferedReader bufferReader;
 	private ArrayList<Location> listLocs;
 	int  persistCounter;
-
 	
 	LocImporter( FileReader fileReader) {
 		super();

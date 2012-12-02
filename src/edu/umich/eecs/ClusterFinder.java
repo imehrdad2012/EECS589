@@ -15,6 +15,7 @@ import org.jgrapht.graph.SimpleWeightedGraph;
 import edu.umich.eecs.data.Constants;
 import edu.umich.eecs.dto.Cell;
 import edu.umich.eecs.dto.Cluster;
+import edu.umich.eecs.dto.DataSetType;
 import edu.umich.eecs.dto.OscillatingCellTowerPair;
 import edu.umich.eecs.logger.LogClass;
 import edu.umich.eecs.service.ClusterService;
@@ -41,7 +42,9 @@ public class ClusterFinder {
 	SimpleWeightedGraph<Cell, DefaultWeightedEdge> backupGraph; //keeping the original graph.
 	List< Cluster > clusters;       ///clusterset after running clustering algorithms.
 	ClusterService clusterSrv;
-	Integer transNumber;     // includes number of package of 100 clusters that persisted
+	Integer transNumber;// includes number of package of 100 clusters that persisted
+	DataSetType dataSet; //dataset type the cluster is creating from.
+	
 	
 	
 	List<OscillatingCellTowerPair> orderedEdges;   //list oredred edges based on ascending weights.
@@ -53,12 +56,13 @@ public class ClusterFinder {
 	 * @param distinctCells: vertices
 	 */
 	
-	public ClusterFinder(List<OscillatingCellTowerPair> osCellPair, Set<Cell> distinctCells, ClusterService cs) {
+	public ClusterFinder(List<OscillatingCellTowerPair> osCellPair, Set<Cell> distinctCells, ClusterService cs, DataSetType dataset) {
 		
 		oscGraph= new SimpleWeightedGraph<Cell, DefaultWeightedEdge>(DefaultWeightedEdge.class);
 		backupGraph= new SimpleWeightedGraph<Cell, DefaultWeightedEdge>(DefaultWeightedEdge.class);
 		clusters= new ArrayList<Cluster>();
 		clusterSrv=cs;
+		this.dataSet=dataset;
 		transNumber=0;
 		if(osCellPair != null && osCellPair.size() > 0){
 			orderedEdges=osCellPair;
@@ -113,7 +117,7 @@ public class ClusterFinder {
 			if(e==null){
 				e=oscGraph.getEdge(op.getCellTowerPair().getCell1(), op.getCellTowerPair().getCell2());
 				//LogClass.log(numberOfInsertedEdges+": "+op.getCellTowerPair().getCell1()+ "<-->"+op.getCellTowerPair().getCell2()+
-				//		" Weight:"+ op.getSupportRate());
+						//" Weight:"+ op.getSupportRate());
 			}
 			oscGraph.setEdgeWeight(e, op.getSupportRate());
 			numberOfInsertedEdges++;
@@ -147,7 +151,7 @@ public class ClusterFinder {
 	 * Computes a greedy algorithm for finding cell towers that oscillates frequently to eachother.
 	 */
 	
-	public List< Cluster > makeCluster(){
+	public void makeCluster(){
 
 		int clusterCount=0;
 		while(oscGraph.vertexSet().size() > 0 && oscGraph.edgeSet().size() > 0){
@@ -160,14 +164,18 @@ public class ClusterFinder {
 					double qualityMetric=qualityMetric(connectedSet);
 					//LogClass.log("Cluster:"+ (++clusterCount)+ " #Cell:"+ connectedSet.size()+" Quality"+qualityMetric);
 					//LogClass.log("\t"+connectedSet);
-					addCluster(new Cluster(connectedSet, qualityMetric(connectedSet)));
+					addCluster(new Cluster(connectedSet, qualityMetric,dataSet ));
 					oscGraph.removeAllVertices(connectedSet);
 				}
 			}
 
 		}
 		
-		return clusters;
+		System.out.println("Persisted #... " + (Constants.maximumClusterBufferSize*transNumber+clusters.size())+ "/All" );
+		clusterSrv.saveListToCluster(clusters);
+		clusters.clear();
+		
+		
 		
 	}
 	
@@ -253,7 +261,7 @@ public class ClusterFinder {
 		clusters.add(c);
 		if(clusters.size()==Constants.maximumClusterBufferSize){
 			transNumber++;
-			System.out.println("Persisting #...(" + Constants.maximumClusterBufferSize*transNumber+ ") of All Clusters" );
+			System.out.println("Persisted #... " + Constants.maximumClusterBufferSize*transNumber+ "/All" );
 			clusterSrv.saveListToCluster(clusters);
 			clusters.clear();
 			
