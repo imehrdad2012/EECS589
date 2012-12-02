@@ -34,9 +34,6 @@ public class Cell implements Serializable, Comparable<Cell> {
 		return cellkey;
 	}
 	
-	
-
-
 	public void setCellkey(CellKey cellkey) {
 		this.cellkey = cellkey;
 	}

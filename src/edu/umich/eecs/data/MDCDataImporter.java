@@ -135,7 +135,8 @@ public class MDCDataImporter {
 		// Replace this with the path to where the personid/gsm.csv files are.
 		//
 		
-		String pathToCsvFiles = "C:\\Users\\Pedro\\Desktop\\589 project data\\mdc2012-373-taskopen\\mdc2012-373-taskopen\\";
+		String pathToCsvFiles ="/Users/Mehrdad/Documents/workspace/589-Project/mdc_csv/mdc2012-373-taskopen/";
+		//String pathToCsvFiles = "C:\\Users\\Pedro\\Desktop\\589 project data\\mdc2012-373-taskopen\\mdc2012-373-taskopen\\";
 		MDCCellSpanService cellSpanService = new MDCCellSpanService();
 
 		try {
@@ -146,11 +147,15 @@ public class MDCDataImporter {
 			File dir = new File(pathToCsvFiles);
 			int count = 0;
 			String[] contents = dir.list();
+			System.out.println(contents);
 			for (String personDir : contents) {
 				
 				MDCDataImporter dataImporter = new MDCDataImporter(
-						pathToCsvFiles + personDir + "\\gsm.csv", Integer.parseInt(personDir),
-						cellSpanService);
+					//	pathToCsvFiles + personDir + "\\gsm.csv", Integer.parseInt(personDir),
+					//	cellSpanService);
+						pathToCsvFiles + personDir + "/gsm.csv", Integer.parseInt(personDir),
+							cellSpanService);	
+						
 				dataImporter.insertIntoDatabase();
 				System.out.println(++count + "/" + contents.length + " CSV files inserted in the DB");
 			}

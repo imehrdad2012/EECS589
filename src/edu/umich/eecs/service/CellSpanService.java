@@ -37,7 +37,6 @@ public class CellSpanService extends Service implements CellSpanServiceInterface
 						+ " key.transitionId ");
 		query.setInteger("pid", pid);
 		List<CellSpan> lcp = (List<CellSpan>) query.list();
-		commitTransaction(s);
 		return lcp;
 	}
 
