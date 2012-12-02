@@ -18,8 +18,13 @@ public class ClusterService extends Service {
 	}
 	public void saveListToCluster(List<Cluster> clusters){
 		Session s=fireTransaction();
+		int row=0;
+		Query query= s.createQuery("select max(ckey.clusterID) from Cluster" );
+		if(query.list().get(0)!=null){
+			row=((Integer)query.list().get(0))+1;
+		}
 		for(Cluster c: clusters){
-		
+			c.getCkey().setClusterID(++row);
 			s.saveOrUpdate(c);
 		}
 		commitTransaction(s);

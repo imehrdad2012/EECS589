@@ -18,18 +18,12 @@ import edu.umich.eecs.util.Tic;
  *
  */
 
-
-
 public class ClusterGenerator {
 	public static Tic clock = new Tic(true);
 	
 
-
-		
-
 	public static void computeCluster(DataSetType dataset){
 		OscillationService os= new OscillationService(dataset);
-		ClusterService cs= new ClusterService();
 		
 		clock.tic();
 		List<OscillatingCellTowerPair> oEdges=os.getOrderedOscillationPairs();
@@ -46,14 +40,12 @@ public class ClusterGenerator {
 		clock.tic();
 		cf.makeCluster();
 		clock.toc("Forth Step: Clusters Are Created and Mostly Persisted ");
-		
-		
 	}
 	
 	
 	public static void main(String[] args) {
 		
-		ClusterGenerator.computeCluster(DataSetType.RealityMining);
+		ClusterGenerator.computeCluster(DataSetType.NokiaChallenge);
 
 		
 	}

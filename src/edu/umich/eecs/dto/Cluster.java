@@ -9,54 +9,49 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
-
+import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
-import org.hibernate.annotations.GenericGenerator;
-
 
 @Entity
 @Table(name="Cluster")
 public class Cluster implements Serializable {
 	
 	private static final long serialVersionUID = 1L;
-
 	
-	@GenericGenerator(name = "generator", strategy = "increment", parameters = {})
-    @Id@GeneratedValue(generator = "generator")
-	private int clusterID;
+	@Id
+	ClusterKey ckey;
 	
-	@OneToMany
-	@JoinTable(name="Cluster_Cell")
+	@ManyToMany
+	@Cascade(org.hibernate.annotations.CascadeType.ALL)
 	Set<Cell> cells;
 	
 	@Column(name="Quality_Ratio")
 	double quality;
 	
-	@Column(name="DataSet_Type")
-	private DataSetType dataset;
-	
-	public DataSetType getDataset() {
-		return dataset;
-	}
-
-	public void setDataset(DataSetType dataset) {
-		this.dataset = dataset;
-	}
-
 
 	Cluster() {
 		super();
 	}
 	
 	
+	public ClusterKey getCkey() {
+		return ckey;
+	}
+
+
+	public void setCkey(ClusterKey ckey) {
+		this.ckey = ckey;
+	}
+
 	public Cluster(Set<Cell> cells, double quality, DataSetType dataset) {
 		super();
 		this.cells = cells;
 		this.quality = quality;
-		this.dataset=dataset;
+		this.ckey=new ClusterKey(dataset);
 	}
 
 
