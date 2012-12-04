@@ -63,7 +63,7 @@
 		<mapping class="edu.umich.eecs.dto.SampledCellSpan"/>
 		<mapping class="edu.umich.eecs.dto.MDCCellSpan"/>
 		<mapping class="edu.umich.eecs.dto.Location"/>
-		
+		<mapping class="edu.umich.eecs.dto.AbstractCellSpan"/>
 
 		
     </session-factory>
