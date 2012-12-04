@@ -37,6 +37,11 @@ public class OscilliatingPairFinder {
 			Collection<SwitchingCellTowerPair> oscillations = 
 					findSwitchesInMobilityPath(mobilityPath);
 			for(SwitchingCellTowerPair oscillation : oscillations) {
+				// HACK
+				// TODO
+				if(oscillation.cellTowerPair.getCell1().getCellID() == 14707516) {
+					int a = 42;
+				}
 				if(!oscillatingPairs.containsKey(oscillation.cellTowerPair)) {
 					oscillatingPairs.put(oscillation.cellTowerPair,
 							new OscillatingCellTowerPair(oscillation.cellTowerPair));

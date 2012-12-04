@@ -77,5 +77,9 @@ public class AbstractCellSpan  implements Serializable, Comparable<CellSpan> {
 		}
 		return Integer.compare(key.transitionId, o.key.transitionId);
 	}
+	
+	public String toString() {
+		return cell.toString() + " from " + startTime.toString() + " to " + endtime.toString();
+	}
 
 }
