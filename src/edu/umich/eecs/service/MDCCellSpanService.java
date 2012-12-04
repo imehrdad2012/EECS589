@@ -47,11 +47,11 @@ public class MDCCellSpanService extends Service implements CellSpanServiceInterf
 
 	@SuppressWarnings("unchecked")
 	public List<Cell> getAllCells() {
-
 		Session s = fireTransaction();
 		Query query = s
-				.createQuery("select cell from MDCCellSpan group by cell");
+				.createQuery("select mdc.cell from MDCCellSpan mdc group by mdc.cell");
 		List<Cell> cells = (List<Cell>) query.list();
+	
 		return cells;
 
 	}

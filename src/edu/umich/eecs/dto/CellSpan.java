@@ -3,6 +3,8 @@ package edu.umich.eecs.dto;
 import java.sql.Timestamp;
 
 import javax.persistence.Entity;
+import javax.persistence.Inheritance;
+import javax.persistence.InheritanceType;
 import javax.persistence.Table;
 
 /**
@@ -19,6 +21,8 @@ public class CellSpan extends AbstractCellSpan {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
+	
+	
 
 	public CellSpan(int personid, Cell cell, int transitionId, Timestamp startTime, Timestamp endtime) {
 		super(personid, cell, transitionId, startTime, endtime);

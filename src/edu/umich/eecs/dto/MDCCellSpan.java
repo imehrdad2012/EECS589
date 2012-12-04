@@ -12,6 +12,8 @@ public class MDCCellSpan extends AbstractCellSpan {
 	
 	private static final long serialVersionUID = 1L;
 
+	
+	
 	public MDCCellSpan(CellSpan span) {
 		super(span.getKey().getPersonid(), span.getCell(), span.getKey()
 				.getTransitionId(), span.getStartTime(), span.getEndtime());
