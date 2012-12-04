@@ -45,7 +45,9 @@ public class LocationService extends Service {
 		query.setInteger("cc", cc);
 		if(query.list()==null || query.list().size()==0){
 
+
 		//	LogClass.log("There is no result for mcc="+cc+" mnc="+nc+" aid="+aid+" cid="+cid);
+
 		}
 		else {
 		
@@ -57,7 +59,4 @@ public class LocationService extends Service {
 		 
 	 }
 
-
-	
-	
 }
