@@ -62,7 +62,7 @@
 		<mapping class="edu.umich.eecs.dto.Cluster"/>
 		<mapping class="edu.umich.eecs.dto.SampledCellSpan"/>
 		<mapping class="edu.umich.eecs.dto.MDCCellSpan"/>
-		<mapping class="edu.umich.eecs.dto.Location"/>
+		<mapping class="edu.umich.eecs.dto.OpenCell"/>
 		<mapping class="edu.umich.eecs.dto.AbstractCellSpan"/>
 
 		
