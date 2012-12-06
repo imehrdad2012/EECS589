@@ -10,6 +10,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Scanner;
 
+import edu.umich.eecs.LatitudeLongitudeDistance;
 import edu.umich.eecs.dto.Cell;
 import edu.umich.eecs.dto.GpsPosition;
 import edu.umich.eecs.service.CellService;
@@ -139,23 +140,19 @@ public class CellGpsDataImporter {
 			double latitudeMean = latitudeSum / gpsDataList.size();
 			double longitudeMean = longitudeSum / gpsDataList.size();
 			
-			double latitudeVarianceSum = 0;
-			double longitudeVarianceSum = 0;
+			//
+			// We compute the standard deviation in meters from the mean.
+			//
+			
+			double varianceSum = 0.0;
 			for(GpsTimestampedData gpsData : gpsDataList) {
-				latitudeVarianceSum += Math.pow(gpsData.latitude - latitudeMean, 2);
-				longitudeVarianceSum +=  Math.pow(gpsData.longitude - longitudeMean, 2);;
+				double distanceInM = LatitudeLongitudeDistance.distanceInMeters(
+						latitudeMean, longitudeMean,
+						gpsData.latitude, gpsData.longitude);
+				varianceSum += Math.pow(distanceInM, 2);
 			}
 			
-			double latitudeVariance = latitudeVarianceSum / gpsDataList.size();
-			double longitudeVariance = longitudeVarianceSum / gpsDataList.size();
-			
-			//
-			// Our standard deviation is a little fishy -- it doesn't make sense to think
-			// of a single standard deviation of a two-dimensional value. We just average
-			// the longitude and latitude variances and take the sqrt of that.
-			//
-			
-			double positionStdDev = Math.sqrt((latitudeVariance + longitudeVariance) / 2);
+			double positionStdDev = Math.sqrt(varianceSum / gpsDataList.size());			
 			
 			GpsPosition gpsPosition = new GpsPosition(latitudeMean, longitudeMean, positionStdDev);
 			gpsPosition.setCountSightings(gpsDataList.size());
