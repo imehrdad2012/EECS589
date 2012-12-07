@@ -10,7 +10,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Scanner;
 
-import edu.umich.eecs.LatitudeLongitudeDistance;
+import edu.umich.eecs.LatitudeLongitude;
 import edu.umich.eecs.dto.Cell;
 import edu.umich.eecs.dto.GpsPosition;
 import edu.umich.eecs.service.CellService;
@@ -130,15 +130,14 @@ public class CellGpsDataImporter {
 	public HashMap<Cell, GpsPosition> computeCellGpsPosition(HashMap<Cell, List<GpsTimestampedData>> cellGpsData) {
 		HashMap<Cell, GpsPosition> cellPosition = new HashMap<>(cellGpsData.size());
 		for (Cell cell : cellGpsData.keySet()) {
-			double latitudeSum = 0;
-			double longitudeSum = 0;
+
 			List<GpsTimestampedData> gpsDataList = cellGpsData.get(cell);
+			List<LatitudeLongitude> points = new ArrayList<>();
 			for(GpsTimestampedData gpsData : gpsDataList) {
-				latitudeSum += gpsData.latitude;
-				longitudeSum += gpsData.longitude;
+				points.add(new LatitudeLongitude(gpsData.latitude, gpsData.longitude));
 			}
-			double latitudeMean = latitudeSum / gpsDataList.size();
-			double longitudeMean = longitudeSum / gpsDataList.size();
+			
+			LatitudeLongitude meanPoint = LatitudeLongitude.average(points);
 			
 			//
 			// We compute the standard deviation in meters from the mean.
@@ -146,15 +145,15 @@ public class CellGpsDataImporter {
 			
 			double varianceSum = 0.0;
 			for(GpsTimestampedData gpsData : gpsDataList) {
-				double distanceInM = LatitudeLongitudeDistance.distanceInMeters(
-						latitudeMean, longitudeMean,
-						gpsData.latitude, gpsData.longitude);
+				double distanceInM = LatitudeLongitude.distanceInMeters(
+						meanPoint,
+						new LatitudeLongitude(gpsData.latitude, gpsData.longitude));
 				varianceSum += Math.pow(distanceInM, 2);
 			}
 			
 			double positionStdDev = Math.sqrt(varianceSum / gpsDataList.size());			
 			
-			GpsPosition gpsPosition = new GpsPosition(latitudeMean, longitudeMean, positionStdDev);
+			GpsPosition gpsPosition = new GpsPosition(meanPoint.getLatitude(), meanPoint.getLongitude(), positionStdDev);
 			gpsPosition.setCountSightings(gpsDataList.size());
 			cellPosition.put(cell, gpsPosition);
 		}
