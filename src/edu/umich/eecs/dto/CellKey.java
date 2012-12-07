@@ -92,6 +92,11 @@ public class CellKey implements Serializable, Comparable<CellKey>{
 			return false;
 		return true;
 	}
+	
+	@Override
+	public String toString() {
+		return countryID+"/"+networkID+"/"+areaID+"/"+cellID;
+	}
 
 	@Override
 	public int compareTo(CellKey o) {

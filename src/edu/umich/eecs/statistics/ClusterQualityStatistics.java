@@ -69,8 +69,6 @@ public class ClusterQualityStatistics {
 		}
 	}
 	
-	
-	
 	private Map<CellKey, GpsPosition> getGpsData(Collection<CellKey> cellKeys, CellService svc) {
 		clock.tic();
 		Map<CellKey, GpsPosition> gpsMap = new HashMap<>();
