@@ -6,7 +6,7 @@ import java.util.HashSet;
 import java.util.Scanner;
 import java.util.Set;
 
-import edu.umich.eecs.LatitudeLongitudeDistance;
+import edu.umich.eecs.LatitudeLongitude;
 import edu.umich.eecs.dto.Cell;
 import edu.umich.eecs.dto.CellKey;
 import edu.umich.eecs.dto.GpsPosition;
@@ -43,9 +43,9 @@ public class CellLocationStatistics {
 			
 			OpenCell openCell = openCellSvc.getLocation(key);
 			
-			double disparity = LatitudeLongitudeDistance.distanceInMeters(
-					gpsPos.getLatitude(), gpsPos.getLongitude(),
-					openCell.getLatitude(), openCell.getLongitude());
+			double disparity = LatitudeLongitude.distanceInMeters(
+					new LatitudeLongitude(gpsPos),
+					new LatitudeLongitude(openCell.getLatitude(), openCell.getLongitude()));
 			disparities.add(disparity);
 			
 		 //System.out.println(/*i++ + "/" + cells.size() + " (" + */disparity); //+ ")");
@@ -64,19 +64,10 @@ public class CellLocationStatistics {
 		Scanner scanner = new Scanner(new File(
 				"src/edu/umich/eecs/statistics/files/cells_opencell_and_gpslog_all.txt"));
 		try {
-			Set<CellKey> cells = new HashSet<CellKey>();
+
 			// CELLID   LAC   MNC   MCC  
 			scanner.nextLine();
-			while (scanner.hasNext()) {
-				int cellId = scanner.nextInt();
-				int areaId = scanner.nextInt();
-				int networkId = scanner.nextInt();
-				int countryId = scanner.nextInt();
-				CellKey cellKey = new CellKey(countryId, cellId, areaId,
-						networkId);
-				cells.add(cellKey);
-			}
-
+			Set<CellKey> cells = new HashSet<CellKey>(CellListParser.fromFile(scanner));
 			CellService cellSvc = new CellService();
 			OpenCellService openCellSvc = new OpenCellService();
 
