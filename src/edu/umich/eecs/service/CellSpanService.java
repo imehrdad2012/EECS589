@@ -48,12 +48,37 @@ public class CellSpanService extends Service implements CellSpanServiceInterface
 		return cells;
 	}
 
+
 	@SuppressWarnings("unchecked")
 	public List<Cell> getAllCells() {
 		Session s = fireTransaction();
-		Query query = s.createQuery("select cell from CellSpan group by cell");
+		Query query = s.createQuery("select distinct(cellspan.cell) from CellSpan cellspan");
 		List<Cell> cells = (List<Cell>) query.list();
 		return cells;
+
+	}
+	
+
+	@SuppressWarnings("unchecked")
+	public List<Integer> getAllCellsByAreaID(int areaID) {
+		Session s = fireTransaction();
+		Query query = s
+				.createQuery("select distinct(cellspan.cell.cellkey.cellID) from CellSpan cellspan where cellspan.cell.cellkey.areaID=:id");
+		query.setInteger("id", areaID);
+		List<Integer> cells = (List<Integer>) query.list();
+	
+		return cells;
+
+	}
+	
+	@SuppressWarnings("unchecked")
+	public List<Integer> getAllAreaID() {
+		Session s = fireTransaction();
+		Query query = s.createQuery("select distinct(cellspan.cell.cellkey.areaID) from CellSpan " +
+				"cellspan");
+		List<Integer> areas = (List<Integer>) query.list();
+		areas.remove(new Integer(0));
+		return areas;
 
 	}
 

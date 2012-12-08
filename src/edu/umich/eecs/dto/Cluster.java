@@ -22,6 +22,9 @@ public class Cluster implements Serializable {
 	
 	private static final long serialVersionUID = 1L;
 	
+	
+	
+	
 	@Id
 	ClusterKey ckey;
 	
@@ -68,6 +71,32 @@ public class Cluster implements Serializable {
 		this.quality = quality;
 	}
 	
+	
+
+	@Override
+	public boolean equals(Object c) {
+		if(c == this) {
+			return true;
+		}
+		if(c instanceof Cluster && c != null) {
+			return ((Cluster)c).getCkey()
+					.getClusterID()== this.getCkey().getClusterID()
+					&& ((Cluster)c).getCkey().getDataset() == this.getCkey().getDataset();
+					
+		} else {
+			return false;
+		}
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + getCkey().getDataset().asInt();
+		result = prime * result + getCkey().getClusterID();
+		return result;
+	}
+		
 	
 
 }

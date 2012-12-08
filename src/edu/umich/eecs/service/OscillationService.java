@@ -109,11 +109,37 @@ public class OscillationService extends Service{
 	@SuppressWarnings("unchecked")
 	public Set<Cell> getAllOsiCells(){
 		Session s= fireTransaction();
-		Query query1= s.createQuery("select distinct(cellTowerPair.cell1) from OscillatingCellTowerPair where dataset =:dataset");
+		Query query1= s.createQuery("select distinct(cellTowerPair.cell1)" +
+				" from OscillatingCellTowerPair where dataset =:dataset");
 		query1.setInteger("dataset", dataset.asInt());
-		Query query2= s.createQuery("select distinct(cellTowerPair.cell2) from OscillatingCellTowerPair where dataset =:dataset");
+		Query query2= s.createQuery("select distinct(cellTowerPair.cell2)" +
+				" from OscillatingCellTowerPair where dataset =:dataset");
 		query2.setInteger("dataset", dataset.asInt());
 		Set<Cell> cell = new HashSet<Cell>();
+		cell.addAll(query1.list());
+		cell.addAll(query2.list());
+		return cell;
+		
+		
+	}
+	
+	@SuppressWarnings("unchecked")
+	public Set<Integer> getAllOsiCellsByAreaId(int areaID){
+		Session s= fireTransaction();
+		
+		Query query1= s.createQuery("select distinct(pair.cellTowerPair.cell1.cellkey.cellID) " +
+				"from OscillatingCellTowerPair pair where pair.dataset =:dataset" +
+				" and pair.cellTowerPair.cell1.cellkey.areaID=:id ");
+		query1.setInteger("dataset", dataset.asInt());
+		query1.setInteger("id", areaID);
+		
+		
+		Query query2= s.createQuery("select distinct(pair.cellTowerPair.cell2.cellkey.cellID) " +
+				"from OscillatingCellTowerPair pair where pair.dataset =:dataset " +
+				"and pair.cellTowerPair.cell2.cellkey.areaID=:id");
+		query2.setInteger("dataset", dataset.asInt());
+		query2.setInteger("id", areaID);
+		Set<Integer> cell = new HashSet<Integer>();
 		cell.addAll(query1.list());
 		cell.addAll(query2.list());
 		return cell;

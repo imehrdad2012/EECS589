@@ -11,4 +11,6 @@ public interface CellSpanServiceInterface {
 	public List<CellSpan> getAllCellSpans();
 	public List<Cell> getAllCells();
 	public List<Integer> getAllUsers();
+	public List<Integer> getAllAreaID();
+	public List<Integer> getAllCellsByAreaID(int areaID);
 }

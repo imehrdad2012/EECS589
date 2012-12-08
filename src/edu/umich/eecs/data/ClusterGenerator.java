@@ -45,7 +45,7 @@ public class ClusterGenerator {
 	
 	public static void main(String[] args) {
 		
-		ClusterGenerator.computeCluster(DataSetType.NokiaChallenge);
+		ClusterGenerator.computeCluster(DataSetType.RealityMining);
 
 		
 	}

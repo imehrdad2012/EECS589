@@ -242,7 +242,8 @@ public class CellGpsDataImporter {
 		// Replace this with the path to where the personid/gsm.csv files are.
 		//
 		
-		String pathToCsvFiles = "C:\\Users\\Pedro\\Desktop\\589 project data\\mdc2012-373-taskopen\\mdc2012-373-taskopen\\";
+		String pathToCsvFiles ="/Users/Mehrdad/Documents/workspace/589-Project/mdc_csv/mdc2012-373-taskopen/";
+		//String pathToCsvFiles = "C:\\Users\\Pedro\\Desktop\\589 project data\\mdc2012-373-taskopen\\mdc2012-373-taskopen\\";
 		//
 		// Every person has a directory with her own ID. Inside that directory are files called
 		// "gsm.csv" and "gps.csv" with the data we want.
@@ -257,8 +258,13 @@ public class CellGpsDataImporter {
 		CellGpsDataImporter importer = new CellGpsDataImporter(40);
 		HashMap<Cell, List<GpsTimestampedData>> cellGpsDataMap = new HashMap<>();
 		for (String personDir : contents) {
-			importer.readGpsGsmFilePair(new File(pathToCsvFiles + personDir + "\\gsm.csv"),
+			/*importer.readGpsGsmFilePair(new File(pathToCsvFiles + personDir + "\\gsm.csv"),
 					new File(pathToCsvFiles + personDir + "\\gps.csv"),
+					cellGpsDataMap);*/
+			
+
+			importer.readGpsGsmFilePair(new File(pathToCsvFiles + personDir + "/gsm.csv"),
+					new File(pathToCsvFiles + personDir + "/gps.csv"),
 					cellGpsDataMap);
 
 			System.out.println(++count + "/" + contents.length + " CSV files analyzed DB");

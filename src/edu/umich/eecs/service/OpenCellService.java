@@ -24,7 +24,7 @@ public class OpenCellService extends Service {
 		Session s=fireTransaction();
 		for(OpenCell l: locations){
 			s.saveOrUpdate(l);
-		}
+		} 
 		commitTransaction(s);
 	}
 	

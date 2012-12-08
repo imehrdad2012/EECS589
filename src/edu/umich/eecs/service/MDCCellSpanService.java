@@ -49,12 +49,39 @@ public class MDCCellSpanService extends Service implements CellSpanServiceInterf
 	public List<Cell> getAllCells() {
 		Session s = fireTransaction();
 		Query query = s
-				.createQuery("select mdc.cell from MDCCellSpan mdc group by mdc.cell");
+				.createQuery("select distinct(mdc.cell) from MDCCellSpan mdc");
 		List<Cell> cells = (List<Cell>) query.list();
 	
 		return cells;
 
 	}
+	
+	
+	@SuppressWarnings("unchecked")
+	public List<Integer> getAllCellsByAreaID(int areaID) {
+		Session s = fireTransaction();
+		Query query = s
+				.createQuery("select distinct(cellspan.cell.cellkey.cellID) from MDCCellSpan cellspan where cellspan.cell.cellkey.areaID=:id");
+		query.setInteger("id", areaID);
+		List<Integer> cells = (List<Integer>) query.list();
+	
+		return cells;
+
+	}
+	
+	@SuppressWarnings("unchecked")
+	public List<Integer> getAllAreaID() {
+		Session s = fireTransaction();
+		Query query = s.createQuery("select distinct(cellspan.cell.cellkey.areaID) from MDCCellSpan " +
+				"cellspan");
+		List<Integer> areas = (List<Integer>) query.list();
+		areas.remove(new Integer(0));
+		return areas;
+
+	}
+	
+	
+	
 
 	@SuppressWarnings("unchecked")
 	public List<Integer> getAllUsers() {

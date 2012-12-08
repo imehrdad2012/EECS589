@@ -1,12 +1,16 @@
 package edu.umich.eecs.service;
 
 import java.util.Collection;
+import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.hibernate.Query;
 import org.hibernate.Session;
 
 import edu.umich.eecs.dto.Cell;
+import edu.umich.eecs.dto.DataSetType;
 
 public class CellService  extends Service {
 	public void saveCell(Cell cp) {
@@ -15,6 +19,11 @@ public class CellService  extends Service {
 		commitTransaction(s);
 	}
 	
+	/**
+	 * This return all cells in our database.
+	 * Cells are limited to any dataset
+	 */
+	
 	@SuppressWarnings("unchecked")
 	public List<Cell> getAllCells() {
 		Session s = fireTransaction();
@@ -22,6 +31,10 @@ public class CellService  extends Service {
 		List<Cell> cells = (List<Cell>) query.list();
 		return cells;
 	}
+	
+	
+	
+	
 	
 	public void saveCells(Collection<Cell> cells){
 		Session s=fireTransaction();

@@ -65,6 +65,12 @@ public class ClusterStatistics {
 		
 	}
 	
+	public void clusterDensity(){
+		//
+	}
+	
+	
+	
 	
 	public static void main(String[] args) {
 		ClusterStatistics css= new ClusterStatistics();
