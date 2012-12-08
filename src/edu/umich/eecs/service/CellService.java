@@ -10,9 +10,9 @@ import org.hibernate.Query;
 import org.hibernate.Session;
 
 import edu.umich.eecs.dto.Cell;
-<<<<<<< HEAD
+
 import edu.umich.eecs.dto.DataSetType;
-=======
+
 import edu.umich.eecs.dto.CellKey;
 import edu.umich.eecs.dto.GpsPosition;
 
