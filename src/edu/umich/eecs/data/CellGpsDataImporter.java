@@ -10,6 +10,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Scanner;
 
+import edu.umich.eecs.LatitudeLongitude;
 import edu.umich.eecs.dto.Cell;
 import edu.umich.eecs.dto.GpsPosition;
 import edu.umich.eecs.service.CellService;
@@ -129,35 +130,30 @@ public class CellGpsDataImporter {
 	public HashMap<Cell, GpsPosition> computeCellGpsPosition(HashMap<Cell, List<GpsTimestampedData>> cellGpsData) {
 		HashMap<Cell, GpsPosition> cellPosition = new HashMap<>(cellGpsData.size());
 		for (Cell cell : cellGpsData.keySet()) {
-			double latitudeSum = 0;
-			double longitudeSum = 0;
+
 			List<GpsTimestampedData> gpsDataList = cellGpsData.get(cell);
+			List<LatitudeLongitude> points = new ArrayList<>();
 			for(GpsTimestampedData gpsData : gpsDataList) {
-				latitudeSum += gpsData.latitude;
-				longitudeSum += gpsData.longitude;
-			}
-			double latitudeMean = latitudeSum / gpsDataList.size();
-			double longitudeMean = longitudeSum / gpsDataList.size();
-			
-			double latitudeVarianceSum = 0;
-			double longitudeVarianceSum = 0;
-			for(GpsTimestampedData gpsData : gpsDataList) {
-				latitudeVarianceSum += Math.pow(gpsData.latitude - latitudeMean, 2);
-				longitudeVarianceSum +=  Math.pow(gpsData.longitude - longitudeMean, 2);;
+				points.add(new LatitudeLongitude(gpsData.latitude, gpsData.longitude));
 			}
 			
-			double latitudeVariance = latitudeVarianceSum / gpsDataList.size();
-			double longitudeVariance = longitudeVarianceSum / gpsDataList.size();
+			LatitudeLongitude meanPoint = LatitudeLongitude.average(points);
 			
 			//
-			// Our standard deviation is a little fishy -- it doesn't make sense to think
-			// of a single standard deviation of a two-dimensional value. We just average
-			// the longitude and latitude variances and take the sqrt of that.
+			// We compute the standard deviation in meters from the mean.
 			//
 			
-			double positionStdDev = Math.sqrt((latitudeVariance + longitudeVariance) / 2);
+			double varianceSum = 0.0;
+			for(GpsTimestampedData gpsData : gpsDataList) {
+				double distanceInM = LatitudeLongitude.distanceInMeters(
+						meanPoint,
+						new LatitudeLongitude(gpsData.latitude, gpsData.longitude));
+				varianceSum += Math.pow(distanceInM, 2);
+			}
 			
-			GpsPosition gpsPosition = new GpsPosition(latitudeMean, longitudeMean, positionStdDev);
+			double positionStdDev = Math.sqrt(varianceSum / gpsDataList.size());			
+			
+			GpsPosition gpsPosition = new GpsPosition(meanPoint.getLatitude(), meanPoint.getLongitude(), positionStdDev);
 			gpsPosition.setCountSightings(gpsDataList.size());
 			cellPosition.put(cell, gpsPosition);
 		}

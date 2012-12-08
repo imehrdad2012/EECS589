@@ -10,13 +10,19 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Scanner;
+import java.util.Set;
 import java.util.StringTokenizer;
+import java.util.Iterator;
 
+import edu.umich.eecs.dto.Cell;
+import edu.umich.eecs.dto.CellKey;
 import edu.umich.eecs.dto.OpenCell;
 import edu.umich.eecs.dto.OpenCell;
 import edu.umich.eecs.logger.LogClass;
+import edu.umich.eecs.service.CellService;
 import edu.umich.eecs.service.OpenCellService;
 /**
  * This Class imports OpenCellID and OpenCell Map into
@@ -67,9 +73,10 @@ public class OpenCellImporter {
 	 * In this method, we read all rows of opencellid from a dat file.
 	 * and import those rows that we are working with their country codes.
 	 * @param srv
+	 * @param cellSrv 
 	 * @throws IOException
 	 */
-	public void insertOpenCellID(OpenCellService srv) throws IOException  {
+	public void insertOpenCellID(OpenCellService srv, Set<Cell> keysInDb) throws IOException  {
 		String sCurrentLine;
 		int numberOfRows=0;
 		while ((sCurrentLine = bufferReader.readLine()) != null) {
@@ -86,7 +93,7 @@ public class OpenCellImporter {
 				
 				if(Constants.totalCountryNokia.contains(mcc)==true){
 					numberOfRows++;
-					persistIntoDatabase(new OpenCell(lat,lon,mcc,mnc,lac,cellid) , srv);
+					persistIntoDatabase(new OpenCell(lat,lon,mcc,mnc,lac,cellid) , srv, keysInDb);
 				}
 			} catch (Exception e) {
 			}
@@ -105,10 +112,11 @@ public class OpenCellImporter {
 	 * In this method, we read all rows of opencell map from a text file.
 	 * and import those rows that we are working with their country codes.
 	 * @param srv
+	 * @param cellSrv 
 	 * @throws IOException
 	 */
 	// mcc INT, mnc INT, lac INT, cid INT, lat FLOAT, lon FLOAT
-	public void insertOpenCellMap(OpenCellService srv) throws IOException  {
+	public void insertOpenCellMap(OpenCellService srv, Set<Cell> keysInDb) throws IOException  {
 		String sCurrentLine;
 		int numberOfRows=0;
 		while ((sCurrentLine = bufferReader.readLine()) != null) {
@@ -124,7 +132,7 @@ public class OpenCellImporter {
 				double lon=getDouble(splits[5]);
 				if(Constants.totalCountryNokia.contains(mcc)==true){
 					numberOfRows++;
-					persistIntoDatabase(new OpenCell(lat,lon,mcc,mnc,lac,cellid) , srv);
+					persistIntoDatabase(new OpenCell(lat,lon,mcc,mnc,lac,cellid) , srv, keysInDb );
 				}
 			} catch (Exception e) {
 			}
@@ -144,11 +152,27 @@ public class OpenCellImporter {
 	 * @param oCell
 	 * @param l
 	 */
-	public void persistIntoDatabase(OpenCell oCell, OpenCellService l){
+	public void persistIntoDatabase(OpenCell oCell, OpenCellService l, Set<Cell> keysInDb){
 		
 		openCellList.add(oCell);
+
 		if(openCellList.size()==1000){
-			System.out.println("Persisting "+ (persistCounter++)*1000);
+			//
+			// Remove cells that are not in the database to begin with.
+			//
+			Iterator<OpenCell> iterator = openCellList.iterator();
+			while(iterator.hasNext()) {
+				OpenCell openCell = iterator.next();
+				if(!keysInDb.contains(new Cell(new CellKey(
+						openCell.getMcc(),
+						openCell.getCellid(),
+						openCell.getLac(),
+						openCell.getMnc())))) {
+					iterator.remove();
+				}
+			}
+			
+			System.out.println("Persisting " + openCellList.size());
 			l.saveListToOpenCell(openCellList);
 			openCellList.clear();
 			
@@ -181,13 +205,16 @@ public class OpenCellImporter {
 	public static void main(String[] args)  {
 		
 		OpenCellImporter li;
+		Set<Cell> keysInDb = new HashSet<>(new CellService().getAllCells());
 		try {
 			
-			li = new OpenCellImporter( new FileReader("/Users/Mehrdad/Documents/workspace/589-Project/CellID"));
-			li.insertOpenCellID(new OpenCellService());
+			//li = new OpenCellImporter( new FileReader("/Users/Mehrdad/Documents/workspace/589-Project/CellID"));
+			li = new OpenCellImporter( new FileReader("C:\\Users\\Pedro\\Desktop\\589 project data\\opencell\\CellID"));
+			li.insertOpenCellID(new OpenCellService(), keysInDb);
 			
-			li = new OpenCellImporter( new FileReader("/Users/Mehrdad/Documents/workspace/589-Project/CellMap.txt"));
-			li.insertOpenCellMap(new OpenCellService());
+			//li = new OpenCellImporter( new FileReader("/Users/Mehrdad/Documents/workspace/589-Project/CellMap.txt"));
+			li = new OpenCellImporter( new FileReader("C:\\Users\\Pedro\\Desktop\\589 project data\\opencell\\CellMap.txt"));
+			li.insertOpenCellMap(new OpenCellService(), keysInDb);
 			
 			
 		} catch (FileNotFoundException e) {

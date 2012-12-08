@@ -10,7 +10,12 @@ import org.hibernate.Query;
 import org.hibernate.Session;
 
 import edu.umich.eecs.dto.Cell;
+<<<<<<< HEAD
 import edu.umich.eecs.dto.DataSetType;
+=======
+import edu.umich.eecs.dto.CellKey;
+import edu.umich.eecs.dto.GpsPosition;
+
 
 public class CellService  extends Service {
 	public void saveCell(Cell cp) {
@@ -32,10 +37,36 @@ public class CellService  extends Service {
 		return cells;
 	}
 	
+
+
+	public Cell getCell(CellKey key) {
+		Session s = fireTransaction();
+		Query query = s.createQuery(
+				"from Cell where cellkey.cellID=:cellid and cellkey.areaID=:areaid and "+
+				"cellkey.networkID=:networkid and cellkey.countryID=:countryid");
+		
+		query.setInteger("cellid", key.getCellID());
+		query.setInteger("areaid", key.getAreaID());
+		query.setInteger("networkid", key.getNetworkID());
+		query.setInteger("countryid", key.getCountryID());
+		return (Cell) query.uniqueResult();
+		
+	}
 	
-	
-	
-	
+	public boolean exists(CellKey key) {
+		Session s = fireTransaction();
+		Query query = s.createQuery(
+				"from Cell where cellkey.cellID=:cellid and cellkey.areaID=:areaid and "+
+				"cellkey.networkID=:networkid and cellkey.countryID=:countryid");
+		
+		query.setInteger("cellid", key.getCellID());
+		query.setInteger("areaid", key.getAreaID());
+		query.setInteger("networkid", key.getNetworkID());
+		query.setInteger("countryid", key.getCountryID());
+		
+		return !query.list().isEmpty();
+	}
+
 	public void saveCells(Collection<Cell> cells){
 		Session s=fireTransaction();
 		

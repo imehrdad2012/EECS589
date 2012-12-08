@@ -46,6 +46,10 @@ public class Cell implements Serializable, Comparable<Cell> {
 		init(Double.toString(cell_area));
 	}
 	
+	public Cell(CellKey key) {
+		this.cellkey = key;
+	}
+	
 	public Cell(int countryID, int networkID, int areaID, int cellID) {
 		this.cellkey = new CellKey(countryID, cellID, areaID, networkID);
 	}

@@ -3,6 +3,8 @@ package edu.umich.eecs.service;
 import java.util.List;
 import org.hibernate.Query;
 import org.hibernate.Session;
+
+import edu.umich.eecs.dto.CellKey;
 import edu.umich.eecs.dto.Cluster;
 import edu.umich.eecs.dto.OpenCell;
 import edu.umich.eecs.dto.OscillatingCellTowerPair;
@@ -27,7 +29,10 @@ public class OpenCellService extends Service {
 		} 
 		commitTransaction(s);
 	}
-	
+
+	public OpenCell getLocation(CellKey key) {
+		return getLocation(key.getCountryID(), key.getNetworkID(), key.getAreaID(), key.getCellID());
+	}
 
 	public OpenCell getLocation(int cc, int nc, int aid, int cid){
 	
