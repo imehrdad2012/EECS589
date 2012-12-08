@@ -2,6 +2,7 @@ package edu.umich.eecs.data;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import javassist.expr.NewArray;
 
@@ -30,16 +31,19 @@ public class DensityGenerator {
 		numberOfPersistence=1;
 		List<Integer> areas= cSpaninf.getAllAreaID();
 		System.out.println("DataSet is: "+dataset.toString()+" There is #"+areas.size()+" areas");
+		
+		Map<Integer,Long> cc=new ClusterService().getCountOfClustersByAreaID(dataset, areas);
+		Map<Integer,Long> uc= new ClusterService().getCountUnclusteredCellbyAreaID(dataset, areas);
+		Map<Integer,Long> ac= cSpaninf.getCountAllCellsByAreaID(areas);
 		for(Integer i: areas){
-			List<Integer> cl=new ClusterService().getAllClustersByAreaID(dataset, i);
-			List<Integer> uc= new ClusterService().getUnclusteredCellbyAreaID(dataset, i);
-			double numberOfCluster= cl.size()+uc.size();
-			double numberOfCells=cSpaninf.getAllCellsByAreaID(i).size();
+			
+			double numberOfCluster= cc.get(i)+uc.get(i);
+			double numberOfCells=ac.get(i);
 			double density= numberOfCells/numberOfCluster;
 			AreaDensity ad= new AreaDensity(i, (int)numberOfCluster, dataset, (int)numberOfCells,density );
 			addDensity(ad);
 		}	
-		System.out.println("#"+(50*numberOfPersistence+listAreaDensity.size())+" Area Densities is Persited");
+		System.out.println("#"+(50*numberOfPersistence+listAreaDensity.size())+" Area Densities is Persisted");
 		listAreaDensity.clear();
 	}
 	public void addDensity(AreaDensity ad){
@@ -57,8 +61,7 @@ public class DensityGenerator {
 	
 	public static void main(String[] args) {
 		
-		Integer cl=new ClusterService().getCount(DataSetType.RealityMining, 1);
-		//new DensityGenerator().computeDensity(new CellSpanService(), DataSetType.RealityMining);
+		new DensityGenerator().computeDensity(new CellSpanService(), DataSetType.RealityMining);
 	}
 
 }

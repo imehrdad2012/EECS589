@@ -1,6 +1,8 @@
 package edu.umich.eecs.service;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.hibernate.Query;
 import org.hibernate.Session;
@@ -56,18 +58,26 @@ public class SampledCellSpanService extends Service implements CellSpanServiceIn
 	}
 	
 	
-
 	@SuppressWarnings("unchecked")
-	public List<Integer> getAllCellsByAreaID(int areaID) {
+	public Map<Integer, Long> getCountAllCellsByAreaID(List<Integer> areas) {
+		Map<Integer, Long> result= new HashMap<Integer, Long>();
 		Session s = fireTransaction();
-		Query query = s
-				.createQuery("select distinct(cellspan.cell.cellkey.cellID) from SampledCellSpan cellspan where cellspan.cell.cellkey.areaID=:id");
-		query.setInteger("id", areaID);
-		List<Integer> cells = (List<Integer>) query.list();
+		
+		for(int i:areas){
+			Query query = s
+					.createQuery("select count(distinct cellspan.cell.cellkey.cellID) from SampledCellSpan cellspan where " +
+							"cellspan.cell.cellkey.areaID=:id");
+			query.setInteger("id", i);
+			List<Long> cells = (List<Long>) query.list();	
+			result.put(i, cells.get(0));
+		}
+		
 	
-		return cells;
+		return result;
 
 	}
+	
+	
 	
 	@SuppressWarnings("unchecked")
 	public List<Integer> getAllAreaID() {

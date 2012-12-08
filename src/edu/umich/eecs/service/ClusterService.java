@@ -1,7 +1,10 @@
 package edu.umich.eecs.service;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import org.hibernate.Query;
@@ -25,25 +28,25 @@ public class ClusterService extends Service {
 	
 	
 	@SuppressWarnings("unchecked")
-	public List<Integer> getAllClustersByAreaID(DataSetType dataset, int areaID) {
+	public Map<Integer, Long> getCountOfClustersByAreaID(DataSetType dataset, List<Integer> areas) {
+		Map<Integer,Long> result= new HashMap<>();
 		Session s= fireTransaction();
-		Query query= s.createQuery("select distinct(cl.ckey.clusterID) from Cluster cl join cl.cells ce where" +
-				" cl.ckey.dataset=:dset and ce.cellkey.areaID=:id " );
-		query.setInteger("id", areaID);
-		query.setInteger("dset", dataset.asInt());
-		List<Integer> clusterID=(List<Integer>)query.list();
-		return clusterID;
+		
+		for(Integer i: areas){
+			Query query= s.createQuery("select count(distinct cl.ckey.clusterID) from Cluster cl join cl.cells ce where" +
+					" cl.ckey.dataset=:dset and ce.cellkey.areaID=:id" );
+			query.setInteger("id", i);
+			query.setInteger("dset", dataset.asInt());
+			List<Long> clusterID=(List<Long>)query.list();
+			result.put(i, clusterID.get(0));
+			
+		}
+		
+		
+		return result;
 	}
 	
-	public int getCount(DataSetType dataset, int areaID) {
-		Session s= fireTransaction();
-		Query query= s.createQuery("select count(*) from Cluster cl join cl.cells ce where" +
-				" cl.ckey.dataset=:dset and ce.cellkey.areaID=:id group by cl.ckey.clusterID " );
-		query.setInteger("id", areaID);
-		query.setInteger("dset", dataset.asInt());
-		List<Integer> clusterID=(List<Integer>)query.list();
-		return (int)clusterID.get(0);
-	} 
+
 	
 	
 	public void saveListToCluster(List<Cluster> clusters){
@@ -61,23 +64,25 @@ public class ClusterService extends Service {
 	}
 	
 	
-	public List<Integer> getUnclusteredCellbyAreaID(DataSetType dataset, int areaID){
+	public Map<Integer, Long> getCountUnclusteredCellbyAreaID(DataSetType dataset, List<Integer> areas){
 		
-		OscillationService os= new OscillationService(dataset);
-		Set<Integer>oSet=os.getAllOsiCellsByAreaId(areaID);
-		List<Integer>cList= null;
+		Map<Integer, Long> oCellCount=new OscillationService(dataset).getCountOfOsiCellsByAreaId(areas);
+		Map<Integer, Long> cMap= null;
 		
 		if(dataset==DataSetType.RealityMining){
-			cList= new CellSpanService().getAllCellsByAreaID(areaID);
+			cMap= new CellSpanService().getCountAllCellsByAreaID(areas);
 		}
 		else if(dataset==DataSetType.NokiaChallenge){
-			cList=new MDCCellSpanService().getAllCellsByAreaID(areaID);
+			cMap=new MDCCellSpanService().getCountAllCellsByAreaID(areas);
 		}
 		else if(dataset==DataSetType.SampledRealityMining){
-			cList= new SampledCellSpanService().getAllCellsByAreaID(areaID);
+			cMap= new SampledCellSpanService().getCountAllCellsByAreaID(areas);
 		}
-		cList.removeAll(oSet);
-		return cList ;
+		for(int i: cMap.keySet()){
+			cMap.put(i, cMap.get(i)-oCellCount.get(i));
+		}
+		
+		return cMap;
 		
 		
 	}

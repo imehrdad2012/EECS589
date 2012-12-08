@@ -1,6 +1,7 @@
 package edu.umich.eecs.service;
 
 import java.util.List;
+import java.util.Map;
 
 import edu.umich.eecs.dto.Cell;
 import edu.umich.eecs.dto.CellSpan;
@@ -12,5 +13,5 @@ public interface CellSpanServiceInterface {
 	public List<Cell> getAllCells();
 	public List<Integer> getAllUsers();
 	public List<Integer> getAllAreaID();
-	public List<Integer> getAllCellsByAreaID(int areaID);
+	public Map<Integer, Long> getCountAllCellsByAreaID(List<Integer> areas);
 }

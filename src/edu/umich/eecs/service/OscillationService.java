@@ -1,8 +1,10 @@
 package edu.umich.eecs.service;
 
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import org.hibernate.Criteria;
@@ -124,25 +126,32 @@ public class OscillationService extends Service{
 	}
 	
 	@SuppressWarnings("unchecked")
-	public Set<Integer> getAllOsiCellsByAreaId(int areaID){
+	public Map<Integer, Long> getCountOfOsiCellsByAreaId(List<Integer> areas){
 		Session s= fireTransaction();
+		Map<Integer, Long> result= new HashMap<>();
 		
-		Query query1= s.createQuery("select distinct(pair.cellTowerPair.cell1.cellkey.cellID) " +
-				"from OscillatingCellTowerPair pair where pair.dataset =:dataset" +
-				" and pair.cellTowerPair.cell1.cellkey.areaID=:id ");
-		query1.setInteger("dataset", dataset.asInt());
-		query1.setInteger("id", areaID);
-		
-		
-		Query query2= s.createQuery("select distinct(pair.cellTowerPair.cell2.cellkey.cellID) " +
-				"from OscillatingCellTowerPair pair where pair.dataset =:dataset " +
-				"and pair.cellTowerPair.cell2.cellkey.areaID=:id");
-		query2.setInteger("dataset", dataset.asInt());
-		query2.setInteger("id", areaID);
-		Set<Integer> cell = new HashSet<Integer>();
-		cell.addAll(query1.list());
-		cell.addAll(query2.list());
-		return cell;
+		for(Integer i: areas){
+			Query query1= s.createQuery("select distinct(pair.cellTowerPair.cell1.cellkey.cellID) " +
+					"from OscillatingCellTowerPair pair where pair.dataset =:dataset" +
+					" and pair.cellTowerPair.cell1.cellkey.areaID=:id ");
+			query1.setInteger("dataset", dataset.asInt());
+			query1.setInteger("id", i);
+			
+			Query query2= s.createQuery("select distinct(pair.cellTowerPair.cell2.cellkey.cellID) " +
+					"from OscillatingCellTowerPair pair where pair.dataset =:dataset " +
+					"and pair.cellTowerPair.cell2.cellkey.areaID=:id");
+			query2.setInteger("dataset", dataset.asInt());
+			query2.setInteger("id", i);
+
+			Set<Integer> cell = new HashSet<Integer>();
+			cell.addAll(query1.list());
+			cell.addAll(query2.list());
+			
+			result.put(i, (long)cell.size());
+			
+		}
+	
+		return result;
 		
 		
 	}
