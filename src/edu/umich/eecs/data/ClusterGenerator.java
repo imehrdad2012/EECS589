@@ -47,6 +47,7 @@ public class ClusterGenerator {
 		ClusterGenerator.computeCluster(DataSetType.SampledRealityMining);
 		ClusterGenerator.computeCluster(DataSetType.RealityMining);
 		ClusterGenerator.computeCluster(DataSetType.NokiaChallenge);	
+
 	}
 
 }
