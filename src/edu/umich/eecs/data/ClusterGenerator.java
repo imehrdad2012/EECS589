@@ -20,7 +20,6 @@ import edu.umich.eecs.util.Tic;
 
 public class ClusterGenerator {
 	public static Tic clock = new Tic(true);
-	
 
 	public static void computeCluster(DataSetType dataset){
 		OscillationService os= new OscillationService(dataset);
@@ -45,8 +44,10 @@ public class ClusterGenerator {
 	
 	public static void main(String[] args) {
 		
+		ClusterGenerator.computeCluster(DataSetType.SampledRealityMining);
 		ClusterGenerator.computeCluster(DataSetType.RealityMining);
-
+		ClusterGenerator.computeCluster(DataSetType.NokiaChallenge);
+		
 		
 	}
 
