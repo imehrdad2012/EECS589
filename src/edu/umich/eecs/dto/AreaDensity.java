@@ -3,12 +3,17 @@ package edu.umich.eecs.dto;
 import java.io.Serializable;
 
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 @Entity
 public class AreaDensity implements Serializable {
 	
 	@Id
+	@GeneratedValue(strategy=GenerationType.AUTO)
+	int id;
+	
 	int areaCode;
 	int numberOfCluster;
 	DataSetType dataSet;
@@ -24,7 +29,7 @@ public class AreaDensity implements Serializable {
 	int numberOfCells;
 	
 	/*
-	 * density=(number of cells in a specific area/ number of cluster in an area)
+	 * density=(number of cluster in an area/number of cells in a specific area )
 	 */
 	double density;
 	

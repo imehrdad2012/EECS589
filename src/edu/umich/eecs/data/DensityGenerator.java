@@ -41,10 +41,11 @@ public class DensityGenerator {
 			
 			double numberOfCluster= cc.get(i)+uc.get(i);
 			double numberOfCells=ac.get(i);
-			double density= numberOfCells/numberOfCluster;
+			double density= numberOfCluster/numberOfCells;
 			AreaDensity ad= new AreaDensity(i, (int)numberOfCluster, dataset, (int)numberOfCells,density );
 			addDensity(ad);
 		}	
+		aSrv.saveListToAD(listAreaDensity);
 		System.out.println("#"+(50*numberOfPersistence+listAreaDensity.size())+" Area Densities is Persisted");
 		listAreaDensity.clear();
 	}
