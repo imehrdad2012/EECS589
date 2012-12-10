@@ -16,6 +16,8 @@ import edu.umich.eecs.service.CellService;
 import edu.umich.eecs.service.CellSpanService;
 import edu.umich.eecs.service.CellSpanServiceInterface;
 import edu.umich.eecs.service.ClusterService;
+import edu.umich.eecs.service.MDCCellSpanService;
+import edu.umich.eecs.service.SampledCellSpanService;
 
 public class DensityGenerator {
 	
@@ -61,7 +63,10 @@ public class DensityGenerator {
 	
 	public static void main(String[] args) {
 		
+		new DensityGenerator().computeDensity(new MDCCellSpanService(), DataSetType.NokiaChallenge);
 		new DensityGenerator().computeDensity(new CellSpanService(), DataSetType.RealityMining);
+		new DensityGenerator().computeDensity(new SampledCellSpanService(), DataSetType.SampledRealityMining);
+		
 	}
 
 }
