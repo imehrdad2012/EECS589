@@ -13,7 +13,7 @@ public class CellListParser {
 	
 	/**
 	 * Reads a list of cells that are specified like this:
-	 * CELLID   LAC   MNC   MCC
+	 * CELLID LAC MNC MCC
 	 * The method assumes there is no header.
 	 * @param scanner
 	 * @return

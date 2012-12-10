@@ -145,7 +145,7 @@ public class ClusterIncompletenessStatistics {
 				new CellService(),
 				new ClusterService(), dataset);
 		
-		Scanner scanner = new Scanner(new File("src/edu/umich/eecs/statistics/files/clustered_cells_with_gpslog.txt"));
+		Scanner scanner = new Scanner(new File("/Users/Mehrdad/Documents/workspace/589-Project/files/clustered_cells_with_gpslog.txt"));
 		
 		scanner.nextLine(); // get rid of the header
 		List<CellKey> cellsWithGpsData = CellListParser.fromFile(scanner);

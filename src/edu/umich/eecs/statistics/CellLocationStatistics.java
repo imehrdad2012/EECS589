@@ -62,10 +62,10 @@ public class CellLocationStatistics {
 		// query and I didn't want to do it in Hibernate.
 		//
 		Scanner scanner = new Scanner(new File(
-				"src/edu/umich/eecs/statistics/files/cells_opencell_and_gpslog_all.txt"));
+				"/Users/Mehrdad/Documents/workspace/589-Project/files/cells_opencell_and_gpslog_all.txt"));
 		try {
 
-			// CELLID   LAC   MNC   MCC  
+			// CELLID LAC MNC MCC
 			scanner.nextLine();
 			Set<CellKey> cells = new HashSet<CellKey>(CellListParser.fromFile(scanner));
 			CellService cellSvc = new CellService();
