@@ -63,7 +63,8 @@ public class CellLocationStatistics {
 		// query and I didn't want to do it in Hibernate.
 		//
 		Scanner scanner = new Scanner(new File(
-				"/Users/Mehrdad/Documents/workspace/589-Project/files/cells_opencell_and_gpslog.txt"));
+				//"/Users/Mehrdad/Documents/workspace/589-Project/files/cells_opencell_and_gpslog.txt"));
+				"src/edu/umich/eecs/statistics/files/cells_opencell_and_gpslog.txt"));
 		try {
 
 			// CELLID LAC MNC MCC
