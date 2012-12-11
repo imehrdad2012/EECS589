@@ -5,6 +5,7 @@
 \usepackage{algorithmic}
 \usepackage{algorithm}
 \usepackage{amssymb}
+\usepackage{url}
 
 \newcommand{\xxx}[1]{\textcolor{red}{#1}}
 
@@ -20,37 +21,138 @@
 \xxx{Talk about mobility prediction in mobile networks. Discuss some of the potential benefits -- some of them were discussed in the
 ATT leap graph paper. Maybe do a little research on this.}
 
-\cite{Jadbabaie2012}
-\cite{DeGroot1974}
+In this project, we address one of the challenges faced in mobility prediction using GSM cell tower connection logs. In our context, mobility prediction in cellular
+towers can be defined as the ability to predict a user's physical movement by examning the history of cell tower connections. This is very important
+for mobile network operators, as several network optimizations are possible if they can forecast with reasonable accuracy
+where a user will be in the future \cite{LeapGraph} \cite{Liu97anoptimal}. By being able to pre-allocate resources to towers that are most likely to
+be connected to by the user, network operators can improve latency and uptime. This is increasingly important as the amount of data in cellular networks
+increases: indeed, in 2010 the amount of data traffic surpassed voice traffic for the first time, and it is expected to double annually in the near future
+\cite{EricssonData}.
+
+Another use of mobility prediction is to discover mobility profiles, i.e. patterns in a user's movement \cite{mobilityprofiler}. As illustrated in \cite{mobilityprofiler}, mobility profiles have a wide range of possible applications, from traffic planning to advertisement. Recently, Google started integrating
+a contextual search and recommendation service in its phones that is able to, for instance, detect a user's home and work addresses and suggest routes based on
+traffic \cite{googleNow}.
+
+
+The heart of every mobility prediction system based on cell tower connections is to infer movement based on which cell the user's phone is connected to. The goal
+is to predict which tower the user is more likely to connect to next. A major challenge in this is dealing with the \textit{oscillation effect}, which happens when a \textit{stationary} user's phone switches between two or more towers. This is a natural consequence of the radio medium and the fact that towers very often have overlapping ranges. In order to accurately predict a user's mobility, these outliers have to be removed so that fluctuations can be separated from actual user movement.
+
+In this project, we analyze one published algorithm for oscillation detection \cite{mobilityprofiler} and evaluate its performance using GPS data as ground-truth.
+
+\xxx{``In the next section, we describe....''}
+\xxx{More about the results.}
 
 \section{Motivation}
 
 \xxx{This is where we explain why we think that our work is important: because current tower clustering methods do not have ground truth data to check against and we do.}
 
+\xxx{How do we cite the Nokia MDC?}
+
+\xxx{Reproduce the stationary phone example in the leap graph paper.}
+
+The accuracy of current mobility prediction systems based on cell tower connections is usually measured through machine learning techniques like cross-validation that try to validate the ultimate goal of forecasting the user's future connections \cite{LeapGraph}. As far as we know there are no studies that evaluate methods of dealing with the oscillation effect, even though all prediction systems must deal with it.
+
+In this paper we report the results of such an analysis. We have implemented and evaluated the ``oscillation graph'' technique described in \cite{mobilityprofiler}. The basic idea of this algorithm is to detect cell towers that often present oscillations and consider them as a single tower. This is effectively a clustering algorithm. Our goal is to evaluate whether towers that are clustered together are actually close in real life. To evaluate this, we use the Nokia Mobility Challenge dataset, which has data on both cell tower connection (``GSM logs'') and the GPS position of the phones.
+
 \section{Methodology}
 
-\xxx{What were out methods?}
+\xxx{What were our methods?\\- Implemented clustering algorithm. Explain mobility paths, oscillations, oscillation graph etc. \\- RM. We sampled the RM dataset and compared it to
+the Nokia MDC \\- MDC. We apply the oscillation clustering to the MDC and look at the position
+characteristics of the clusters.}
 
-\section{Clustering algorithm}
+The Mobility Profiler paper \cite{mobilityprofiler} describes an algorithm to detect the oscillation effect. Our approach to evaluating this algorithm's efficiency was the following. We implement the algorithm as described in \cite{mobilityprofiler} and test it in the same dataset used in the original paper. However, that dataset does not have any data on the location of the users when they were connected to the towers. We therefore apply the algorithm to another dataset, from the Nokia Mobility Challenge, in which the GPS position of the users is listed. In order to evaluate how successful the clustering algorithm is, we devise two metrics: cluster distance and cluster incompleteness.
 
-\xxx{Explain why we used the Mobility Profiler algorithm; mention that we couldn't use a leap graph because we don't have active set information.
-\\Describe the clustering algorithm.}
+\subsection{Clustering algorithm}
+
+There are two main papers that tackle the problem of oscillation effects: the Mobility Profiler paper, by Bayir et al. \cite{mobilityprofiler}, and the Leap Graph paper by Duffield et al \cite{LeapGraph}. Ideally we would want to evaluate both of them, but the leap graph algorithm, which was published by resarchers at AT\&T, makes use of the active set of connections. The active set contains all towers that are within range of the phone's antenna at any given time. Unfortunately, active set logs are not public which makes it impossible for us to evaluate the leap graph algorithm.
+
+We therefore focus our efforts on the algorithm described in the Mobility Profiler paper, which we call the oscillation graph algorithm. In the interest of completeness, we briefly describe how it works.
+
+\xxx{Cellspan log example. Mobility path example.}
+
+\subsubsection{Mobility paths}
+The input of the algorithm is a sequence of \textit{handovers}, which are transition events when a phone switches the tower it is connected to. These events are timestamped. The first step of the algorithm is to analyze the transitions and extract \textit{mobility paths}.  A mobility path corresponds to a sequence of handovers that are associated with actual user movement. For example, imagine a user that drives every morning to work, stays there for eight hours and goes back home. During his drive to work, the user's phone will switch cell towers several times. These handovers will be included in a mobility path. While the user is at work, ignoring the oscillation effect temporarily, the phone will be connected to a single tower. Finally, when the user the goes home the handovers that occur during the drive will belong to a different mobility path.
+
+More formally, let $\Delta_i$ be the time difference between two consecutive handovers for a particular user's connection log. In other words, $\Delta_i$ is the time the user spent connected to cell tower $C_i$. Let $\delta_{duration}$ be the \textit{end-location threshold}. Then we define a mobility path as a sequence of cell connections $\left\{C_i, C_{i+1}, \ldots, C_j\right\}$ such that $\Delta_i < \delta_{duration}$ for all handovers.\footnote{We also have to consider \textit{hidden end-locations}, which happen when a user's phone is disconnected from any towers, or if the user turns his phone off. We omit its formal definition for briefness.}
+
+
+\subsubsection{Oscillating pair detection}
+
+The goal of the oscillation detection algorithm is to retrieve sets of towers that overlap each other -- that is, towers that could be in a stationary user's handover logs. The main idea behind the algorithm is that a user's phone is more likely to switch between oscillating towers than between regular towers that are not overlapping. In this context, \textit{switching} means a handover from one tower to another inside of a mobility path. We can define $k$ to be the minimum switching count and consider all pairs of towers that have more than $k$ switches in one mobility path to be an \textit{oscillating pair}. The example in \cite{mobilityprofiler} is illustrative: consider a sequence of handovers $\left[x, y, x, w, v, w, y\right]$ where every element represents one cell tower. We say that the pair $(x, y)$ has 3 switches: the first twofrom $x$ to $y$ and back to $x$ in the first positions of the sequence, and then back to $y$ at the end. Hence, if we adopt $k=3$ the only oscillating pair would be $(x, y)$. Note that switches do not need to be consecutive. The authors argue that this allows for detection of overlapping towers in dense region where multiple towers may be within range at the same time.
+
+\subsubsection{Oscillation graph}
+
+After detecting all the oscillating pairs in all mobility paths, the next step is to build the oscillation graph. The set $V$ of vertices in the graph are all cell towers in the dataset, and the weighted edges in $E$ connect oscillating pairs. Let $P_i$ be a mobility path.The weight of every edge, which we also call its \textit{support}, is defined as:
+
+\begin{equation*}
+s(x,y) = \frac{|\left\{P_i| (x, y) \in P_i \wedge (x, y) \text{oscillated}\right\}|}{|\left\{P_i| (x, y) \in P_i\right\}|}
+\end{equation*}
+
+In words, $s(x,y)$ is the ratio of how many times the cell towers $x$ and $y$ oscillated over the number of mobility paths in which $x$ and $y$ appear. For example, a pair of towers such that in \textit{every} mobility path that both of them appear the switch count is greater than $k$ would have a support equal to 1. If a pair only switches more or equal to $k$ times in half the mobility paths both of the towers appear in, that pair's support would be 0.5.
+
+\subsubsection{Oscillation graph clustering}
+
+\xxx{Explain the clustering algorithm.}
+
+The final step of the algorithm is to find clusters in the oscillation graph. Intuitively, a cluster represents a group of towers that are not indicative of actual user movement. The Mobility Profiler paper uses an greedy divise algorithm for clustering. At every iteration, the algorithm removes the edge with the lowest weight from the graph. It then evaluates the ``quality'' of all connected components, which is the weighted ratio of edges inside of the cluster over the number of edges that leave the cluster in the original graph. Formally, let $C$ be a cluster with the set of edges $E$, and $E_{out}$ be the set of edges that have exactly one vertex in $C$, and define $w(e)$ to be an edge's weight:
+
+\begin{equation*}
+Q(C) = \frac{\displaystyle\sum_{\forall e_{in} \in E}{w(e_{in})}}{\displaystyle\sum_{\forall e_{out} \in E_{out}}{w(e_{out})}}
+\end{equation*}
+
+Every cluster with quality metric greater than a threshold is removed from the graph. The algorithm continues until there are no more vertices in the graph. The algorithm outputs all the clusters it found. Our main goal is to evaluate these clusters according to the GPS position of the users when they were within range of that tower.
 
 \subsection{GSM datasets}
 
-\xxx{MDC and Reality Mining.}
+\xxx{Reality Mining dataset reference.}
+
+We use two datasets with GSM cell tower connection data, from the Reality Mining project and from the Nokia Mobility Data Challenge.
+
+\subsubsection{Reality Mining}
+
+\xxx{Describe the reality mining dataset}
+
+\subsubsection{Nokia Mobility Data Challenge -- GSM}
+
+\xxx{Describe the Nokia Mobility Challenge}
 
 \subsection{Cell location datasets}
 
 \xxx{GPS logs from MDC and OpenCell}
 
+Our main contribution is an analysis of the oscillation clustering algorithm using GPS data. We use two sources of GPS data, the Nokia MDC and the OpenCell database.
+
+\subsubsection{Nokia Mobility Data Challenge -- GPS}
+
+Phones in the MDC also had their GPS units sampled every minute. The format of the GPS logs is shown in Figure \xxx{Show the MDC GPS logs}. We process the GPS and try to establish an approximate position for each cell tower. We approximate the cell tower position as the average of the positions of users when they were connected to that tower. To do this, we have to match each entry in the GSM log with an entry in the GPS log.
+
+Because GSM and GPS entries do not necessarily have the same timestamp (in fact, they almost never do), we use GPS entries that have a timestamp within $\delta_{GPS}$ seconds of the GSM entry we are trying to match. The algorithm goes through every record in the GSM log and tries to find a matching GPS log. After going through all users' connection logs, we estimate each tower's position as the average of all GPS positions that were associated with that tower. It is important to have a measure of how accurate the GPS estimate of a particular tower is, so we record the number of GPS samples for that tower and the standard deviation in the samples. The standard deviation is computed based on the distance from each sample to the average point, which is calculated using the Haversine formula \cite{haversine}.
+
+The algorithm runs in $O(k(n\log n + m\log n))$, where $k$ is the number of users in the dataset and $m$ and $n$ are upper bounds on the number of GPS and GSM records per user, respectively. The logarithmic factor comes from sorting the GPS log by timestamp and performing a binary search.
+
+\subsubsection{OpenCell}
+
+\xxx{Talk about OpenCell; what it is and how we use it.}
+
 \section{Results}
+
+\xxx{Results introduction fluff.}
+
+\xxx{Talk about challenges in handling the data -- wrong clock, entries out of order in the RM dataset;}
+
+We implemented the clustering algorithm in \cite{mobilityprofiler} for the Reality Mining and the Nokia Mobility Data Challenge datasets and compared the results of the clustering in both datasets (adjusting for the fact that the MDC dataset's data is sampled every minute). In this section, we report the results of running the algorithm in those datasets and analyze the results. \xxx{One sentence description of the non-GPS related results.} We also used GPS data to evaluate the accuracy and quality of the resulting clusters. \xxx{One sentence description of the GPS results}.
+
+Running the clustering algorithm on the RM dataset was more challenging than originally expected; there were inconsistencies with the dates (apparently the phones' clocks reverted to 01/01/2004 when the battery died) and time (with entries appearing in an inconsistent order; see \xxx{RM GSM time weirdness example}). We dealt with these problems by ignoring records with a timestamp equal to 01/01/2004 and by assuming that the ordering of the lines in the dataset logs represented the actual ordering that the logs were collected -- this seemed consistent with manual analysis of the logs and generated valid mobility paths, which is not the case if the timestamps are taken at face value. \xxx{Maybe expand on what a valid mobility path is.}
 
 \subsection{Dataset comparison}
 
 \xxx{Compare MDC and Reality Mining, i.e. show that they are similiar using the sampled RM?}
 
 \subsection{Location comparison}
+
+\section{Conclusion}
+
+\xxx{Talk about other clustering techinques and other modularity measures, like Newman's.}
 
 \bibliographystyle{plain}
 \bibliography{eecs589Report}
