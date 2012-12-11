@@ -30,6 +30,7 @@ public class ClusterIncompletenessStatistics {
 	private ClusterService clusterSvc;
 	private Tic clock = new Tic(true);
 	private DataSetType dataset;
+	private Map<Integer, Integer> clusterToCountUnclutered= new HashMap<>();
 	private final double radius = 500;  // cells within radius meters of each other should be clustered.
 	
 	
@@ -47,6 +48,8 @@ public class ClusterIncompletenessStatistics {
 		int countTotalUnclusteredCells = 0;
 		int countValidCells = 0;
 		System.out.println("CountryID\tNetworkID\tAreaID\tCellID\tClusterID\tCountUnclustered");
+		//System.out.println("CellID\t\tClusterID\t\tCountUnclustered");
+
 		for(CellKey cell1 : cells) {
 			int countCellUnclusteredCells = 0;
 			if(!isValidCell(cell1, cellGpsMap)) {
@@ -85,6 +88,13 @@ public class ClusterIncompletenessStatistics {
 			+ cell1.getCellID() + "\t"
 			+ (cellClusterMap.containsKey(cell1) ? cellClusterMap.get(cell1).getCkey().getClusterID() : "-1")
 			+ "\t" + countCellUnclusteredCells);
+			
+			//System.out.println(countCellUnclusteredCells);
+			
+			
+			
+			
+			
 		}
 		double countUnclusteredCells = countTotalUnclusteredCells / 2; // our method double counts (c1, c2) and (c2, c1)
 		double averageCountUnclusteredCells = countUnclusteredCells / countValidCells;
@@ -145,7 +155,7 @@ public class ClusterIncompletenessStatistics {
 				new CellService(),
 				new ClusterService(), dataset);
 		
-		Scanner scanner = new Scanner(new File("src/edu/umich/eecs/statistics/files/clustered_cells_with_gpslog.txt"));
+		Scanner scanner = new Scanner(new File("/Users/Mehrdad/Documents/workspace/589-Project/files/clustered_cells_with_gpslog.txt"));
 		
 		scanner.nextLine(); // get rid of the header
 		List<CellKey> cellsWithGpsData = CellListParser.fromFile(scanner);

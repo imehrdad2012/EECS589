@@ -16,6 +16,8 @@ import edu.umich.eecs.service.CellService;
 import edu.umich.eecs.service.CellSpanService;
 import edu.umich.eecs.service.CellSpanServiceInterface;
 import edu.umich.eecs.service.ClusterService;
+import edu.umich.eecs.service.MDCCellSpanService;
+import edu.umich.eecs.service.SampledCellSpanService;
 
 public class DensityGenerator {
 	
@@ -39,10 +41,11 @@ public class DensityGenerator {
 			
 			double numberOfCluster= cc.get(i)+uc.get(i);
 			double numberOfCells=ac.get(i);
-			double density= numberOfCells/numberOfCluster;
+			double density= numberOfCluster/numberOfCells;
 			AreaDensity ad= new AreaDensity(i, (int)numberOfCluster, dataset, (int)numberOfCells,density );
 			addDensity(ad);
 		}	
+		aSrv.saveListToAD(listAreaDensity);
 		System.out.println("#"+(50*numberOfPersistence+listAreaDensity.size())+" Area Densities is Persisted");
 		listAreaDensity.clear();
 	}
@@ -61,7 +64,10 @@ public class DensityGenerator {
 	
 	public static void main(String[] args) {
 		
+		new DensityGenerator().computeDensity(new MDCCellSpanService(), DataSetType.NokiaChallenge);
 		new DensityGenerator().computeDensity(new CellSpanService(), DataSetType.RealityMining);
+		new DensityGenerator().computeDensity(new SampledCellSpanService(), DataSetType.SampledRealityMining);
+		
 	}
 
 }

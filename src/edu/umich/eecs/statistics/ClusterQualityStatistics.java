@@ -60,11 +60,17 @@ public class ClusterQualityStatistics {
 				}
 				MeanAndStdDev clusterDistances = MeanAndStdDev
 						.fromSample(distances);
-				System.out.println(cluster.getCkey().getClusterID() + "\t"
+				/*System.out.println(cluster.getCkey().getClusterID() + "\t"
 						+ clusterCells.size() + "\t"
 						+ gpsPositionsInCluster.size() + "\t"
 						+ clusterDistances.getMean() + "\t"
-						+ clusterDistances.getStdDev());
+						+ clusterDistances.getStdDev());*/
+				
+				/*double clusterSize=clusterCells.size();
+				double gpsPositionInCluster=gpsPositionsInCluster.size();*/
+				
+				System.out.println(clusterDistances.getStdDev());
+						
 			}
 		}
 	}
@@ -84,7 +90,7 @@ public class ClusterQualityStatistics {
 		DataSetType dataset = DataSetType.NokiaChallenge;
 		
 		ClusterQualityStatistics qualityStats = new ClusterQualityStatistics(new ClusterService());
-		Scanner scanner = new Scanner(new File("src/edu/umich/eecs/statistics/files/clustered_cells_with_gpslog.txt"));
+		Scanner scanner = new Scanner(new File("/Users/Mehrdad/Documents/workspace/589-Project/files/clustered_cells_with_gpslog.txt"));
 		scanner.nextLine(); // get rid of the header
 		List<CellKey> cellsWithGpsData = CellListParser.fromFile(scanner);
 		qualityStats.printClusterLocationInfo(cellsWithGpsData,  new CellService(), dataset);

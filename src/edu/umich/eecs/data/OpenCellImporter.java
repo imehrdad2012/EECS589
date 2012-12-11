@@ -208,12 +208,12 @@ public class OpenCellImporter {
 		Set<Cell> keysInDb = new HashSet<>(new CellService().getAllCells());
 		try {
 			
-			//li = new OpenCellImporter( new FileReader("/Users/Mehrdad/Documents/workspace/589-Project/CellID"));
-			li = new OpenCellImporter( new FileReader("C:\\Users\\Pedro\\Desktop\\589 project data\\opencell\\CellID"));
+			li = new OpenCellImporter( new FileReader("/Users/Mehrdad/Documents/workspace/589-Project/CellID"));
+			//li = new OpenCellImporter( new FileReader("C:\\Users\\Pedro\\Desktop\\589 project data\\opencell\\CellID"));
 			li.insertOpenCellID(new OpenCellService(), keysInDb);
 			
-			//li = new OpenCellImporter( new FileReader("/Users/Mehrdad/Documents/workspace/589-Project/CellMap.txt"));
-			li = new OpenCellImporter( new FileReader("C:\\Users\\Pedro\\Desktop\\589 project data\\opencell\\CellMap.txt"));
+			li = new OpenCellImporter( new FileReader("/Users/Mehrdad/Documents/workspace/589-Project/CellMap.txt"));
+			//li = new OpenCellImporter( new FileReader("C:\\Users\\Pedro\\Desktop\\589 project data\\opencell\\CellMap.txt"));
 			li.insertOpenCellMap(new OpenCellService(), keysInDb);
 			
 			
