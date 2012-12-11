@@ -50,6 +50,7 @@ public class CellLocationStatistics {
 			
 		 //System.out.println(/*i++ + "/" + cells.size() + " (" + */disparity); //+ ")");
 			System.out.println(key.getCountryID() + "\t" + key.getNetworkID() + "\t" + key.getAreaID() + "\t" + key.getCellID() + "\t" + disparity);
+			System.out.println(disparity);
 		}
 		
 		return MeanAndStdDev.fromSample(disparities);
@@ -62,11 +63,12 @@ public class CellLocationStatistics {
 		// query and I didn't want to do it in Hibernate.
 		//
 		Scanner scanner = new Scanner(new File(
-				"/Users/Mehrdad/Documents/workspace/589-Project/files/cells_opencell_and_gpslog_all.txt"));
+				"/Users/Mehrdad/Documents/workspace/589-Project/files/cells_opencell_and_gpslog.txt"));
 		try {
 
 			// CELLID LAC MNC MCC
-			scanner.nextLine();
+			String s = scanner.nextLine();
+			System.out.println(s);
 			Set<CellKey> cells = new HashSet<CellKey>(CellListParser.fromFile(scanner));
 			CellService cellSvc = new CellService();
 			OpenCellService openCellSvc = new OpenCellService();

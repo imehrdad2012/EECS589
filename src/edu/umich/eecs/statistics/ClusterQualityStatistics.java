@@ -60,11 +60,17 @@ public class ClusterQualityStatistics {
 				}
 				MeanAndStdDev clusterDistances = MeanAndStdDev
 						.fromSample(distances);
-				System.out.println(cluster.getCkey().getClusterID() + "\t"
+				/*System.out.println(cluster.getCkey().getClusterID() + "\t"
 						+ clusterCells.size() + "\t"
 						+ gpsPositionsInCluster.size() + "\t"
 						+ clusterDistances.getMean() + "\t"
-						+ clusterDistances.getStdDev());
+						+ clusterDistances.getStdDev());*/
+				
+				/*double clusterSize=clusterCells.size();
+				double gpsPositionInCluster=gpsPositionsInCluster.size();*/
+				
+				System.out.println(clusterDistances.getStdDev());
+						
 			}
 		}
 	}
