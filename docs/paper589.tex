@@ -1,4 +1,5 @@
-\documentclass[a4paper,10pt]{article}
+%\documentclass[a4paper,10pt]{article}
+\documentclass[letterpaper, 11pt, conference]{ieeeconf}
 \usepackage{amsmath} % For 'cases' curly brace
 \usepackage{amsfonts} % For bold number set font
 \usepackage{color}
@@ -17,7 +18,7 @@
 \maketitle
 
 \section{Introduction}
-
+\label{sec:intro}
 \xxx{Talk about mobility prediction in mobile networks. Discuss some of the potential benefits -- some of them were discussed in the
 ATT leap graph paper. Maybe do a little research on this.}
 
@@ -146,6 +147,8 @@ Running the clustering algorithm on the RM dataset was more challenging than ori
 
 In all experiments we used the same parameters value as the original Mobility Profiler paper, namely \xxx{list the constants we used, like the minimum oscillation count etc.}.
 
+We are only able to assess the cluster distance and incompleteness in the MDC dataset, since it is the only one for which we have GPS information\footnote{In principle we could have used OpenCell data to estimate the position of the towers in the RM dataset. However, the data does not provide the necessary information about the cell towers, such as network ID.}. We choose the MDC GPS logs as our source of location data for the cell towers for two reasons. First, as discussed above, there are more cells in the MDC dataset covered by the GPS logs than by the OpenCell database. Second, because the GPS logs measure the \textit{user's} location when he or she was connected to that tower, it provides a semantically more accurate value -- after all, as discussed in Section \ref{sec:intro}, the ultimate goal of the clustering algorithm is to provide data that will be fed to an algorithm that predicts \textit{user's} movements.
+
 \subsection{Dataset comparison}
 
 
@@ -163,7 +166,7 @@ The fact that both datasets show a similar distribution is important for our res
 
 \subsection{Location statistics}
 
-\xxx{Talk about how many cells we have location data for, the difference between GPS logs and OpenCell, how many cells with $gps_sightings > 1$ and $stdddev < x$ etc.}
+\xxx{Talk about how many cells we have location data for, the difference between GPS logs and OpenCell, how many cells with $gps_{sightings} > 1$ and $stdddev < x$ etc.}
 
 \subsection{Effectiveness of clustering algorithm}
 
@@ -171,18 +174,11 @@ In this section we present the most important results of our project: an empiric
 
 \subsubsection{Metrics}
 
-We define two metrics:
+We define two metrics, cluster distance and cluster incompleteness.
 
-\begin{itemize}
-	\item \textbf{Cluster distance}: the average distance between cells in a cluster. A good algorithm will group together towers that are geographically close and therefore clusters will have a low distance.
-	\item \textbf{Cluster incompleteness}: the number of cells within $\delta_{incomp}$ meters of another cell $k$ that are not in the same cluster as $k$.
-\end{itemize}
+\paragraph{Cluster Distance} the average distance between cells in a cluster. A good algorithm will group together towers that are geographically close and therefore clusters will have a low distance. The cluster distance is measured in meters.
 
-The second metric is necessary, or else the trivial solution of all clusters with size 1 would be optimal.
-
-\subsubsection{Results}
-
-We are only able to assess the cluster distance and incompleteness in the MDC dataset, since it is the only one for which we have GPS information \footnote{Theoretically we could have used OpenCell data to estimate the position of the towers in the RM dataset. However, the data does not provide the necessary information about the cell towers, such as network ID.}. We choose the MDC GPS logs as our source of location data for the cell towers for two reasons. First, as discussed above, there are more cells in the MDC dataset covered by the GPS logs than by the OpenCell database. Second, because the GPS logs measure the \textit{user's} location when he or she was connected to that tower, it provides a semantically more accurate value -- after all, the ultimate goal of the clustering algorithm is to provide data that predicts \textit{user's} movements.
+\paragraph{Cluster incompleteness} For a cell $k$, this is the number of cells within $\delta_{incomp}$ meters of it that are not in the same cluster as $k$. The algorithm is shown in \xxx{Show the cluster incompleteness algorithm.} Intuitively this measures if there are potentially oscillating towers that are not being clustered together. We can think of the cluster incompleteness as the dual of the cluster distance: the former favors agressive algorithms while the latter encourages conservative approaches. Another way to see the benefit of using two metrics is noting that there are trivial solutions that minimize distance or incompleteness (each cell in its own cluster and one huge cluster with all cels, respectively), but there are no trivial solutions that minimize both metrics at the same time.
 
 \xxx{Talk about\begin{itemize}
 	\item Cluster distance histogram/CDF, average.
@@ -191,11 +187,23 @@ We are only able to assess the cluster distance and incompleteness in the MDC da
 	\item What can we conclude from this? That the algorithm works, pretty much.
 \end{itemize}}
 
+\subsubsection{Cluster distance}
 
+In order to provide some confidence in the precision of the results, we only consider cells that were seen more than once in the GPS logs, with a standard deviation less than 500 meters. Only clusters in which more tha 70\% of cells meet this criteria are analyzed. This meant that only 82 clusters, or 9.44\% of the total, could be analyzed. Although this is a small fraction, there is no reason to think it is a biased sample if we assume there is no correlation between GPS precision and clustering ineffiency. Therefore, the results should hold for the entirety of the clusters, and, we conjecture, for other datasets too.
+
+Figures \xxx{cluster distance histogram} and \xxx{cluster distance CDF} show the histogram and CDF of the cluster distances. \xxx{Talk about that.}
+
+We also investigated whether there is a correlation between the size of a cluster and the its distance. A graph of both values is presented in Figure \xxx{size x distance}. We find that there is no significant correlation.
+
+\subsubsection{Cluster incompleteness}
+
+The measurements for cluster incompleteness are presented in Figures \xxx{cluster incompleteness histogram} and \xxx{cluster incompleteness CDF}. The average incompleteness for all cells with GPS data is 0.52 (standard deviation 1.37). This is a surprisingly low value and indicates that the algorithm works well.
 
 \section{Conclusion}
 
-\xxx{Talk about other clustering techinques and other modularity measures, like Newman's.}
+We have evaluated a clustering algorithm used to eliminate the oscillation effect in cellular mobility prediction. Our main contribution is the use of GPS data to evaluate if the clustered towers are geographically close to each other, which would be circumstantial evidence in favor of the clustering algorithm. We find that the clustering algorithm proposed in \cite{mobilityprofiler} performs well on the two metrics we define, cluster distance and cluster incompleteness.
+
+As part of future work, we would like to repeat the experiments here with more data. As discussed before, only 9.44\% of the clusters in the MDC dataset had enough information to be reliably processed by the algorithm. Another avenue of research is to investigate clustering algorithms that use a different clustering quality metric. One possible approach would be the modularity metric defined by Newman and Girvan~\cite{newman}. There is also a large body of literature on clustering in theoretical computer science, especially in social networks: Andersen and Peres find sparse cuts efficently in~\cite{sparsecuts}, while Aroroa et. al try to find overlapping communities \cite{overlapping}. Finding overlapping communities has interesting applications for dealing with the oscillation effect, since towers can conceivably in more than one cluster.
 
 \bibliographystyle{plain}
 \bibliography{eecs589Report}
