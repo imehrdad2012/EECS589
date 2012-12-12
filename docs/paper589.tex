@@ -155,7 +155,7 @@ We are only able to assess the cluster distance and incompleteness in the MDC da
 \subsection{Dataset comparison}
 
 
-\xxx{Compare MDC and Reality Mining, i.e. show that they are similiar using the sampled RM?}
+\xxx{Compare MDC and Reality Mining, i.e. show that they are similar using the sampled RM?}
 
 We compare the Reality Mining dataset, which was originally used in the Mobility Profiler paper, with the Mobility Data Challenge. Table \xxx{Table with number of cells etc.} shows the number of cells, area codes and countries that are represented in each dataset. We can see that the MDC data has a much larger breadth in terms of the countries that are covered, but contains less cells and cell transitions. \xxx{Try to explain this difference. Talk about number of clusters.}
 
@@ -181,7 +181,7 @@ We define two metrics, cluster distance and cluster incompleteness.
 
 \paragraph{Cluster Distance} the average distance between cells in a cluster. A good algorithm will group together towers that are geographically close and therefore clusters will have a low distance. The cluster distance is measured in meters.
 
-\paragraph{Cluster incompleteness} For a cell $k$, this is the number of cells within $\delta_{incomp}$ meters of it that are not in the same cluster as $k$. The algorithm is shown in \xxx{Show the cluster incompleteness algorithm.} Intuitively this measures if there are potentially oscillating towers that are not being clustered together. We can think of the cluster incompleteness as the dual of the cluster distance: the former favors agressive algorithms while the latter encourages conservative approaches. Another way to see the benefit of using two metrics is noting that there are trivial solutions that minimize distance or incompleteness (each cell in its own cluster and one huge cluster with all cels, respectively), but there are no trivial solutions that minimize both metrics at the same time.
+\paragraph{Cluster incompleteness} For a cell $k$, this is the number of cells within $\delta_{incomp}$ meters of it that are not in the same cluster as $k$. The algorithm is shown in \xxx{Show the cluster incompleteness algorithm.} Intuitively this measures if there are potentially oscillating towers that are not being clustered together. We can think of the cluster incompleteness as the dual of the cluster distance: the former favors aggressive algorithms while the latter encourages conservative approaches. Another way to see the benefit of using two metrics is noting that there are trivial solutions that minimize distance or incompleteness (each cell in its own cluster and one huge cluster with all cels, respectively), but there are no trivial solutions that minimize both metrics at the same time.
 
 \xxx{Talk about\begin{itemize}
 	\item Cluster distance histogram/CDF, average.
@@ -192,7 +192,7 @@ We define two metrics, cluster distance and cluster incompleteness.
 
 \subsubsection{Cluster distance}
 
-In order to provide some confidence in the precision of the results, we only consider cells that were seen more than once in the GPS logs, with a standard deviation less than 500 meters. Only clusters in which more tha 70\% of cells meet this criteria are analyzed. This meant that only 82 clusters, or 9.44\% of the total, could be analyzed. Although this is a small fraction, there is no reason to think it is a biased sample if we assume there is no correlation between GPS precision and clustering ineffiency. Therefore, the results should hold for the entirety of the clusters, and, we conjecture, for other datasets too.
+In order to provide some confidence in the precision of the results, we only consider cells that were seen more than once in the GPS logs, with a standard deviation less than 500 meters. Only clusters in which more tha 70\% of cells meet this criteria are analyzed. This meant that only 82 clusters, or 9.44\% of the total, could be analyzed. Although this is a small fraction, there is no reason to think it is a biased sample if we assume there is no correlation between GPS precision and clustering inefficiency. Therefore, the results should hold for the entirety of the clusters, and, we conjecture, for other datasets too.
 
 Figures \xxx{cluster distance histogram} and \xxx{cluster distance CDF} show the histogram and CDF of the cluster distances. \xxx{Talk about that.}
 
