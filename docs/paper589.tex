@@ -7,6 +7,8 @@
 \usepackage{algorithm}
 \usepackage{amssymb}
 \usepackage{url}
+\usepackage{graphicx}
+\usepackage[font=bf]{caption}
 
 \newcommand{\xxx}[1]{\textcolor{red}{#1}}
 
@@ -23,8 +25,6 @@ We investigate in detail one of the algorithms involved in cellular mobility pre
 
 \section{Introduction}
 \label{sec:intro}
-\xxx{Talk about mobility prediction in mobile networks. Discuss some of the potential benefits -- some of them were discussed in the
-ATT leap graph paper. Maybe do a little research on this.}
 
 In this project, we address one of the challenges faced in mobility prediction using GSM cell tower connection logs. In our context, mobility prediction in cellular
 towers can be defined as the ability to predict a user's physical movement by examning the history of cell tower connections. This is very important
@@ -40,19 +40,24 @@ traffic \cite{googleNow}.
 
 
 The heart of every mobility prediction system based on cell tower connections is to infer movement based on which cell the user's phone is connected to. The goal
-is to predict which tower the user is more likely to connect to next. A major challenge in this is dealing with the \textit{oscillation effect}, which happens when a \textit{stationary} user's phone switches between two or more towers. This is a natural consequence of the radio medium and the fact that towers very often have overlapping ranges. In order to accurately predict a user's mobility, these outliers have to be removed so that fluctuations can be separated from actual user movement.
+is to predict which tower the user is more likely to connect to next. A major challenge in this is dealing with the \textit{oscillation effect}, which happens when a \textit{stationary} user's phone switches between two or more towers. Figure~\ref{fig:stationary} shows an example of a stationary phone that connects to different cell towers. This is a natural consequence of the radio medium and the fact that towers very often have overlapping ranges. In order to accurately predict a user's mobility, these outliers have to be removed so that fluctuations can be separated from actual user movement.
 
 In this project, we analyze one published algorithm for oscillation detection \cite{mobilityprofiler} and evaluate its performance using GPS data as ground-truth. We find that this algorithm performs surprisingly well as measured by two metrics we define.
 
 This report is structured as follows. In the next section, we motivate our work by explaining why clustering validation is important. In section~\ref{sec:methodology} we describe our methodology  and explain the algorithm we will evaluate. We present and discuss results in section~\ref{sec:results}, and conclude in section~\ref{sec:conclusion}.
+
+\begin{figure}
+\centering
+\includegraphics[width=0.15\textwidth]{figs/stationary_oscillation}
+\caption{An example of actual cell tower connection logs for a stationary phone, slightly modified from~\cite{LeapGraph}. The time of the sample is on the left, and an identifier for the cell tower is on the right. We can see that the phone connects to several towers, even though it does not move. }
+\label{fig:stationary}
+\end{figure}
 
 \section{Motivation}
 
 \xxx{This is where we explain why we think that our work is important: because current tower clustering methods do not have ground truth data to check against and we do.}
 
 \xxx{How do we cite the Nokia MDC?}
-
-\xxx{Reproduce the stationary phone example in the leap graph paper.}
 
 The accuracy of current mobility prediction systems based on cell tower connections is usually measured through machine learning techniques like cross-validation that try to validate the ultimate goal of forecasting the user's future connections \cite{LeapGraph}. As far as we know there are no studies that evaluate methods of dealing with the oscillation effect, even though all prediction systems must deal with it.
 
