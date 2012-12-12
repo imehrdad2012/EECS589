@@ -1,4 +1,4 @@
-\documentclass[a4paper,12pt]{article}
+\documentclass[a4paper,10pt]{article}
 \usepackage{amsmath} % For 'cases' curly brace
 \usepackage{amsfonts} % For bold number set font
 \usepackage{color}
@@ -144,11 +144,54 @@ We implemented the clustering algorithm in \cite{mobilityprofiler} for the Reali
 
 Running the clustering algorithm on the RM dataset was more challenging than originally expected; there were inconsistencies with the dates (apparently the phones' clocks reverted to 01/01/2004 when the battery died) and time (with entries appearing in an inconsistent order; see \xxx{RM GSM time weirdness example}). We dealt with these problems by ignoring records with a timestamp equal to 01/01/2004 and by assuming that the ordering of the lines in the dataset logs represented the actual ordering that the logs were collected -- this seemed consistent with manual analysis of the logs and generated valid mobility paths, which is not the case if the timestamps are taken at face value. \xxx{Maybe expand on what a valid mobility path is.}
 
+In all experiments we used the same parameters value as the original Mobility Profiler paper, namely \xxx{list the constants we used, like the minimum oscillation count etc.}.
+
 \subsection{Dataset comparison}
+
 
 \xxx{Compare MDC and Reality Mining, i.e. show that they are similiar using the sampled RM?}
 
-\subsection{Location comparison}
+We compare the Reality Mining dataset, which was originally used in the Mobility Profiler paper, with the Mobility Data Challenge. Table \xxx{Table with number of cells etc.} shows the number of cells, area codes and countries that are represented in each dataset. We can see that the MDC data has a much larger breadth in terms of the countries that are covered, but contains less cells and cell transitions. \xxx{Try to explain this difference. Talk about number of clusters.}
+
+However, both datasets show similar patterns in cluster size distribution, as evidenced in Figure \xxx{Figure with the oscillation histogram}, which also presents the cluster size distribution for the Reality Mining dataset sampled every minute. This is necessary for a fair comparison since the RM contains information on every handover, while the MDC samples the tower the phone is currently connected to every minute (so there is loss of information).
+
+The fact that both datasets show a similar distribution is important for our results, since it allows us to extrapolate the results we find with the MDC dataset to the RM dataset with reasonable confidence.
+
+\subsection{Cluster statistics}
+
+\xxx{Talk about cluster size, quality metric for both datasets}
+
+\subsection{Location statistics}
+
+\xxx{Talk about how many cells we have location data for, the difference between GPS logs and OpenCell, how many cells with $gps_sightings > 1$ and $stdddev < x$ etc.}
+
+\subsection{Effectiveness of clustering algorithm}
+
+In this section we present the most important results of our project: an empirical validation of the clustering algorithm from the point of view of the efficiency of the clusters that it outputs.
+
+\subsubsection{Metrics}
+
+We define two metrics:
+
+\begin{itemize}
+	\item \textbf{Cluster distance}: the average distance between cells in a cluster. A good algorithm will group together towers that are geographically close and therefore clusters will have a low distance.
+	\item \textbf{Cluster incompleteness}: the number of cells within $\delta_{incomp}$ meters of another cell $k$ that are not in the same cluster as $k$.
+\end{itemize}
+
+The second metric is necessary, or else the trivial solution of all clusters with size 1 would be optimal.
+
+\subsubsection{Results}
+
+We are only able to assess the cluster distance and incompleteness in the MDC dataset, since it is the only one for which we have GPS information \footnote{Theoretically we could have used OpenCell data to estimate the position of the towers in the RM dataset. However, the data does not provide the necessary information about the cell towers, such as network ID.}. We choose the MDC GPS logs as our source of location data for the cell towers for two reasons. First, as discussed above, there are more cells in the MDC dataset covered by the GPS logs than by the OpenCell database. Second, because the GPS logs measure the \textit{user's} location when he or she was connected to that tower, it provides a semantically more accurate value -- after all, the ultimate goal of the clustering algorithm is to provide data that predicts \textit{user's} movements.
+
+\xxx{Talk about\begin{itemize}
+	\item Cluster distance histogram/CDF, average.
+	\item Mean cluster distance/cluster size (no correlation).
+	\item Cluster incompleteness CDF, average.
+	\item What can we conclude from this? That the algorithm works, pretty much.
+\end{itemize}}
+
+
 
 \section{Conclusion}
 
