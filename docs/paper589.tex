@@ -17,6 +17,8 @@
 
 \maketitle
 
+\xxx{Abstract}
+
 \section{Introduction}
 \label{sec:intro}
 \xxx{Talk about mobility prediction in mobile networks. Discuss some of the potential benefits -- some of them were discussed in the
@@ -38,9 +40,9 @@ traffic \cite{googleNow}.
 The heart of every mobility prediction system based on cell tower connections is to infer movement based on which cell the user's phone is connected to. The goal
 is to predict which tower the user is more likely to connect to next. A major challenge in this is dealing with the \textit{oscillation effect}, which happens when a \textit{stationary} user's phone switches between two or more towers. This is a natural consequence of the radio medium and the fact that towers very often have overlapping ranges. In order to accurately predict a user's mobility, these outliers have to be removed so that fluctuations can be separated from actual user movement.
 
-In this project, we analyze one published algorithm for oscillation detection \cite{mobilityprofiler} and evaluate its performance using GPS data as ground-truth.
+In this project, we analyze one published algorithm for oscillation detection \cite{mobilityprofiler} and evaluate its performance using GPS data as ground-truth. We find that this algorithm performs surprisingly well as measured by two metrics we define.
 
-\xxx{``In the next section, we describe....''}
+This report is structured as follows. In the next section, we motivate our work by explaining why clustering validation is important. In section~\ref{sec:methodology} we describe our methodology  and explain the algorithm we will evaluate. We present and discuss results in section~\ref{sec:results}, and conclude in section~\ref{sec:conclusion}.
 \xxx{More about the results.}
 
 \section{Motivation}
@@ -56,7 +58,7 @@ The accuracy of current mobility prediction systems based on cell tower connecti
 In this paper we report the results of such an analysis. We have implemented and evaluated the ``oscillation graph'' technique described in \cite{mobilityprofiler}. The basic idea of this algorithm is to detect cell towers that often present oscillations and consider them as a single tower. This is effectively a clustering algorithm. Our goal is to evaluate whether towers that are clustered together are actually close in real life. To evaluate this, we use the Nokia Mobility Challenge dataset, which has data on both cell tower connection (``GSM logs'') and the GPS position of the phones.
 
 \section{Methodology}
-
+\label{sec:methodology}
 \xxx{What were our methods?\\- Implemented clustering algorithm. Explain mobility paths, oscillations, oscillation graph etc. \\- RM. We sampled the RM dataset and compared it to
 the Nokia MDC \\- MDC. We apply the oscillation clustering to the MDC and look at the position
 characteristics of the clusters.}
@@ -136,7 +138,7 @@ The algorithm runs in $O(k(n\log n + m\log n))$, where $k$ is the number of user
 \xxx{Talk about OpenCell; what it is and how we use it.}
 
 \section{Results}
-
+\label{sec:results}
 \xxx{Results introduction fluff.}
 
 \xxx{Talk about challenges in handling the data -- wrong clock, entries out of order in the RM dataset;}
@@ -200,12 +202,12 @@ We also investigated whether there is a correlation between the size of a cluste
 The measurements for cluster incompleteness are presented in Figures \xxx{cluster incompleteness histogram} and \xxx{cluster incompleteness CDF}. The average incompleteness for all cells with GPS data is 0.52 (standard deviation 1.37). This is a surprisingly low value and indicates that the algorithm works well.
 
 \section{Conclusion}
-
+\label{sec:conclusion}
 We have evaluated a clustering algorithm used to eliminate the oscillation effect in cellular mobility prediction. Our main contribution is the use of GPS data to evaluate if the clustered towers are geographically close to each other, which would be circumstantial evidence in favor of the clustering algorithm. We find that the clustering algorithm proposed in \cite{mobilityprofiler} performs well on the two metrics we define, cluster distance and cluster incompleteness.
 
 As part of future work, we would like to repeat the experiments here with more data. As discussed before, only 9.44\% of the clusters in the MDC dataset had enough information to be reliably processed by the algorithm. Another avenue of research is to investigate clustering algorithms that use a different clustering quality metric. One possible approach would be the modularity metric defined by Newman and Girvan~\cite{newman}. There is also a large body of literature on clustering in theoretical computer science, especially in social networks: Andersen and Peres find sparse cuts efficently in~\cite{sparsecuts}, while Aroroa et. al try to find overlapping communities \cite{overlapping}. Finding overlapping communities has interesting applications for dealing with the oscillation effect, since towers can conceivably in more than one cluster.
 
-\bibliographystyle{plain}
+\bibliographystyle{IEEEtranS}
 \bibliography{eecs589Report}
 
 \end{document}
