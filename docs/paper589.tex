@@ -17,7 +17,9 @@
 
 \maketitle
 
-\xxx{Abstract}
+\begin{abstract}
+We investigate in detail one of the algorithms involved in cellular mobility prediction. These systems try to predict a user's position based on cell tower connections. One key difficulty in this is the oscillation effect: a stationary phone will often switch between towers, adding significant noise to the data. We look at the efficiency of one of the approaches in the literature that tries to counter this effect.  This algorithm tries to cluster cell towers that users often oscillate between. In order to do evaluate the algorithm's efficiency, we use a new dataset that allows us to infer GPS data for cell towers. We find that the algorithm performs well.
+\end{abstract}
 
 \section{Introduction}
 \label{sec:intro}
@@ -43,7 +45,6 @@ is to predict which tower the user is more likely to connect to next. A major ch
 In this project, we analyze one published algorithm for oscillation detection \cite{mobilityprofiler} and evaluate its performance using GPS data as ground-truth. We find that this algorithm performs surprisingly well as measured by two metrics we define.
 
 This report is structured as follows. In the next section, we motivate our work by explaining why clustering validation is important. In section~\ref{sec:methodology} we describe our methodology  and explain the algorithm we will evaluate. We present and discuss results in section~\ref{sec:results}, and conclude in section~\ref{sec:conclusion}.
-\xxx{More about the results.}
 
 \section{Motivation}
 
