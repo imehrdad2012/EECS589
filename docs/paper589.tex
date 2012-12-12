@@ -134,7 +134,10 @@ Because GSM and GPS entries do not necessarily have the same timestamp (in fact,
 
 The algorithm runs in $O(k(n\log n + m\log n))$, where $k$ is the number of users in the dataset and $m$ and $n$ are upper bounds on the number of GPS and GSM records per user, respectively. The logarithmic factor comes from sorting the GPS log by timestamp and performing a binary search.
 
-\subsubsection{OpenCell}
+\subsubsection{OpenCellId and OpenBMap}
+
+OpenCellId and OpenBmap are two open source projects with goal of providing researchers with a complete database of  cells with their locations. We use these two dataset for retrieving location information of cells
+we have in MDC.
 
 \xxx{Talk about OpenCell; what it is and how we use it.}
 
