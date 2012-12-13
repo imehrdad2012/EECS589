@@ -27,7 +27,7 @@ We investigate in detail one of the algorithms involved in cellular mobility pre
 \label{sec:intro}
 
 In this project, we address one of the challenges faced in mobility prediction using GSM cell tower connection logs. In our context, mobility prediction in cellular
-towers can be defined as the ability to predict a user's physical movement by examning the history of cell tower connections. This is very important
+towers can be defined as the ability to predict a user's physical movement by examining the history of cell tower connections. This is very important
 for mobile network operators, as several network optimizations are possible if they can forecast with reasonable accuracy
 where a user will be in the future \cite{LeapGraph} \cite{Liu97anoptimal}. By being able to pre-allocate resources to towers that are most likely to
 be connected to by the user, network operators can improve latency and uptime. This is increasingly important as the amount of data in cellular networks
@@ -73,7 +73,7 @@ The Mobility Profiler paper \cite{mobilityprofiler} describes an algorithm to de
 
 \subsection{Clustering algorithm}
 
-There are two main papers that tackle the problem of oscillation effects: the Mobility Profiler paper, by Bayir et al. \cite{mobilityprofiler}, and the Leap Graph paper by Duffield et al \cite{LeapGraph}. Ideally we would want to evaluate both of them, but the leap graph algorithm, which was published by resarchers at AT\&T, makes use of the active set of connections. The active set contains all towers that are within range of the phone's antenna at any given time. Unfortunately, active set logs are not public which makes it impossible for us to evaluate the leap graph algorithm.
+There are two main papers that tackle the problem of oscillation effects: the Mobility Profiler paper, by Bayir et al. \cite{mobilityprofiler}, and the Leap Graph paper by Duffield et al \cite{LeapGraph}. Ideally we would want to evaluate both of them, but the leap graph algorithm, which was published by researchers at AT\&T, makes use of the active set of connections. The active set contains all towers that are within range of the phone's antenna at any given time. Unfortunately, active set logs are not public which makes it impossible for us to evaluate the leap graph algorithm.
 
 We therefore focus our efforts on the algorithm described in the Mobility Profiler paper, which we call the oscillation graph algorithm. In the interest of completeness, we briefly describe how it works.
 
@@ -87,7 +87,7 @@ More formally, let $\Delta_i$ be the time difference between two consecutive han
 
 \subsubsection{Oscillating pair detection}
 
-The goal of the oscillation detection algorithm is to retrieve sets of towers that overlap each other -- that is, towers that could be in a stationary user's handover logs. The main idea behind the algorithm is that a user's phone is more likely to switch between oscillating towers than between regular towers that are not overlapping. In this context, \textit{switching} means a handover from one tower to another inside of a mobility path. We can define $k$ to be the minimum switching count and consider all pairs of towers that have more than $k$ switches in one mobility path to be an \textit{oscillating pair}. The example in \cite{mobilityprofiler} is illustrative: consider a sequence of handovers $\left[x, y, x, w, v, w, y\right]$ where every element represents one cell tower. We say that the pair $(x, y)$ has 3 switches: the first twofrom $x$ to $y$ and back to $x$ in the first positions of the sequence, and then back to $y$ at the end. Hence, if we adopt $k=3$ the only oscillating pair would be $(x, y)$. Note that switches do not need to be consecutive. The authors argue that this allows for detection of overlapping towers in dense region where multiple towers may be within range at the same time.
+The goal of the oscillation detection algorithm is to retrieve sets of towers that overlap each other -- that is, towers that could be in a stationary user's handover logs. The main idea behind the algorithm is that a user's phone is more likely to switch between oscillating towers than between regular towers that are not overlapping. In this context, \textit{switching} means a handover from one tower to another inside of a mobility path. We can define $k$ to be the minimum switching count and consider all pairs of towers that have more than $k$ switches in one mobility path to be an \textit{oscillating pair}. The example in \cite{mobilityprofiler} is illustrative: consider a sequence of handovers $\left[x, y, x, w, v, w, y\right]$ where every element represents one cell tower. We say that the pair $(x, y)$ has 3 switches: the first two from $x$ to $y$ and back to $x$ in the first positions of the sequence, and then back to $y$ at the end. Hence, if we adopt $k=3$ the only oscillating pair would be $(x, y)$. Note that switches do not need to be consecutive. The authors argue that this allows for detection of overlapping towers in dense region where multiple towers may be within range at the same time.
 
 \subsubsection{Oscillation graph}
 
@@ -139,7 +139,10 @@ Because GSM and GPS entries do not necessarily have the same timestamp (in fact,
 
 The algorithm runs in $O(k(n\log n + m\log n))$, where $k$ is the number of users in the dataset and $m$ and $n$ are upper bounds on the number of GPS and GSM records per user, respectively. The logarithmic factor comes from sorting the GPS log by timestamp and performing a binary search.
 
-\subsubsection{OpenCell}
+\subsubsection{OpenCellId and OpenBMap}
+
+OpenCellId and OpenBmap are two open source projects with goal of providing researchers with a complete database of  cells with their locations. We use these two dataset for retrieving location information of cells
+we have in MDC.
 
 \xxx{Talk about OpenCell; what it is and how we use it.}
 
@@ -160,7 +163,7 @@ We are only able to assess the cluster distance and incompleteness in the MDC da
 \subsection{Dataset comparison}
 
 
-\xxx{Compare MDC and Reality Mining, i.e. show that they are similiar using the sampled RM?}
+\xxx{Compare MDC and Reality Mining, i.e. show that they are similar using the sampled RM?}
 
 We compare the Reality Mining dataset, which was originally used in the Mobility Profiler paper, with the Mobility Data Challenge. Table \xxx{Table with number of cells etc.} shows the number of cells, area codes and countries that are represented in each dataset. We can see that the MDC data has a much larger breadth in terms of the countries that are covered, but contains less cells and cell transitions. \xxx{Try to explain this difference. Talk about number of clusters.}
 
@@ -186,7 +189,7 @@ We define two metrics, cluster distance and cluster incompleteness.
 
 \paragraph{Cluster Distance} the average distance between cells in a cluster. A good algorithm will group together towers that are geographically close and therefore clusters will have a low distance. The cluster distance is measured in meters.
 
-\paragraph{Cluster incompleteness} For a cell $k$, this is the number of cells within $\delta_{incomp}$ meters of it that are not in the same cluster as $k$. The algorithm is shown in \xxx{Show the cluster incompleteness algorithm.} Intuitively this measures if there are potentially oscillating towers that are not being clustered together. We can think of the cluster incompleteness as the dual of the cluster distance: the former favors agressive algorithms while the latter encourages conservative approaches. Another way to see the benefit of using two metrics is noting that there are trivial solutions that minimize distance or incompleteness (each cell in its own cluster and one huge cluster with all cels, respectively), but there are no trivial solutions that minimize both metrics at the same time.
+\paragraph{Cluster incompleteness} For a cell $k$, this is the number of cells within $\delta_{incomp}$ meters of it that are not in the same cluster as $k$. The algorithm is shown in \xxx{Show the cluster incompleteness algorithm.} Intuitively this measures if there are potentially oscillating towers that are not being clustered together. We can think of the cluster incompleteness as the dual of the cluster distance: the former favors aggressive algorithms while the latter encourages conservative approaches. Another way to see the benefit of using two metrics is noting that there are trivial solutions that minimize distance or incompleteness (each cell in its own cluster and one huge cluster with all cels, respectively), but there are no trivial solutions that minimize both metrics at the same time.
 
 \xxx{Talk about\begin{itemize}
 	\item Cluster distance histogram/CDF, average.
@@ -197,7 +200,7 @@ We define two metrics, cluster distance and cluster incompleteness.
 
 \subsubsection{Cluster distance}
 
-In order to provide some confidence in the precision of the results, we only consider cells that were seen more than once in the GPS logs, with a standard deviation less than 500 meters. Only clusters in which more tha 70\% of cells meet this criteria are analyzed. This meant that only 82 clusters, or 9.44\% of the total, could be analyzed. Although this is a small fraction, there is no reason to think it is a biased sample if we assume there is no correlation between GPS precision and clustering ineffiency. Therefore, the results should hold for the entirety of the clusters, and, we conjecture, for other datasets too.
+In order to provide some confidence in the precision of the results, we only consider cells that were seen more than once in the GPS logs, with a standard deviation less than 500 meters. Only clusters in which more tha 70\% of cells meet this criteria are analyzed. This meant that only 82 clusters, or 9.44\% of the total, could be analyzed. Although this is a small fraction, there is no reason to think it is a biased sample if we assume there is no correlation between GPS precision and clustering inefficiency. Therefore, the results should hold for the entirety of the clusters, and, we conjecture, for other datasets too.
 
 Figures \xxx{cluster distance histogram} and \xxx{cluster distance CDF} show the histogram and CDF of the cluster distances. \xxx{Talk about that.}
 
@@ -211,7 +214,7 @@ The measurements for cluster incompleteness are presented in Figures \xxx{cluste
 \label{sec:conclusion}
 We have evaluated a clustering algorithm used to eliminate the oscillation effect in cellular mobility prediction. Our main contribution is the use of GPS data to evaluate if the clustered towers are geographically close to each other, which would be circumstantial evidence in favor of the clustering algorithm. We find that the clustering algorithm proposed in \cite{mobilityprofiler} performs well on the two metrics we define, cluster distance and cluster incompleteness.
 
-As part of future work, we would like to repeat the experiments here with more data. As discussed before, only 9.44\% of the clusters in the MDC dataset had enough information to be reliably processed by the algorithm. Another avenue of research is to investigate clustering algorithms that use a different clustering quality metric. One possible approach would be the modularity metric defined by Newman and Girvan~\cite{newman}. There is also a large body of literature on clustering in theoretical computer science, especially in social networks: Andersen and Peres find sparse cuts efficently in~\cite{sparsecuts}, while Aroroa et. al try to find overlapping communities \cite{overlapping}. Finding overlapping communities has interesting applications for dealing with the oscillation effect, since towers can conceivably in more than one cluster.
+As part of future work, we would like to repeat the experiments here with more data. As discussed before, only 9.44\% of the clusters in the MDC dataset had enough information to be reliably processed by the algorithm. Another avenue of research is to investigate clustering algorithms that use a different clustering quality metric. One possible approach would be the modularity metric defined by Newman and Girvan~\cite{newman}. There is also a large body of literature on clustering in theoretical computer science, especially in social networks: Andersen and Peres find sparse cuts efficiently in~\cite{sparsecuts}, while Aroroa et. al try to find overlapping communities \cite{overlapping}. Finding overlapping communities has interesting applications for dealing with the oscillation effect, since towers can conceivably in more than one cluster.
 
 \bibliographystyle{IEEEtranS}
 \bibliography{eecs589Report}
